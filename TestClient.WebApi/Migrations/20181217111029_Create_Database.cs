@@ -14,7 +14,7 @@ namespace TestClient.WebApi.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CountryRegioneCode = table.Column<string>(type: "varchar(2)", nullable: true),
-                    Name = table.Column<string>(nullable: true)
+                    CountryName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,7 +27,7 @@ namespace TestClient.WebApi.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
+                    ClientName = table.Column<string>(nullable: true),
                     ClinetCode = table.Column<string>(type: "varchar(5)", nullable: true),
                     CountryId = table.Column<int>(nullable: false)
                 },

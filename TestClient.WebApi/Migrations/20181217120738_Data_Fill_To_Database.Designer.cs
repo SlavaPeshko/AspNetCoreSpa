@@ -9,8 +9,8 @@ using TestClient.WebApi.Context;
 namespace TestClient.WebApi.Migrations
 {
     [DbContext(typeof(TestClientContext))]
-    [Migration("20181217102206_Create_Database")]
-    partial class Create_Database
+    [Migration("20181217120738_Data_Fill_To_Database")]
+    partial class Data_Fill_To_Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,18 +26,34 @@ namespace TestClient.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ClientName");
+
                     b.Property<string>("ClinetCode")
                         .HasColumnType("varchar(5)");
 
                     b.Property<int>("CountryId");
-
-                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
 
                     b.ToTable("Clients");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClientName = "Alan",
+                            ClinetCode = "A1001",
+                            CountryId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClientName = "Mark",
+                            ClinetCode = "M1002",
+                            CountryId = 2
+                        });
                 });
 
             modelBuilder.Entity("TestClient.WebApi.Models.Country", b =>
@@ -46,14 +62,28 @@ namespace TestClient.WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CountryName");
+
                     b.Property<string>("CountryRegioneCode")
                         .HasColumnType("varchar(2)");
-
-                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CountryName = "Belarus",
+                            CountryRegioneCode = "BY"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CountryName = "United Kingdom",
+                            CountryRegioneCode = "GB"
+                        });
                 });
 
             modelBuilder.Entity("TestClient.WebApi.Models.Client", b =>

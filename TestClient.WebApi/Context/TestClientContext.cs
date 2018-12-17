@@ -36,6 +36,8 @@ namespace TestClient.WebApi.Context
                 .HasMany(co => co.Clients)
                 .WithOne(cl => cl.Country);
 
+            modelBuilder.Seed();
+
             base.OnModelCreating(modelBuilder);
         }
     }

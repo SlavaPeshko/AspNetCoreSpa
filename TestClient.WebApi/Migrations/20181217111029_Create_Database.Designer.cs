@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestClient.WebApi.Context;
 
 namespace TestClient.WebApi.Migrations
 {
     [DbContext(typeof(TestClientContext))]
-    partial class TestClientContextModelSnapshot : ModelSnapshot
+    [Migration("20181217111029_Create_Database")]
+    partial class Create_Database
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,22 +38,6 @@ namespace TestClient.WebApi.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Clients");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClientName = "Alan",
-                            ClinetCode = "A1001",
-                            CountryId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClientName = "Mark",
-                            ClinetCode = "M1002",
-                            CountryId = 2
-                        });
                 });
 
             modelBuilder.Entity("TestClient.WebApi.Models.Country", b =>
@@ -68,20 +54,6 @@ namespace TestClient.WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CountryName = "Belarus",
-                            CountryRegioneCode = "BY"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CountryName = "United Kingdom",
-                            CountryRegioneCode = "GB"
-                        });
                 });
 
             modelBuilder.Entity("TestClient.WebApi.Models.Client", b =>
