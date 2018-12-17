@@ -22,17 +22,15 @@ namespace TestClient.WebApi.Context
                 .HasKey(c => c.Id);
 
             modelBuilder.Entity<Client>()
-                .Property(c => c.Code)
-                .HasMaxLength(5)
-                .HasColumnType("varchar");
+                .Property(c => c.ClinetCode)
+                .HasColumnType("varchar(5)");
 
             modelBuilder.Entity<Country>()
                 .ToTable("Countries");
 
             modelBuilder.Entity<Country>()
                 .Property(c => c.CountryRegioneCode)
-                .HasMaxLength(2)
-                .HasColumnType("varchar");
+                .HasColumnType("varchar(2)");
 
             modelBuilder.Entity<Country>()
                 .HasMany(co => co.Clients)
