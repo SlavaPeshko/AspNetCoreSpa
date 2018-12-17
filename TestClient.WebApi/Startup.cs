@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using TestClient.WebApi.Context;
 using TestClient.WebApi.Repositories;
 using TestClient.WebApi.Repositories.Contracts;
+using TestClient.WebApi.UoW;
 
 namespace TestClient.WebApi
 {
@@ -34,7 +35,7 @@ namespace TestClient.WebApi
             services.AddDbContext<TestClientContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddScoped<IClientRepository, ClientRepository>();
-            services.AddScoped<DbContext, TestClientContext>();
+            services.AddScoped<IUnitOfWorks, UnitOfWorks>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
