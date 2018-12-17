@@ -36,6 +36,7 @@ namespace TestClient.WebApi.Controllers
         public async Task<IActionResult> PostAsync([FromBody]Client client)
         {
             await _clientRepository.Post(client);
+            _unitOfWorks.Commit();
 
             return Ok();
         }
@@ -43,7 +44,9 @@ namespace TestClient.WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> PutAsync()
         {
-            return null;
+            await Task.CompletedTask;
+
+            return Ok();
         }
     }
 }
