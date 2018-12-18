@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TestClient.WebApi.Migrations
+namespace TestClient.Data.Migrations
 {
     public partial class Data_Fill_To_Database : Migration
     {

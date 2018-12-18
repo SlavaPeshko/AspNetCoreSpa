@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TestClient.WebApi.Models;
+using TestClient.Domain.Enities;
 
-namespace TestClient.WebApi.Context
+namespace TestClient.Data.Context
 {
     public static class ModelBuilderExtensions
     {

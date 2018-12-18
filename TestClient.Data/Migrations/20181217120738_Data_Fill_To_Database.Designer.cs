@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TestClient.WebApi.Context;
+using TestClient.Data.Context;
 
-namespace TestClient.WebApi.Migrations
+namespace TestClient.Data.Migrations
 {
     [DbContext(typeof(TestClientContext))]
     [Migration("20181217120738_Data_Fill_To_Database")]

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TestClient.WebApi.Models;
-using TestClient.WebApi.ViewModels;
+using TestClient.Domain.Enities;
 
-namespace TestClient.WebApi.Repositories.Contracts
+namespace TestClient.Data.Repositories.Contracts
 {
     public interface IClientRepository
     {
-        Task<IEnumerable<ClientViewModel>> GetClientsAsync();
+        Task<IEnumerable<Client>> GetClientsAsync();
         Task Post(Client client);
         void Put(Client client);
+        Task<Client> GetClientByIdAsync(int id);
     }
 }

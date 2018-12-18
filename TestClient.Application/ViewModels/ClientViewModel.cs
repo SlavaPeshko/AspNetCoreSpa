@@ -1,4 +1,4 @@
-﻿namespace TestClient.WebApi.ViewModels
+﻿namespace TestClient.Application.ViewModels
 {
     public class ClientViewModel
     {

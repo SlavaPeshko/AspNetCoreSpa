@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TestClient.WebApi.Models;
+using TestClient.Domain.Enities.Base;
 
-namespace TestClient.WebApi.Repositories
+namespace TestClient.Data.Repositories
 {
     public abstract class BaseRepository<T, TKey> where T : BaseEntity<TKey>
     {

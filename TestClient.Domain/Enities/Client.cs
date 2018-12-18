@@ -1,4 +1,6 @@
-﻿namespace TestClient.WebApi.Models
+﻿using TestClient.Domain.Enities.Base;
+
+namespace TestClient.Domain.Enities
 {
     public class Client : BaseEntity<int>
     {

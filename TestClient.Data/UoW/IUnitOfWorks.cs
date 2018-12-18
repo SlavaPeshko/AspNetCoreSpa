@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TestClient.WebApi.UoW
+namespace TestClient.Data.UoW
 {
     public interface IUnitOfWorks : IDisposable
     {

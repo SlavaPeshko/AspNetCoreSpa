@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TestClient.WebApi.Models;
-using TestClient.WebApi.Repositories.Contracts;
-using TestClient.WebApi.UoW;
+using TestClient.Application.Services.Contracts;
+using TestClient.Application.ViewModels;
 
 namespace TestClient.WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class ClientsController : Controller
     {
-        private readonly IClientRepository _clientRepository;
-        private readonly IUnitOfWorks _unitOfWorks;
+        private readonly IClientService _clientService; 
 
-        public ClientsController(IClientRepository clientRepository, IUnitOfWorks unitOfWorks)
+        public ClientsController(IClientService clientService)
         {
-            _clientRepository = clientRepository;
-            _unitOfWorks = unitOfWorks;
+            _clientService = clientService;
         }
 
         public IActionResult Index()
@@ -29,14 +23,14 @@ namespace TestClient.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
-            return Ok(await _clientRepository.GetClientsAsync());
+            var vm = await _clientService.GetClientsAsync();
+            return Ok(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]Client client)
+        public async Task<IActionResult> PostAsync([FromBody]PostClientViewModel client)
         {
-            await _clientRepository.Post(client);
-            _unitOfWorks.Commit();
+            await Task.CompletedTask;
 
             return Ok();
         }

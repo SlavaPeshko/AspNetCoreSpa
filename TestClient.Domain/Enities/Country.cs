@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using TestClient.Domain.Enities.Base;
 
-namespace TestClient.WebApi.Models
+namespace TestClient.Domain.Enities
 {
     public class Country : BaseEntity<int>
     {

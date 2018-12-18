@@ -1,6 +1,6 @@
-﻿using TestClient.WebApi.Context;
+﻿using TestClient.Data.Context;
 
-namespace TestClient.WebApi.UoW
+namespace TestClient.Data.UoW
 {
     public class UnitOfWorks : IUnitOfWorks
     {

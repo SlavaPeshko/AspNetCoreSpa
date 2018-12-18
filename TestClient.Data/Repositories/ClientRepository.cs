@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using TestClient.WebApi.Context;
-using TestClient.WebApi.Models;
-using TestClient.WebApi.Repositories.Contracts;
-using TestClient.WebApi.ViewModels;
+using TestClient.Data.Context;
+using TestClient.Data.Repositories.Contracts;
+using TestClient.Domain.Enities;
 
-namespace TestClient.WebApi.Repositories
+namespace TestClient.Data.Repositories
 {
     public class ClientRepository : BaseRepository<Client, int>, IClientRepository
     {
@@ -15,16 +13,14 @@ namespace TestClient.WebApi.Repositories
         {
         }
 
-        public async Task<IEnumerable<ClientViewModel>> GetClientsAsync()
+        public async Task<Client> GetClientByIdAsync(int id)
+        {
+            return await GetSet().SingleOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<IEnumerable<Client>> GetClientsAsync()
         {
             return await GetSet()
-                .Select(c => new ClientViewModel
-                {
-                    ClientName = c.ClientName,
-                    ClientCode = c.ClinetCode,
-                    CountryName = c.Country.CountryName,
-                    CountryRegioneCode = c.Country.CountryRegioneCode
-                })
                 .AsNoTracking()
                 .ToListAsync();
         }

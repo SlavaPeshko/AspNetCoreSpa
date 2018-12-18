@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TestClient.WebApi.Migrations
+namespace TestClient.Data.Migrations
 {
     public partial class Create_Database : Migration
     {

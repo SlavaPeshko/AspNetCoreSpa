@@ -1,4 +1,4 @@
-﻿namespace TestClient.WebApi.Models
+﻿namespace TestClient.Domain.Enities.Base
 {
     public abstract class BaseEntity<T>
     {

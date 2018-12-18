@@ -6,17 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20181217095828_Create_Database.cs" />
-    <Compile Remove="Migrations\20181217095828_Create_Database.Designer.cs" />
-    <Compile Remove="Migrations\20181217111420_Data_Fill_To_Database.cs" />
-    <Compile Remove="Migrations\20181217111420_Data_Fill_To_Database.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestClient.Application\TestClient.Application.csproj" />
+    <ProjectReference Include="..\TestClient.IoC\TestClient.IoC.csproj" />
   </ItemGroup>
 
 </Project>
