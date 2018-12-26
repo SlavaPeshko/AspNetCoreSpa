@@ -12,7 +12,7 @@ namespace TestClient.IoC
         public static void RegisterServices(IServiceCollection services)
         {
             //repositories
-            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IClientsRepository, ClientsRepository>();
 
             //services
             services.AddScoped<IClientService, ClientService>();

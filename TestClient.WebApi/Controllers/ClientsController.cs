@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TestClient.Application.Services.Contracts;
-using TestClient.Application.ViewModels;
+using TestClient.Domain.Models;
 
 namespace TestClient.WebApi.Controllers
 {
@@ -28,11 +28,10 @@ namespace TestClient.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]PostClientViewModel client)
+        public async Task<IActionResult> PostAsync([FromBody]CreateClientModel model)
         {
-            await Task.CompletedTask;
-
-            return Ok();
+            var vm = await _clientService.PostAsync(model);
+            return Ok(vm);
         }
 
         [HttpPut]

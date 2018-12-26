@@ -7,7 +7,7 @@ namespace TestClient.Data.Context
     {
         public TestClientContext(DbContextOptions<TestClientContext> options) : base(options)
         {
-
+            // Database.EnsureCreated();
         }
 
         public DbSet<Client> Clients { get; set; }

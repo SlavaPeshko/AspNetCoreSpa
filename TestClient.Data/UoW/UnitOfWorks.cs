@@ -1,4 +1,5 @@
-﻿using TestClient.Data.Context;
+﻿using System.Threading.Tasks;
+using TestClient.Data.Context;
 
 namespace TestClient.Data.UoW
 {
@@ -11,9 +12,9 @@ namespace TestClient.Data.UoW
             _testClientContext = testClientContext;
         }
 
-        public bool Commit()
+        public async Task CommitAsync()
         {
-            return _testClientContext.SaveChanges() > 0;
+            await _testClientContext.SaveChangesAsync();
         }
 
         public void Dispose()

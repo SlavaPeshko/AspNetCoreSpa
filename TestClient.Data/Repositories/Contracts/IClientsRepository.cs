@@ -4,10 +4,10 @@ using TestClient.Domain.Enities;
 
 namespace TestClient.Data.Repositories.Contracts
 {
-    public interface IClientRepository
+    public interface IClientsRepository
     {
         Task<IEnumerable<Client>> GetClientsAsync();
-        Task Post(Client client);
+        Task PostAsync(Client client);
         void Put(Client client);
         Task<Client> GetClientByIdAsync(int id);
     }

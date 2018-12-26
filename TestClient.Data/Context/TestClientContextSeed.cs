@@ -3,7 +3,7 @@ using TestClient.Domain.Enities;
 
 namespace TestClient.Data.Context
 {
-    public static class ModelBuilderExtensions
+    public static class TestClientContextSeed
     {
         public static void Seed(this ModelBuilder modelBuilder)
         {

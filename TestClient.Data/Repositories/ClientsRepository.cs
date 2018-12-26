@@ -7,9 +7,9 @@ using TestClient.Domain.Enities;
 
 namespace TestClient.Data.Repositories
 {
-    public class ClientRepository : BaseRepository<Client, int>, IClientRepository
+    public class ClientsRepository : BaseRepository<Client, int>, IClientsRepository
     {
-        public ClientRepository(TestClientContext dbContext) : base(dbContext)
+        public ClientsRepository(TestClientContext dbContext) : base(dbContext)
         {
         }
 
@@ -25,7 +25,7 @@ namespace TestClient.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task Post(Client client)
+        public async Task PostAsync(Client client)
         {
             await GetSet().AddAsync(client);
         }

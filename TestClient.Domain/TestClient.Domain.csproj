@@ -7,4 +7,16 @@
     <StartupObject />
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TestClient.CrossCutting\TestClient.CrossCutting.csproj" />
+  </ItemGroup>
+
 </Project>
