@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TestClient.Application.Services.Contracts;
 using TestClient.Application.ViewModels;
@@ -21,13 +22,21 @@ namespace TestClient.Application.Services
             _clientRepository = clientRepository;
         }
 
-        public async Task<IEnumerable> GetClientsAsync()
+        public async Task<IEnumerable<ClientViewModel>> GetClientsAsync()
         {
-            return await _clientRepository.GetClientsAsync();
+            var clients = await _clientRepository.GetClientsAsync();
+
+            return clients.Select(c => c.ToEntity());
         }
 
-        public async Task<ClientViewModel> PostAsync(CreateClientModel createClientModel)
+        public async Task<CreateClientModel> PostAsync(CreateClientModel createClientModel)
         {
+            var isUniqueClientCode = await _clientRepository.IsUniqueClientCodeAsync(createClientModel.ClientCode);
+            if (isUniqueClientCode)
+            {
+                //return 
+            }
+
             var client = new Client
             {
                 ClientName = createClientModel.ClientName,
@@ -38,7 +47,7 @@ namespace TestClient.Application.Services
             await _clientRepository.PostAsync(client);
             await _unitOfWorks.CommitAsync();
 
-            return client.ToEntity();
+            return createClientModel;
         }
 
         public void Put(Client client)

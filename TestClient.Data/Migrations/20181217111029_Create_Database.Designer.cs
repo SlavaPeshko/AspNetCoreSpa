@@ -7,7 +7,7 @@ using TestClient.Data.Context;
 
 namespace TestClient.Data.Migrations
 {
-    [DbContext(typeof(TestClientContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20181217111029_Create_Database")]
     partial class Create_Database
     {

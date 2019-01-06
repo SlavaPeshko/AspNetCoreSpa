@@ -10,7 +10,7 @@ namespace TestClinet.Data.Repositories
 {
     public class CountriesRepository : BaseRepository<Client, int>, ICountriesRepository
     {
-        public CountriesRepository(TestClientContext dbContext) : base(dbContext)
+        public CountriesRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 

@@ -5,9 +5,9 @@ namespace TestClient.Data.UoW
 {
     public class UnitOfWorks : IUnitOfWorks
     {
-        private readonly TestClientContext _testClientContext;
+        private readonly ApplicationDbContext _testClientContext;
 
-        public UnitOfWorks(TestClientContext testClientContext)
+        public UnitOfWorks(ApplicationDbContext testClientContext)
         {
             _testClientContext = testClientContext;
         }

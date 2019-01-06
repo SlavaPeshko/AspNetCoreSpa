@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TestClient.Application.ViewModels;
 using TestClient.Domain.Enities;
@@ -8,8 +8,8 @@ namespace TestClient.Application.Services.Contracts
 {
     public interface IClientService
     {
-        Task<IEnumerable> GetClientsAsync();
-        Task<ClientViewModel> PostAsync(CreateClientModel createClientModel);
+        Task<IEnumerable<ClientViewModel>> GetClientsAsync();
+        Task<CreateClientModel> PostAsync(CreateClientModel createClientModel);
         void Put(Client client);
     }
 }

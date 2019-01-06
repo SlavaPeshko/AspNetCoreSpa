@@ -6,7 +6,7 @@ using TestClient.Data.Context;
 
 namespace TestClient.Data.Migrations
 {
-    [DbContext(typeof(TestClientContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class TestClientContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

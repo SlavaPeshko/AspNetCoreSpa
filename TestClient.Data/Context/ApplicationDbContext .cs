@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TestClient.Domain.Enities;
 
 namespace TestClient.Data.Context
 {
-    public class TestClientContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
-        public TestClientContext(DbContextOptions<TestClientContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            // Database.EnsureCreated();
+            //Database.EnsureCreated();
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -24,6 +25,10 @@ namespace TestClient.Data.Context
             modelBuilder.Entity<Client>()
                 .Property(c => c.ClinetCode)
                 .HasColumnType("varchar(5)");
+
+            modelBuilder.Entity<Client>()
+                .HasIndex(c => c.ClinetCode)
+                .IsUnique();
 
             modelBuilder.Entity<Country>()
                 .ToTable("Countries");

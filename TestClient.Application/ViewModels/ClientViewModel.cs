@@ -10,16 +10,18 @@ namespace TestClient.Application.ViewModels
         public string CountryRegioneCode { get; set; }
     }
 
-    public static class ExtensionMethods
+    public static class ClientViewModelExtensionMethods
     {
         public static ClientViewModel ToEntity(this Client client)
         {
-            if (client == null) return null;
+            if (client == null || client.Country == null) return null;
 
             return new ClientViewModel
             {
                 ClientName = client.ClientName,
                 ClientCode = client.ClinetCode,
+                CountryName = client.Country.CountryName,
+                CountryRegioneCode = client.Country.CountryRegioneCode
             };
         }
     }

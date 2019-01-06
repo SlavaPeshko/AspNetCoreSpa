@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TestClient.Data.Context;
 using TestClient.Data.Repositories.Contracts;
@@ -9,7 +10,7 @@ namespace TestClient.Data.Repositories
 {
     public class ClientsRepository : BaseRepository<Client, int>, IClientsRepository
     {
-        public ClientsRepository(TestClientContext dbContext) : base(dbContext)
+        public ClientsRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
@@ -21,6 +22,7 @@ namespace TestClient.Data.Repositories
         public async Task<IEnumerable<Client>> GetClientsAsync()
         {
             return await GetSet()
+                .Include(c => c.Country)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -34,6 +36,11 @@ namespace TestClient.Data.Repositories
         {
             GetSet().Attach(client);
             DbContext.Entry(client).State = EntityState.Modified;
+        }
+
+        public async Task<bool> IsUniqueClientCodeAsync(string clientCode)
+        {
+            return await GetSet().AnyAsync(c => c.ClinetCode.ToUpperInvariant() == clientCode.ToUpperInvariant());
         }
     }
 }

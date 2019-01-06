@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TestClient.Application.Services.Contracts;
 using TestClient.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestClient.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    //[Authorize]
     public class ClientsController : Controller
     {
         private readonly IClientService _clientService; 
@@ -15,13 +17,8 @@ namespace TestClient.WebApi.Controllers
             _clientService = clientService;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ActionResult> GetAsync()
         {
             var vm = await _clientService.GetClientsAsync();
             return Ok(vm);

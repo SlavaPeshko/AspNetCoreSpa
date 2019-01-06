@@ -10,5 +10,6 @@ namespace TestClient.Data.Repositories.Contracts
         Task PostAsync(Client client);
         void Put(Client client);
         Task<Client> GetClientByIdAsync(int id);
+        Task<bool> IsUniqueClientCodeAsync(string clientCode);
     }
 }
