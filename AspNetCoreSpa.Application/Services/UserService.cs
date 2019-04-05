@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Application.ViewModels;
+using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Enities.Base;
 using AspNetCoreSpa.Domain.Models;
 
 namespace AspNetCoreSpa.Application.Services
@@ -53,6 +55,28 @@ namespace AspNetCoreSpa.Application.Services
         public void Put(User user)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Result<LogInViewModel>> LogInAsync(LoginInputModel model)
+        {
+            User user = null;
+            if(model.EmailOrPhone.IndexOf("@") > -1)
+            {
+                user = await _userRepository.GetUserByEmailAsync(model.EmailOrPhone);
+            }
+            else
+            {
+                user = await _userRepository.GetUserByPhoneAsync(model.EmailOrPhone);
+            }
+
+            if (user == null)
+                return Result.Fail<LogInViewModel>(ErrorCode.UserNotFound, ET.UserNotFound);
+
+            LogInViewModel logInViewModel = new LogInViewModel();
+            logInViewModel.Token = "token";
+            logInViewModel.RerfreshToken = "rerfreshToken";
+
+            return Result.OK(logInViewModel);
         }
     }
 }

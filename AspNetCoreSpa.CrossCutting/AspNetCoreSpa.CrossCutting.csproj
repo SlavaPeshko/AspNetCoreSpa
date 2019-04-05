@@ -5,17 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Text.Designer.cs">
+    <Compile Update="Resources\ErrorTranslation.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Text.resx</DependentUpon>
+      <DependentUpon>ErrorTranslation.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Text.resx">
+    <EmbeddedResource Update="Resources\ErrorTranslation.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Text.Designer.cs</LastGenOutput>
+      <LastGenOutput>ErrorTranslation.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using AspNetCoreSpa.Domain.Models;
-using AspNetCoreSpa.CrossCutting.Resources;
+using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
 namespace AspNetCoreSpa.Domain.Validators
 {
@@ -10,11 +10,11 @@ namespace AspNetCoreSpa.Domain.Validators
         {
             RuleFor(c => c.UserCode)
                 .NotEmpty()
-                .WithMessage(Text.UserCodeRequired);
+                .WithMessage(ET.UserCodeRequired);
 
             RuleFor(c => c.UserCode)
                 .MaximumLength(5)
-                .WithMessage(Text.UserCodeInvalidLength);
+                .WithMessage(ET.UserCodeInvalidLength);
         }
     }
 }

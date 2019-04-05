@@ -6,6 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Domain.Enities.Base;
 using AspNetCoreSpa.Domain.Models;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -16,17 +18,25 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    public class AccountController : BaseController
+    public class UserController : BaseController
     {
-        public AccountController()
-        {}
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
 
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody]LoginInputModel model)
         {
-            await Task.CompletedTask;
-            return Ok();
+            var result = await _userService.LogInAsync(model);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Data);
         }
 
         //[HttpPost("register")]

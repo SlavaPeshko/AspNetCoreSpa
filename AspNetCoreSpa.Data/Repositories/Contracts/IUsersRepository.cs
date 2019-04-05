@@ -12,5 +12,9 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         void Put(User user);
         Task<User> GetUserByIdAsync(Guid id);
         Task<bool> IsUniqueUserCodeAsync(string userCode);
+        
+        // TODO SQRS pattern use for query
+        Task<User> GetUserByEmailAsync(string email);
+        Task<User> GetUserByPhoneAsync(string phone);
     }
 }

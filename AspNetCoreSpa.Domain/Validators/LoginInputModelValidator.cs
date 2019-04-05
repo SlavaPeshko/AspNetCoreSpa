@@ -1,19 +1,17 @@
 ﻿using AspNetCoreSpa.Domain.Models;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using AspNetCoreSpa.CrossCutting.Resources;
+using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
 namespace AspNetCoreSpa.Domain.Validators
 {
     public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
     {
+        // TODO if email
         public LoginInputModelValidator()
         {
-            RuleFor(x => x.Email)
+            RuleFor(x => x.EmailOrPhone)
                 .NotEmpty()
-                .WithMessage(Text.UserCodeRequired);
+                .WithMessage(ET.UserCodeRequired);
         }
     }
 }

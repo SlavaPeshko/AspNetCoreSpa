@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Enities;
+using System.Linq;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
@@ -16,7 +17,7 @@ namespace AspNetCoreSpa.Data.Repositories
 
         public async Task<User> GetUserByIdAsync(Guid id)
         {
-            return await GetSet().SingleOrDefaultAsync(c => c.Id == id);
+            return await GetSet().SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<User>> GetUsersAsync()
@@ -41,6 +42,16 @@ namespace AspNetCoreSpa.Data.Repositories
         public async Task<bool> IsUniqueUserCodeAsync(string userCode)
         {
             return await GetSet().AnyAsync(c => c.UserCode.ToUpperInvariant() == userCode.ToUpperInvariant());
+        }
+
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await GetSet().SingleOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User> GetUserByPhoneAsync (string phone)
+        {
+            return await GetSet().SingleOrDefaultAsync(u => u.Phone == phone);
         }
     }
 }
