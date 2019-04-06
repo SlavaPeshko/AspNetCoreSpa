@@ -15,5 +15,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         
         // TODO SQRS
         Task<Result<LogInViewModel>> LogInAsync(LoginInputModel model);
+        Task<bool> IsExistEmailAsync(string email);
     }
 }

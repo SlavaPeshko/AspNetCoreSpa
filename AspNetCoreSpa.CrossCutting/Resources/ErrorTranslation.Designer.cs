@@ -70,6 +70,87 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email invalid format.
+        /// </summary>
+        public static string EmailInvalid {
+            get {
+                return ResourceManager.GetString("EmailInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is required.
+        /// </summary>
+        public static string EmailRequired {
+            get {
+                return ResourceManager.GetString("EmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be digit.
+        /// </summary>
+        public static string PasswordDigit {
+            get {
+                return ResourceManager.GetString("PasswordDigit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be 8 length.
+        /// </summary>
+        public static string PasswordInvalidLength {
+            get {
+                return ResourceManager.GetString("PasswordInvalidLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be lower letter.
+        /// </summary>
+        public static string PasswordLowercaseLetter {
+            get {
+                return ResourceManager.GetString("PasswordLowercaseLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required.
+        /// </summary>
+        public static string PasswordRequired {
+            get {
+                return ResourceManager.GetString("PasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be special character ! &quot; $ ....
+        /// </summary>
+        public static string PasswordSpecialCharacter {
+            get {
+                return ResourceManager.GetString("PasswordSpecialCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be upper letter.
+        /// </summary>
+        public static string PasswordUppercaseLetter {
+            get {
+                return ResourceManager.GetString("PasswordUppercaseLetter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone is requred.
+        /// </summary>
+        public static string PhoneRequired {
+            get {
+                return ResourceManager.GetString("PhoneRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User Code should be 5 length.
         /// </summary>
         public static string UserCodeInvalidLength {

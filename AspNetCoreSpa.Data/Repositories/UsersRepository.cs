@@ -53,5 +53,10 @@ namespace AspNetCoreSpa.Data.Repositories
         {
             return await GetSet().SingleOrDefaultAsync(u => u.Phone == phone);
         }
+
+        public async Task<bool> IsExistEmailAsync(string email)
+        {
+            return await GetSet().AnyAsync(x => x.Email == email);
+        }
     }
 }

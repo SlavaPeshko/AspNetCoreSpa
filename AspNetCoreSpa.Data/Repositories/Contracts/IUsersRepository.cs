@@ -16,5 +16,6 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         // TODO SQRS pattern use for query
         Task<User> GetUserByEmailAsync(string email);
         Task<User> GetUserByPhoneAsync(string phone);
+        Task<bool> IsExistEmailAsync(string email);
     }
 }

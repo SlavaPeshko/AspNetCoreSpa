@@ -78,5 +78,12 @@ namespace AspNetCoreSpa.Application.Services
 
             return Result.OK(logInViewModel);
         }
+
+        public async Task<bool> IsExistEmailAsync(string email)
+        {
+            bool isExist = await _userRepository.IsExistEmailAsync(email);
+
+            return isExist;
+        }
     }
 }

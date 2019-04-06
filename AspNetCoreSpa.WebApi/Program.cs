@@ -19,8 +19,8 @@ namespace AspNetCoreSpa.WebApi
                 IHostingEnvironment env = hostingContext.HostingEnvironment;
 
                 config.SetBasePath(Directory.GetCurrentDirectory());
-                //config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-                //config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                // config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+                config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
                 config.AddEnvironmentVariables();
             }).UseStartup<Startup>();
     }

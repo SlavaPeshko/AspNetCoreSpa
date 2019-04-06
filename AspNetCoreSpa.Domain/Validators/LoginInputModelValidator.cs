@@ -1,4 +1,5 @@
 ﻿using AspNetCoreSpa.Domain.Models;
+using AspNetCoreSpa.Domain.Validators.Extensions;
 using FluentValidation;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
@@ -6,12 +7,24 @@ namespace AspNetCoreSpa.Domain.Validators
 {
     public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
     {
-        // TODO if email
+        private const string at = "@";
+
         public LoginInputModelValidator()
         {
-            RuleFor(x => x.EmailOrPhone)
+            When(e => e.EmailOrPhone.IndexOf(at) > -1, () =>
+            {
+                RuleFor(e => e.EmailOrPhone)
+                    .NotEmpty()
+                    .WithMessage(ET.EmailRequired)
+                    .EmailAddress()
+                    .WithMessage(ET.EmailInvalid);
+            });
+
+            RuleFor(e => e.EmailOrPhone)
                 .NotEmpty()
-                .WithMessage(ET.UserCodeRequired);
+                .WithMessage(ET.PhoneRequired);
+
+            RuleFor(p => p.Password).Password();
         }
     }
 }
