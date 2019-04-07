@@ -8,7 +8,6 @@ using AspNetCoreSpa.Data.UoW;
 using TestClinet.Data.Repositories;
 using TestClinet.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.IoC
 {
