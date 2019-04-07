@@ -8,11 +8,11 @@ namespace AspNetCoreSpa.Domain.Enities
     {
         public Role()
         {
-            Users = new HashSet<User>();
+            UserRoles = new HashSet<UserRole>();
         }
 
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }

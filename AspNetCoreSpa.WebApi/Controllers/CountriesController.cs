@@ -4,7 +4,8 @@ using AspNetCoreSpa.Application.Contracts;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    public class CountriesController : ControllerBase
+    [Route("api/[controller]")]
+    public class CountriesController : Controller
     {
         private readonly ICountryService _countryService;
 

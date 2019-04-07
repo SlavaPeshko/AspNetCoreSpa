@@ -5,13 +5,15 @@ namespace AspNetCoreSpa.Data.Context
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<DbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        // public DbSet<Claim> Claims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,6 +31,14 @@ namespace AspNetCoreSpa.Data.Context
                 .HasIndex(c => c.UserCode)
                 .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Phone)
+                .IsUnique();
+
             modelBuilder.Entity<Country>()
                 .ToTable("Countries");
 
@@ -39,6 +49,19 @@ namespace AspNetCoreSpa.Data.Context
             modelBuilder.Entity<Country>()
                 .HasMany(co => co.Users)
                 .WithOne(cl => cl.Country);
+
+            modelBuilder.Entity<UserRole>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRoles)
+                .HasForeignKey(ur => ur.RoleId);
 
             modelBuilder.Seed();
 

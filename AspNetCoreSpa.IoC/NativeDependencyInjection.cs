@@ -7,6 +7,8 @@ using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
 using TestClinet.Data.Repositories;
 using TestClinet.Data.Repositories.Contracts;
+using AspNetCoreSpa.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -14,16 +16,19 @@ namespace AspNetCoreSpa.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
-            //repositories
+            // Repositories
             services.AddScoped<IUserRepository, UsersRepository>();
             services.AddScoped<ICountriesRepository, CountriesRepository>();
 
-            //services
+            // Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICountryService, CountryService>();
 
-            //UoW
+            // UoW
             services.AddScoped<IUnitOfWorks, UnitOfWorks>();
+
+            // DbContext
+            services.AddScoped<ApplicationDbContext>();
         }
     }
 }

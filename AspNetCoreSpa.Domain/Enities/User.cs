@@ -8,8 +8,8 @@ namespace AspNetCoreSpa.Domain.Enities
     {
         public User()
         {
-            Claims = new HashSet<Claim>();
-            Roles = new HashSet<Role>();
+            // Claims = new HashSet<Claim>();
+            UserRoles = new HashSet<UserRole>();
         }
 
         public string FirstName { get; set; }
@@ -19,13 +19,13 @@ namespace AspNetCoreSpa.Domain.Enities
         public string Phone { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
-        
+
         public string UserCode { get; set; }
 
         public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public ICollection<Claim> Claims { get; set; }
-        public ICollection<Role> Roles { get; set; }
+        // public ICollection<Claim> Claims { get; set; }
+        public ICollection<UserRole> UserRoles { get; set; }
     }
 }
