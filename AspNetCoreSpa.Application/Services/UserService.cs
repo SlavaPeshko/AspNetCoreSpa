@@ -47,6 +47,10 @@ namespace AspNetCoreSpa.Application.Services
 
                 user.Email = model.EmailOrPhone;
             }
+            else
+            {
+                user.Phone = model.EmailOrPhone;
+            }
 
             // TODO: Create Helper password hasher
             user.PasswordHash = model.Password;
