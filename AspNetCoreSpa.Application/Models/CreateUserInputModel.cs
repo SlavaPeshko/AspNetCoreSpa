@@ -1,6 +1,6 @@
-﻿namespace AspNetCoreSpa.Domain.Models
+﻿namespace AspNetCoreSpa.Application.Models
 {
-    public class CreateUserModel
+    public class CreateUserInputModel
     {
         public string UserName { get; set; }
         public string UserCode { get; set; }

@@ -16,9 +16,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Text;
 using AspNetCoreSpa.Data.Context;
-using AspNetCoreSpa.Domain.Validators;
 using AspNetCoreSpa.IoC;
 using AspNetCoreSpa.WebApi.Filters;
+using AspNetCoreSpa.Application.Validators;
+using AspNetCoreSpa.Application.Options;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -42,6 +43,14 @@ namespace AspNetCoreSpa.WebApi
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+
+            services.Configure<JwtIssuerOptions>(options => {
+                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
+                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                options.Key = jwtAppSettingOptions[nameof(JwtIssuerOptions.Key)];
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -51,9 +60,9 @@ namespace AspNetCoreSpa.WebApi
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    ValidIssuer = Configuration["JwtIssuerOptions:Issuer"],
+                    ValidAudience = Configuration["JwtIssuerOptions:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtIssuerOptions:Key"]))
                 };
             });
 

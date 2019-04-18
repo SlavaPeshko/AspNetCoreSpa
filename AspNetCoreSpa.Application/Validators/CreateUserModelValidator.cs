@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using AspNetCoreSpa.Domain.Models;
+using AspNetCoreSpa.Application.Models;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
-namespace AspNetCoreSpa.Domain.Validators
+namespace AspNetCoreSpa.Application.Validators
 {
-    public sealed class CreateUserModelValidator : AbstractValidator<CreateUserModel>
+    public sealed class CreateUserModelValidator : AbstractValidator<CreateUserInputModel>
     {
         public CreateUserModelValidator()
         {

@@ -8,6 +8,7 @@ using AspNetCoreSpa.Data.UoW;
 using TestClinet.Data.Repositories;
 using TestClinet.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.Context;
+using AspNetCoreSpa.Application.Helpers;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -22,6 +23,9 @@ namespace AspNetCoreSpa.IoC
             // Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICountryService, CountryService>();
+
+            // Services/Helpers
+            services.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
 
             // UoW
             services.AddScoped<IUnitOfWorks, UnitOfWorks>();

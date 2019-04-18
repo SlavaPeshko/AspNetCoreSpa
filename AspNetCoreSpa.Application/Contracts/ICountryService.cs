@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AspNetCoreSpa.Application.ViewModels;
+using AspNetCoreSpa.Application.Models;
 
 namespace AspNetCoreSpa.Application.Contracts
 {

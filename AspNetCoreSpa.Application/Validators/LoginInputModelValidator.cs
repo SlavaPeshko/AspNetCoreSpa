@@ -1,9 +1,9 @@
-﻿using AspNetCoreSpa.Domain.Models;
-using AspNetCoreSpa.Domain.Validators.Extensions;
-using FluentValidation;
+﻿using FluentValidation;
+using AspNetCoreSpa.Application.Models;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
+using AspNetCoreSpa.Application.Validators.Extensions;
 
-namespace AspNetCoreSpa.Domain.Validators
+namespace AspNetCoreSpa.Application.Validators
 {
     public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
     {

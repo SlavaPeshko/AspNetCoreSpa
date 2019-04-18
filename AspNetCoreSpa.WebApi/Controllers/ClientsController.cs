@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreSpa.Application.Services.Contracts;
-using AspNetCoreSpa.Domain.Models;
-using Microsoft.AspNetCore.Authorization;
+using AspNetCoreSpa.Application.Models;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
@@ -24,7 +23,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody]CreateUserModel model)
+        public async Task<IActionResult> PostAsync([FromBody]CreateUserInputModel model)
         {
             var vm = await _clientService.PostAsync(model);
             return Ok(vm);

@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreSpa.Domain.Models
+﻿namespace AspNetCoreSpa.Application.Models
 {
     public class LogInViewModel
     {

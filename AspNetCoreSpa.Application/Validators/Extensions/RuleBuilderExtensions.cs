@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
-namespace AspNetCoreSpa.Domain.Validators.Extensions
+namespace AspNetCoreSpa.Application.Validators.Extensions
 {
     public static class RuleBuilderExtensions
     {

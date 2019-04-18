@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Contracts;
-using AspNetCoreSpa.Application.ViewModels;
+using AspNetCoreSpa.Application.Models;
 using TestClinet.Data.Repositories.Contracts;
 
 namespace AspNetCoreSpa.Application.Services

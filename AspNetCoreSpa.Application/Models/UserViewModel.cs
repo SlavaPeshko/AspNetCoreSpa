@@ -1,6 +1,6 @@
 ﻿using AspNetCoreSpa.Domain.Enities;
 
-namespace AspNetCoreSpa.Application.ViewModels
+namespace AspNetCoreSpa.Application.Models
 {
     public class UserViewModel
     {
