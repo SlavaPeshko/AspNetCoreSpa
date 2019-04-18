@@ -35,25 +35,26 @@ namespace AspNetCoreSpa.Application.Services
             return users.Select(c => c.ToEntity());
         }
 
-        public async Task<CreateUserInputModel> PostAsync(CreateUserInputModel createUserModel)
+        public async Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel model)
         {
-            var isUniqueUserCode = await _userRepository.IsUniqueUserCodeAsync(createUserModel.UserCode);
-            if (isUniqueUserCode)
+            User user = null;
+
+            if(model.EmailOrPhone.IndexOf("@") > -1)
             {
-                //return 
+                var isExistEmail = await _userRepository.IsExistEmailAsync(model.EmailOrPhone);
+                if (isExistEmail)
+                    return Result.Fail<UserViewModel>(ErrorCode.UserNotFound, "");
+
+                user.Email = model.EmailOrPhone;
             }
 
-            var user = new User
-            {
-                // ClientName = createClientModel.ClientName,
-                UserCode = createUserModel.UserCode,
-                CountryId = createUserModel.CountryId
-            };
+            // TODO: Create Helper password hasher
+            user.PasswordHash = model.Password;
 
             await _userRepository.PostAsync(user);
             await _unitOfWorks.CommitAsync();
 
-            return createUserModel;
+            return Result.OK(user.ToEntity());
         }
 
         public void Put(User user)
@@ -61,7 +62,7 @@ namespace AspNetCoreSpa.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Result<LogInViewModel>> LogInAsync(LoginInputModel model)
+        public async Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model)
         {
             User user = null;
             if(model.EmailOrPhone.IndexOf("@") > -1)
@@ -73,8 +74,8 @@ namespace AspNetCoreSpa.Application.Services
                 user = await _userRepository.GetUserByPhoneAsync(model.EmailOrPhone);
             }
 
-            //if (user == null)
-            //    return Result.Fail<LogInViewModel>(ErrorCode.UserNotFound, ET.UserNotFound);
+            if (user == null)
+                return Result.Fail<LogInViewModel>(ErrorCode.UserNotFound, ET.UserNotFound);
 
             var logInViewModel = new LogInViewModel
             {

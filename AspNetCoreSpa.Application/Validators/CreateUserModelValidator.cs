@@ -8,13 +8,7 @@ namespace AspNetCoreSpa.Application.Validators
     {
         public CreateUserModelValidator()
         {
-            RuleFor(c => c.UserCode)
-                .NotEmpty()
-                .WithMessage(ET.UserCodeRequired);
 
-            RuleFor(c => c.UserCode)
-                .MaximumLength(5)
-                .WithMessage(ET.UserCodeInvalidLength);
         }
     }
 }

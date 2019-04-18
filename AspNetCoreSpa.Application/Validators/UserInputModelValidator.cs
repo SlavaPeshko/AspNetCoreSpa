@@ -5,11 +5,11 @@ using AspNetCoreSpa.Application.Validators.Extensions;
 
 namespace AspNetCoreSpa.Application.Validators
 {
-    public class LoginInputModelValidator : AbstractValidator<LoginInputModel>
+    public class UserInputModelValidator : AbstractValidator<UserInputModel>
     {
         private const string at = "@";
 
-        public LoginInputModelValidator()
+        public UserInputModelValidator()
         {
             When(e => e.EmailOrPhone.IndexOf(at) > -1, () =>
             {
