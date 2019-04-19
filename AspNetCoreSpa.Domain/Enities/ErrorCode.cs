@@ -4,6 +4,7 @@
     {
         // User errors
         UserNotFound = 100,
-        PasswordInvalid = 101
+        PasswordInvalid = 101,
+        EmailAlreadyExists = 102
     }
 }

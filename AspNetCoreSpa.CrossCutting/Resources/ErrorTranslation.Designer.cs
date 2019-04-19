@@ -79,6 +79,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email is already exists.
+        /// </summary>
+        public static string EmailAlreadyExists {
+            get {
+                return ResourceManager.GetString("EmailAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email invalid format.
         /// </summary>
         public static string EmailInvalid {

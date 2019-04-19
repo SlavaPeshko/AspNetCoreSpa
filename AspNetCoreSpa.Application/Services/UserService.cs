@@ -44,7 +44,7 @@ namespace AspNetCoreSpa.Application.Services
             {
                 var isExistEmail = await _userRepository.IsExistEmailAsync(model.EmailOrPhone);
                 if (isExistEmail)
-                    return Result.Fail<UserViewModel>(ErrorCode.UserNotFound, "");
+                    return Result.Fail<UserViewModel>(ErrorCode.EmailAlreadyExists, ET.EmailAlreadyExists);
 
                 user.Email = model.EmailOrPhone;
             }

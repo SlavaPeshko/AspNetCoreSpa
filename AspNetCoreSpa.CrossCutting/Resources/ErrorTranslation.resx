@@ -123,6 +123,9 @@
   <data name="CountryNameRequired" xml:space="preserve">
     <value>CountryName is required</value>
   </data>
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>Email is already exists</value>
+  </data>
   <data name="EmailInvalid" xml:space="preserve">
     <value>Email invalid format</value>
   </data>

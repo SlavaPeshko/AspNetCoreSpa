@@ -29,7 +29,11 @@ namespace AspNetCoreSpa.Application.Helpers
 
             var claims = new[]
             {
-                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                 new Claim(nameof(user.Phone), user.Phone),
+                 new Claim(nameof(user.FirstName), user.FirstName),
+                 new Claim(nameof(user.LastName), user.LastName),
+                 new Claim(JwtRegisteredClaimNames.Birthdate, user.BirthDay.ToString()),
+                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtIssuerOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
              };

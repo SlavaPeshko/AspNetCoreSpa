@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetCoreSpa.Data.Migrations
 {
-    public partial class Initialization : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,12 +47,18 @@ namespace AspNetCoreSpa.Data.Migrations
                     BirthDay = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     UserCode = table.Column<string>(type: "varchar(5)", nullable: true),
-                    CountryId = table.Column<int>(nullable: true),
+                    CountryId = table.Column<Guid>(nullable: true),
                     CountryId1 = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Users_Countries_CountryId1",
                         column: x => x.CountryId1,
@@ -89,6 +95,11 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_CountryId",
+                table: "Users",
+                column: "CountryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CountryId1",

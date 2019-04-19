@@ -24,7 +24,7 @@ namespace AspNetCoreSpa.Domain.Enities
 
         public string UserCode { get; set; }
 
-        public int? CountryId { get; set; }
+        public Guid? CountryId { get; set; }
         public Country Country { get; set; }
 
         public ICollection<UserRole> UserRoles { get; set; }

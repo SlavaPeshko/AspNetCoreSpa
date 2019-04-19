@@ -10,10 +10,9 @@ namespace AspNetCoreSpa.Data.Context
             Database.EnsureCreated();
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        // public DbSet<Claim> Claims { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -39,16 +38,17 @@ namespace AspNetCoreSpa.Data.Context
                 .HasIndex(u => u.Phone)
                 .IsUnique();
 
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.Country)
+                .WithMany()
+                .HasForeignKey(c => c.CountryId);
+
             modelBuilder.Entity<Country>()
                 .ToTable("Countries");
 
             modelBuilder.Entity<Country>()
                 .Property(c => c.CountryRegioneCode)
                 .HasColumnType("varchar(2)");
-
-            modelBuilder.Entity<Country>()
-                .HasMany(co => co.Users)
-                .WithOne(cl => cl.Country);
 
             modelBuilder.Entity<UserRole>()
                 .HasKey(ur => new { ur.UserId, ur.RoleId });

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190419080622_Initialization")]
-    partial class Initialization
+    [Migration("20190419160158_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -57,7 +57,7 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<DateTime>("BirthDay");
 
-                    b.Property<int?>("CountryId");
+                    b.Property<Guid?>("CountryId");
 
                     b.Property<Guid?>("CountryId1");
 
@@ -79,6 +79,8 @@ namespace AspNetCoreSpa.Data.Migrations
                         .HasColumnType("varchar(5)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
 
                     b.HasIndex("CountryId1");
 
@@ -113,6 +115,10 @@ namespace AspNetCoreSpa.Data.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.User", b =>
                 {
                     b.HasOne("AspNetCoreSpa.Domain.Enities.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("AspNetCoreSpa.Domain.Enities.Country")
                         .WithMany("Users")
                         .HasForeignKey("CountryId1");
                 });
