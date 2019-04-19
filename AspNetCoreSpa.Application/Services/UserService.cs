@@ -38,7 +38,7 @@ namespace AspNetCoreSpa.Application.Services
 
         public async Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel model)
         {
-            User user = null;
+            User user = new User();
 
             if(model.EmailOrPhone.IndexOf("@") > -1)
             {
@@ -57,9 +57,7 @@ namespace AspNetCoreSpa.Application.Services
             user.LastName = model.LastName;
             user.BirthDay = model.BirthDay;
             user.Gender = (Gender)model.Gender;
-
-            // TODO: Create Helper password hasher
-            user.PasswordHash = model.Password;
+            user.PasswordHash = PasswordHasher.GetHashPassword(model.Password);
 
             await _userRepository.PostAsync(user);
             await _unitOfWorks.CommitAsync();
@@ -86,6 +84,10 @@ namespace AspNetCoreSpa.Application.Services
 
             if (user == null)
                 return Result.Fail<LogInViewModel>(ErrorCode.UserNotFound, ET.UserNotFound);
+
+            var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.Password);
+            if (!verifyPassword)
+                return Result.Fail<LogInViewModel>(ErrorCode.PasswordInvalid, ET.PasswordInvalid);
 
             var logInViewModel = new LogInViewModel
             {

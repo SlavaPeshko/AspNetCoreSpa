@@ -4,5 +4,6 @@
     {
         // User errors
         UserNotFound = 100,
+        PasswordInvalid = 101
     }
 }
