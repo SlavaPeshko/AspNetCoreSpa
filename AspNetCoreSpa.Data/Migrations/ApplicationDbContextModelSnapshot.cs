@@ -53,7 +53,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<int>("CountryId");
+                    b.Property<DateTime>("BirthDay");
+
+                    b.Property<int?>("CountryId");
 
                     b.Property<Guid?>("CountryId1");
 
@@ -62,6 +64,8 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<int>("Gender");
 
                     b.Property<string>("LastName");
 

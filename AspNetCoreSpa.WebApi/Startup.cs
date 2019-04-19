@@ -163,9 +163,9 @@ namespace AspNetCoreSpa.WebApi
             app.UseMvc();
         }
 
-        private static void RegisterService(IServiceCollection services)
+        private static void RegisterService(IServiceCollection service)
         {
-            NativeDependencyInjection.RegisterServices(services);
+            NativeDependencyInjection.RegisterServiceCollection(service);
         }
     }
 }

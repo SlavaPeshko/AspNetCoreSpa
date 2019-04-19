@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BirthDayRequired" xml:space="preserve">
+    <value>BirthDay is required</value>
+  </data>
   <data name="CountryNameRequired" xml:space="preserve">
     <value>CountryName is required</value>
   </data>
@@ -125,6 +128,15 @@
   </data>
   <data name="EmailRequired" xml:space="preserve">
     <value>Email is required</value>
+  </data>
+  <data name="FirstNameRequired" xml:space="preserve">
+    <value>FirstName is required</value>
+  </data>
+  <data name="GenderRequired" xml:space="preserve">
+    <value>Gender is required</value>
+  </data>
+  <data name="LastNameRequired" xml:space="preserve">
+    <value>LastName is required</value>
   </data>
   <data name="PasswordDigit" xml:space="preserve">
     <value>Password must be digit</value>

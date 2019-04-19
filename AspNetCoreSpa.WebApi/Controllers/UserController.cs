@@ -28,6 +28,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result.Data);
         }
 
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> CreateUserAsync([FromBody]CreateUserInputModel model)
         {

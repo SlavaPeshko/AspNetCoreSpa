@@ -61,6 +61,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BirthDay is required.
+        /// </summary>
+        public static string BirthDayRequired {
+            get {
+                return ResourceManager.GetString("BirthDayRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CountryName is required.
         /// </summary>
         public static string CountryNameRequired {
@@ -84,6 +93,33 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string EmailRequired {
             get {
                 return ResourceManager.GetString("EmailRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FirstName is required.
+        /// </summary>
+        public static string FirstNameRequired {
+            get {
+                return ResourceManager.GetString("FirstNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gender is required.
+        /// </summary>
+        public static string GenderRequired {
+            get {
+                return ResourceManager.GetString("GenderRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LastName is required.
+        /// </summary>
+        public static string LastNameRequired {
+            get {
+                return ResourceManager.GetString("LastNameRequired", resourceCulture);
             }
         }
         

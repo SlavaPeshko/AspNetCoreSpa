@@ -44,8 +44,10 @@ namespace AspNetCoreSpa.Data.Migrations
                     Phone = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    BirthDay = table.Column<DateTime>(nullable: false),
+                    Gender = table.Column<int>(nullable: false),
                     UserCode = table.Column<string>(type: "varchar(5)", nullable: true),
-                    CountryId = table.Column<int>(nullable: false),
+                    CountryId = table.Column<int>(nullable: true),
                     CountryId1 = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>

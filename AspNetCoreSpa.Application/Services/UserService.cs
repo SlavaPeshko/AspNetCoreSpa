@@ -10,6 +10,7 @@ using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Base;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Helpers;
+using AspNetCoreSpa.Domain.Enities.Enum;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -51,6 +52,11 @@ namespace AspNetCoreSpa.Application.Services
             {
                 user.Phone = model.EmailOrPhone;
             }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.BirthDay = model.BirthDay;
+            user.Gender = (Gender)model.Gender;
 
             // TODO: Create Helper password hasher
             user.PasswordHash = model.Password;

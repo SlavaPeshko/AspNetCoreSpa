@@ -1,37 +1,78 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using AspNetCoreSpa.Application.Contracts;
-using AspNetCoreSpa.Application.Services;
-using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Data.Repositories;
-using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
-using TestClinet.Data.Repositories;
-using TestClinet.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Application.Helpers;
+using System.Collections.Generic;
+using System;
+using System.Linq;
 
 namespace AspNetCoreSpa.IoC
 {
     public class NativeDependencyInjection
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServiceCollection(IServiceCollection service)
         {
             // Repositories
-            services.AddScoped<IUserRepository, UsersRepository>();
-            services.AddScoped<ICountriesRepository, CountriesRepository>();
+            //service.AddScoped<IUserRepository, UsersRepository>();
+            //service.AddScoped<ICountriesRepository, CountriesRepository>();
 
             // Services
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ICountryService, CountryService>();
+            //service.AddScoped<IUserService, UserService>();
+            //service.AddScoped<ICountryService, CountryService>();
 
             // Services/Helpers
-            services.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
+            service.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
 
             // UoW
-            services.AddScoped<IUnitOfWorks, UnitOfWorks>();
+            service.AddScoped<IUnitOfWorks, UnitOfWorks>();
 
             // DbContext
-            services.AddScoped<ApplicationDbContext>();
+            service.AddScoped<ApplicationDbContext>();
+
+            RegisterServices(service, typeof(IBaseService));
+            RegisterRepositories(service, typeof(BaseRepository<,>));
+        }
+
+        private static void RegisterRepositories(IServiceCollection service, Type baseTypeOf)
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => !x.IsAbstract && !x.IsInterface && x.BaseType != null 
+                    && x.BaseType.IsGenericType && x.BaseType.GetGenericTypeDefinition() == baseTypeOf);
+
+            AddScoped(types, service);
+        }
+
+        private static void RegisterServices(IServiceCollection service, Type baseTypeOf)
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(x => x.GetTypes())
+                .Where(x => baseTypeOf.IsAssignableFrom(x) && x.IsClass);
+
+            AddScoped(types, service);
+        }
+
+        private static IEnumerable<Type> GetImplementedInterfaces(Type type)
+        {
+            var allInterfaces = type.GetInterfaces();
+
+            var implementedlInterfaces = allInterfaces.Except
+                    (allInterfaces.SelectMany(t => t.GetInterfaces()));
+
+            return implementedlInterfaces;
+        }
+
+        private static void AddScoped(IEnumerable<Type> types, IServiceCollection service)
+        {
+            foreach (var type in types)
+            {
+                foreach (var @interface in GetImplementedInterfaces(type))
+                {
+                    service.AddScoped(@interface, type);
+                }
+            }
         }
     }
 }

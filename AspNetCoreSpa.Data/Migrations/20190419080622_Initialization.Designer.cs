@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190407191552_Initialization")]
+    [Migration("20190419080622_Initialization")]
     partial class Initialization
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<int>("CountryId");
+                    b.Property<DateTime>("BirthDay");
+
+                    b.Property<int?>("CountryId");
 
                     b.Property<Guid?>("CountryId1");
 
@@ -64,6 +66,8 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<bool>("EmailConfirmed");
 
                     b.Property<string>("FirstName");
+
+                    b.Property<int>("Gender");
 
                     b.Property<string>("LastName");
 

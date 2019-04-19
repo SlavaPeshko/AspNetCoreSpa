@@ -4,7 +4,7 @@ using AspNetCoreSpa.Application.Models;
 
 namespace AspNetCoreSpa.Application.Contracts
 {
-    public interface ICountryService
+    public interface ICountryService : IBaseService
     {
         Task<IEnumerable<CountryViewModel>> GetCountriesAsync();
     }

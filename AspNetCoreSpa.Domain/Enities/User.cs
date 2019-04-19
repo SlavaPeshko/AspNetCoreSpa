@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AspNetCoreSpa.Domain.Enities.Base;
+using AspNetCoreSpa.Domain.Enities.Enum;
 
 namespace AspNetCoreSpa.Domain.Enities
 {
@@ -8,7 +9,6 @@ namespace AspNetCoreSpa.Domain.Enities
     {
         public User()
         {
-            // Claims = new HashSet<Claim>();
             UserRoles = new HashSet<UserRole>();
         }
 
@@ -19,13 +19,14 @@ namespace AspNetCoreSpa.Domain.Enities
         public string Phone { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
+        public DateTime BirthDay { get; set; }
+        public Gender Gender { get; set; }
 
         public string UserCode { get; set; }
 
-        public int CountryId { get; set; }
+        public int? CountryId { get; set; }
         public Country Country { get; set; }
 
-        // public ICollection<Claim> Claims { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }
