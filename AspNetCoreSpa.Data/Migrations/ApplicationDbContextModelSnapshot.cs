@@ -39,7 +39,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<int>("Name");
 
                     b.HasKey("Id");
 
@@ -53,11 +53,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<DateTime>("BirthDay");
-
                     b.Property<Guid?>("CountryId");
 
-                    b.Property<Guid?>("CountryId1");
+                    b.Property<DateTime>("DateOfBirth");
 
                     b.Property<string>("Email");
 
@@ -79,8 +77,6 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CountryId");
-
-                    b.HasIndex("CountryId1");
 
                     b.HasIndex("Email")
                         .IsUnique()
@@ -113,12 +109,8 @@ namespace AspNetCoreSpa.Data.Migrations
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.User", b =>
                 {
                     b.HasOne("AspNetCoreSpa.Domain.Enities.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId");
-
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Country")
                         .WithMany("Users")
-                        .HasForeignKey("CountryId1");
+                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.UserRole", b =>

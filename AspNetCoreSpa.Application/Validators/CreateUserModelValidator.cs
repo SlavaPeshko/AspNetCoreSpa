@@ -22,9 +22,17 @@ namespace AspNetCoreSpa.Application.Validators
                 .NotEmpty()
                 .WithMessage(ET.GenderRequired);
 
-            RuleFor(c => c.BirthDay)
+            RuleFor(c => c.DateOfBirth)
                 .NotEmpty()
                 .WithMessage(ET.BirthDayRequired);
+
+            RuleFor(c => c.ConfirmationPassword)
+                .NotEmpty()
+                .WithMessage(ET.ConfirmationPasswordRequired);
+
+            RuleFor(c => c.Password)
+                .Equal(c => c.ConfirmationPassword)
+                .WithMessage(ET.ConfirmationPasswordMatch);
         }
     }
 }

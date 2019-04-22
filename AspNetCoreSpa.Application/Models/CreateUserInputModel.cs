@@ -6,7 +6,8 @@ namespace AspNetCoreSpa.Application.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime BirthDay { get; set; }
-        public int Gender { get; set; }
+        public string ConfirmationPassword { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public string Gender { get; set; }
     }
 }

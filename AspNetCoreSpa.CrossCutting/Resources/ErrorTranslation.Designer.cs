@@ -70,6 +70,24 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ConfirmationPassword doesn&apos;t match password.
+        /// </summary>
+        public static string ConfirmationPasswordMatch {
+            get {
+                return ResourceManager.GetString("ConfirmationPasswordMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ConfirmationPassword is required.
+        /// </summary>
+        public static string ConfirmationPasswordRequired {
+            get {
+                return ResourceManager.GetString("ConfirmationPasswordRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to CountryName is required.
         /// </summary>
         public static string CountryNameRequired {

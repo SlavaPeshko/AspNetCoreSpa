@@ -19,14 +19,12 @@ namespace AspNetCoreSpa.Domain.Enities
         public string Phone { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
-        public DateTime BirthDay { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
 
         public string UserCode { get; set; }
 
-        public Guid? CountryId { get; set; }
         public Country Country { get; set; }
-
         public ICollection<UserRole> UserRoles { get; set; }
     }
 }

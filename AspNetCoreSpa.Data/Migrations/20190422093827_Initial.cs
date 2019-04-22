@@ -25,7 +25,7 @@ namespace AspNetCoreSpa.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,11 +44,10 @@ namespace AspNetCoreSpa.Data.Migrations
                     Phone = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    BirthDay = table.Column<DateTime>(nullable: false),
+                    DateOfBirth = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     UserCode = table.Column<string>(type: "varchar(5)", nullable: true),
-                    CountryId = table.Column<Guid>(nullable: true),
-                    CountryId1 = table.Column<Guid>(nullable: true)
+                    CountryId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,12 +55,6 @@ namespace AspNetCoreSpa.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Users_Countries_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Users_Countries_CountryId1",
-                        column: x => x.CountryId1,
                         principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -100,11 +93,6 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "IX_Users_CountryId",
                 table: "Users",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_CountryId1",
-                table: "Users",
-                column: "CountryId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",

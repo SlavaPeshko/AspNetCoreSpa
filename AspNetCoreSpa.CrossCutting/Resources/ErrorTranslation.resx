@@ -120,6 +120,12 @@
   <data name="BirthDayRequired" xml:space="preserve">
     <value>BirthDay is required</value>
   </data>
+  <data name="ConfirmationPasswordMatch" xml:space="preserve">
+    <value>ConfirmationPassword doesn't match password</value>
+  </data>
+  <data name="ConfirmationPasswordRequired" xml:space="preserve">
+    <value>ConfirmationPassword is required</value>
+  </data>
   <data name="CountryNameRequired" xml:space="preserve">
     <value>CountryName is required</value>
   </data>

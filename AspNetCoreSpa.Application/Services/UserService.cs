@@ -55,9 +55,20 @@ namespace AspNetCoreSpa.Application.Services
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.BirthDay = model.BirthDay;
-            user.Gender = (Gender)model.Gender;
+            user.DateOfBirth = model.DateOfBirth;
+            user.Gender = Enum.Parse<Gender>(model.Gender);
             user.PasswordHash = PasswordHasher.GetHashPassword(model.Password);
+
+            var userRole = new UserRole
+            {
+                User = user,
+                Role = new Role
+                {
+                    Name = RoleEnum.User
+                }
+            };
+
+            user.UserRoles.Add(userRole);
 
             await _userRepository.PostAsync(user);
             await _unitOfWorks.CommitAsync();

@@ -20,14 +20,14 @@ namespace AspNetCoreSpa.Data.Context
                 .ToTable("Users");
 
             modelBuilder.Entity<User>()
-                .HasKey(c => c.Id);
+                .HasKey(u => u.Id);
 
             modelBuilder.Entity<User>()
-                .Property(c => c.UserCode)
+                .Property(u => u.UserCode)
                 .HasColumnType("varchar(5)");
 
             modelBuilder.Entity<User>()
-                .HasIndex(c => c.UserCode)
+                .HasIndex(u => u.UserCode)
                 .IsUnique();
 
             modelBuilder.Entity<User>()
@@ -37,11 +37,6 @@ namespace AspNetCoreSpa.Data.Context
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Phone)
                 .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Country)
-                .WithMany()
-                .HasForeignKey(c => c.CountryId);
 
             modelBuilder.Entity<Country>()
                 .ToTable("Countries");
