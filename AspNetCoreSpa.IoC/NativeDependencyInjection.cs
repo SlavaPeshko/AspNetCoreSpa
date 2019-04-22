@@ -7,6 +7,7 @@ using AspNetCoreSpa.Application.Helpers;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -24,6 +25,7 @@ namespace AspNetCoreSpa.IoC
 
             // Services/Helpers
             service.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
+            service.AddTransient<IEmailSender, EmailSender>();
 
             // UoW
             service.AddScoped<IUnitOfWorks, UnitOfWorks>();

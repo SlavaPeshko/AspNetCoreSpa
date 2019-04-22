@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,10 +39,7 @@ namespace AspNetCoreSpa.Application.Helpers
                  new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
              };
 
-            foreach (var role in user.UserRoles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Role.Name.ToString("G")));
-            }
+            claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString("G"))));
 
             if (string.IsNullOrEmpty(user.Phone) && string.IsNullOrEmpty(user.Email))
             {

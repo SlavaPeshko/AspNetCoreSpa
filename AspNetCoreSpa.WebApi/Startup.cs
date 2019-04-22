@@ -20,6 +20,7 @@ using AspNetCoreSpa.IoC;
 using AspNetCoreSpa.WebApi.Filters;
 using AspNetCoreSpa.Application.Validators;
 using AspNetCoreSpa.Application.Options;
+using Newtonsoft.Json.Serialization;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -104,6 +105,11 @@ namespace AspNetCoreSpa.WebApi
             {
                 s.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AspNetCoreSpa", Version = "v1" });
             });
+            services
+                .AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,7 +133,7 @@ namespace AspNetCoreSpa.WebApi
 
             //app.UseHttpsRedirection();
 
-            //app.UseIdentityServer();
+            // app.UseIdentityServer();
 
             app.UseAuthentication();
 
@@ -139,26 +145,26 @@ namespace AspNetCoreSpa.WebApi
                 s.RoutePrefix = string.Empty;
             });
 
-            //app.UseExceptionHandler(appError =>
-            //{
-            //    appError.Run(async context =>
-            //    {
-            //        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            //        context.Response.ContentType = "application/json";
+            app.UseExceptionHandler(appError =>
+            {
+                appError.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
 
-            //        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-            //        if (contextFeature != null)
-            //        {
-            //            //logger.LogError($"Something went wrong: {contextFeature.Error}");
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        //logger.LogError($"Something went wrong: {contextFeature.Error}");
 
-            //            await context.Response.WriteAsync(new ErrorDetails()
-            //            {
-            //                StatusCode = context.Response.StatusCode,
-            //                Message = "Internal Server Error."
-            //            }.ToString());
-            //        }
-            //    });
-            //});
+                        await context.Response.WriteAsync(new
+                        {
+                            context.Response.StatusCode,
+                            Message = "Internal Server Error."
+                        }.ToString());
+                    }
+                });
+            });
 
             app.UseMvc();
         }

@@ -11,6 +11,11 @@ using AspNetCoreSpa.Domain.Enities.Base;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Helpers;
 using AspNetCoreSpa.Domain.Enities.Enum;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Text.Encodings.Web;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -19,14 +24,17 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IUnitOfWorks _unitOfWorks;
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenHelper _jwtTokenHelper;
+        private readonly IEmailSender _emailSender;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
-            IJwtTokenHelper jwtTokenHelper)
+            IJwtTokenHelper jwtTokenHelper,
+            IEmailSender emailSender)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
             _jwtTokenHelper = jwtTokenHelper;
+            _emailSender = emailSender;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -113,6 +121,25 @@ namespace AspNetCoreSpa.Application.Services
             bool isExist = await _userRepository.IsExistEmailAsync(email);
 
             return isExist;
+        }
+
+        public async Task<Result<bool>> ConfirmEmailAsync(Guid userId, IUrlHelper url)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return Result.Fail<bool>(ErrorCode.UserNotFound, ET.UserNotFound);
+            }
+
+            var code = "12345";
+
+            var callbackUrl = UrlHelperExtensions.Page(url, "", null, new { userId = user.Id, code });
+
+            var htmlMessage = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+
+            await _emailSender.SendEmailAsync(user.Email, "Confirm email", htmlMessage);
+
+            return Result.OK(true);
         }
     }
 }
