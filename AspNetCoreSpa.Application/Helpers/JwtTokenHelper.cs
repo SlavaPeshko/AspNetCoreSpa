@@ -19,16 +19,16 @@ namespace AspNetCoreSpa.Application.Helpers
     public class JwtTokenHelper : IJwtTokenHelper
     {
         private readonly JwtIssuerOptions _jwtIssuerOptions;
+        private readonly byte[] _key;
 
         public JwtTokenHelper(IOptions<JwtIssuerOptions> jwtIssuerOptions)
         {
             _jwtIssuerOptions = jwtIssuerOptions.Value;
+            _key = Encoding.Default.GetBytes(_jwtIssuerOptions.Key);
         }
 
         public async Task<string> GenerateToken(User user)
         {
-            var key = Encoding.Default.GetBytes(_jwtIssuerOptions.Key);
-
             var claims = new List<Claim>
             {
                  new Claim(nameof(user.FirstName), user.FirstName),
@@ -41,17 +41,17 @@ namespace AspNetCoreSpa.Application.Helpers
 
             claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString("G"))));
 
-            if (string.IsNullOrEmpty(user.Phone) && string.IsNullOrEmpty(user.Email))
+            if (string.IsNullOrEmpty(user.PhoneNumber) && string.IsNullOrEmpty(user.Email))
             {
                 claims.AddRange(new List<Claim>
                     {
-                        new Claim(ClaimTypes.MobilePhone, user.Phone),
+                        new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
                         new Claim(ClaimTypes.Email, user.Email)
                     });
             }
             else
             {
-                claims.Add(user.Phone != null ? new Claim(nameof(user.Phone), user.Phone) : new Claim(JwtRegisteredClaimNames.Email, user.Email));
+                claims.Add(user.PhoneNumber != null ? new Claim(nameof(user.PhoneNumber), user.PhoneNumber) : new Claim(JwtRegisteredClaimNames.Email, user.Email));
             }
 
             var tokeOptions = new JwtSecurityToken(
@@ -59,7 +59,7 @@ namespace AspNetCoreSpa.Application.Helpers
                 audience: _jwtIssuerOptions.Audience,
                 claims: claims,
                 expires: _jwtIssuerOptions.Expiration,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256)
             );
 
             var token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);

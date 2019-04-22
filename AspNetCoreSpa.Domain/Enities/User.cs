@@ -16,13 +16,12 @@ namespace AspNetCoreSpa.Domain.Enities
         public string LastName { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
-        public string Phone { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-
-        public string UserCode { get; set; }
 
         public Country Country { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }

@@ -23,19 +23,11 @@ namespace AspNetCoreSpa.Data.Context
                 .HasKey(u => u.Id);
 
             modelBuilder.Entity<User>()
-                .Property(u => u.UserCode)
-                .HasColumnType("varchar(5)");
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.UserCode)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Phone)
+                .HasIndex(u => u.PhoneNumber)
                 .IsUnique();
 
             modelBuilder.Entity<Country>()
