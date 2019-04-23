@@ -17,7 +17,8 @@ namespace TestClinet.Data.Repositories
 
         public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
-            return await DbContext.Set<Country>()
+            return await GetSet()
+                .AsNoTracking()
                 .ToListAsync();
         }
     }

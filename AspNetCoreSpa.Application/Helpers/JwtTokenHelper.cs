@@ -1,5 +1,6 @@
 ﻿using AspNetCoreSpa.Application.Options;
 using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
@@ -13,7 +14,8 @@ namespace AspNetCoreSpa.Application.Helpers
 {
     public interface IJwtTokenHelper
     {
-        Task<string> GenerateToken(User user);
+        Task<string> GenerateTokenAsync(User user);
+        string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, ProviderType providerType, string code);
     }
 
     public class JwtTokenHelper : IJwtTokenHelper
@@ -27,7 +29,7 @@ namespace AspNetCoreSpa.Application.Helpers
             _key = Encoding.Default.GetBytes(_jwtIssuerOptions.Key);
         }
 
-        public async Task<string> GenerateToken(User user)
+        public async Task<string> GenerateTokenAsync(User user)
         {
             var claims = new List<Claim>
             {
@@ -59,6 +61,36 @@ namespace AspNetCoreSpa.Application.Helpers
                 audience: _jwtIssuerOptions.Audience,
                 claims: claims,
                 expires: _jwtIssuerOptions.Expiration,
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256)
+            );
+
+            var token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+
+            return token;
+        }
+
+        public string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, ProviderType providerType, string code)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(nameof(code), code),
+                new Claim(nameof(codeActionType), codeActionType.ToString("G")),
+                new Claim(nameof(user.Id), user.Id.ToString())
+             };
+
+            if (providerType == ProviderType.Email)
+            {
+                claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
+            }
+
+            var tokeOptions = new JwtSecurityToken(
+                issuer: _jwtIssuerOptions.Issuer,
+                audience: _jwtIssuerOptions.Audience,
+                claims: claims,
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(_key), SecurityAlgorithms.HmacSha256)
             );
 

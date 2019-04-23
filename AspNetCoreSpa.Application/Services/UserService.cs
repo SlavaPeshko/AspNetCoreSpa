@@ -16,6 +16,7 @@ using System.Text.Encodings.Web;
 using System.Security.Policy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using AspNetCoreSpa.Domain.Enities.Security;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -25,16 +26,19 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IJwtTokenHelper _jwtTokenHelper;
         private readonly IEmailSender _emailSender;
+        private readonly ISecurityCodesRepository _securityCodesRepository;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
             IJwtTokenHelper jwtTokenHelper,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ISecurityCodesRepository securityCodesRepository)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
             _jwtTokenHelper = jwtTokenHelper;
             _emailSender = emailSender;
+            _securityCodesRepository = securityCodesRepository;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -110,7 +114,7 @@ namespace AspNetCoreSpa.Application.Services
 
             var logInViewModel = new LogInViewModel
             {
-                Token = await _jwtTokenHelper.GenerateToken(user),
+                Token = await _jwtTokenHelper.GenerateTokenAsync(user),
             };
 
             return Result.OK(logInViewModel);
@@ -131,9 +135,21 @@ namespace AspNetCoreSpa.Application.Services
                 return Result.Fail<bool>(ErrorCode.UserNotFound, ET.UserNotFound);
             }
 
-            var code = "12345";
+            if (user.EmailConfirmed)
+            {
+                // TODO: error description
+                return Result.Fail<bool>(ErrorCode.EmailAlreadyConfirmed, "");
+            }
 
-            var callbackUrl = UrlHelperExtensions.Page(url, "", null, new { userId = user.Id, code });
+            var codeActionType = CodeActionType.ConfirmEmail;
+            var providerType = ProviderType.Email;
+
+            var securityCode = SecurityCode.Create(providerType, user.Email, codeActionType);
+            await _securityCodesRepository.CreateAsync(securityCode);
+
+            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, codeActionType, providerType, securityCode.Code);
+
+            var callbackUrl = UrlHelperExtensions.Page(url, "", null, new { userId = user.Id, securityCode });
 
             var htmlMessage = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
 

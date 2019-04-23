@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreSpa.Domain.Enities.Enum
+﻿namespace AspNetCoreSpa.Domain.Enities.Security
 {
     public enum ProviderType
     {

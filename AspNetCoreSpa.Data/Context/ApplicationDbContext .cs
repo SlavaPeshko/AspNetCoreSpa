@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Enities.Security;
 
 namespace AspNetCoreSpa.Data.Context
 {
@@ -13,6 +14,7 @@ namespace AspNetCoreSpa.Data.Context
         public DbSet<Country> Countries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<SecurityCode> SecurityCodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +51,13 @@ namespace AspNetCoreSpa.Data.Context
                 .HasOne(ur => ur.Role)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId);
+
+            modelBuilder.Entity<SecurityCode>()
+                .ToTable("SecurityCodes");
+
+            modelBuilder.Entity<SecurityCode>()
+                .Property(s => s.Code)
+                .HasColumnType("varchar(6)");
 
             modelBuilder.Seed();
 
