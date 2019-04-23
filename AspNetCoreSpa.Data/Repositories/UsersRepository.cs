@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Enities;
-using System.Linq;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
@@ -39,11 +38,6 @@ namespace AspNetCoreSpa.Data.Repositories
             DbContext.Entry(user).State = EntityState.Modified;
         }
 
-        public async Task<bool> IsUniqueUserCodeAsync(string userCode)
-        {
-            return await GetSet().AnyAsync(c => c.UserCode.ToUpperInvariant() == userCode.ToUpperInvariant());
-        }
-
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await GetSet()
@@ -55,7 +49,7 @@ namespace AspNetCoreSpa.Data.Repositories
 
         public async Task<User> GetUserByPhoneAsync (string phone)
         {
-            return await GetSet().SingleOrDefaultAsync(u => u.Phone == phone);
+            return await GetSet().SingleOrDefaultAsync(u => u.PhoneNumber == phone);
         }
 
         public async Task<bool> IsExistEmailAsync(string email)

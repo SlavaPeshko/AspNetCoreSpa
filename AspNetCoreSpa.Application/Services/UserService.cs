@@ -58,7 +58,7 @@ namespace AspNetCoreSpa.Application.Services
             }
             else
             {
-                user.Phone = model.EmailOrPhone;
+                user.PhoneNumber = model.EmailOrPhone;
             }
 
             user.FirstName = model.FirstName;

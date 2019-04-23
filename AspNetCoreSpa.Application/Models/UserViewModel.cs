@@ -22,7 +22,7 @@ namespace AspNetCoreSpa.Application.Models
             return new UserViewModel
             {
                 Email = user.Email ?? string.Empty,
-                Phone = user.Phone ?? string.Empty,
+                Phone = user.PhoneNumber ?? string.Empty,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDay = user.DateOfBirth,
