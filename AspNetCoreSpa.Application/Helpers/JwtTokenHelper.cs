@@ -1,8 +1,10 @@
-﻿using AspNetCoreSpa.Application.Options;
+﻿using AspNetCoreSpa.Application.Models;
+using AspNetCoreSpa.Application.Options;
 using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -15,8 +17,8 @@ namespace AspNetCoreSpa.Application.Helpers
     public interface IJwtTokenHelper
     {
         Task<string> GenerateTokenAsync(User user);
-        List<Claim> DecodeToken(string token);
-        string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, ProviderType providerType, string code);
+        EmailUpdateToken DecodeToken(string token);
+        string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, string code);
     }
 
     public class JwtTokenHelper : IJwtTokenHelper
@@ -70,23 +72,15 @@ namespace AspNetCoreSpa.Application.Helpers
             return token;
         }
 
-        public string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, ProviderType providerType, string code)
+        public string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, string code)
         {
             var claims = new List<Claim>
             {
+                new Claim(nameof(user.Id), user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(nameof(code), code),
                 new Claim(nameof(codeActionType), codeActionType.ToString("G")),
-                new Claim(nameof(user.Id), user.Id.ToString())
              };
-
-            if (providerType == ProviderType.Email)
-            {
-                claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            }
-            else
-            {
-                claims.Add(new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
-            }
 
             var tokeOptions = new JwtSecurityToken(
                 issuer: _jwtIssuerOptions.Issuer,
@@ -100,15 +94,17 @@ namespace AspNetCoreSpa.Application.Helpers
             return token;
         }
 
-        public List<Claim> DecodeToken(string token)
+        public EmailUpdateToken DecodeToken(string token)
         {
             var jwtSecurityToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
 
-            var claims = new List<Claim>();
-
-            claims.AddRange(jwtSecurityToken.Claims.Select(x => new Claim(x.Type, x.Value)));
-
-            return claims;
+            return new EmailUpdateToken
+            {
+                Id = Guid.Parse(jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.Id), StringComparison.OrdinalIgnoreCase)).Value),
+                Code = jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.Code), StringComparison.OrdinalIgnoreCase)).Value,
+                Email = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value,
+                CodeActionType = Enum.Parse<CodeActionType>(jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.CodeActionType), StringComparison.OrdinalIgnoreCase)).Value)
+            };
         }
     }
 }

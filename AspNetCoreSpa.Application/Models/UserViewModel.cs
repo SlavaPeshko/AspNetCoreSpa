@@ -1,5 +1,5 @@
-﻿using AspNetCoreSpa.Domain.Enities;
-using System;
+﻿using System;
+using AspNetCoreSpa.Domain.Enities;
 
 namespace AspNetCoreSpa.Application.Models
 {

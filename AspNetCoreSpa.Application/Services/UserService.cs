@@ -151,7 +151,7 @@ namespace AspNetCoreSpa.Application.Services
             var securityCode = SecurityCode.Create(providerType, user.Email, codeActionType);
             // await _securityCodesRepository.CreateAsync(securityCode);
 
-            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, codeActionType, providerType, securityCode.Code);
+            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, codeActionType, securityCode.Code);
 
             var url = $"{_configuration["UiBaseUrl"]}confirm-email?token={token}";
 
