@@ -17,6 +17,7 @@ using System.Security.Policy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using AspNetCoreSpa.Domain.Enities.Security;
+using Microsoft.Extensions.Configuration;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -27,18 +28,21 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IJwtTokenHelper _jwtTokenHelper;
         private readonly IEmailSender _emailSender;
         private readonly ISecurityCodesRepository _securityCodesRepository;
+        private readonly IConfiguration _configuration;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
             IJwtTokenHelper jwtTokenHelper,
             IEmailSender emailSender,
-            ISecurityCodesRepository securityCodesRepository)
+            ISecurityCodesRepository securityCodesRepository,
+            IConfiguration configuration)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
             _jwtTokenHelper = jwtTokenHelper;
             _emailSender = emailSender;
             _securityCodesRepository = securityCodesRepository;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -127,7 +131,7 @@ namespace AspNetCoreSpa.Application.Services
             return isExist;
         }
 
-        public async Task<Result<bool>> ConfirmEmailAsync(Guid userId, IUrlHelper url)
+        public async Task<Result<bool>> SendEmailConfirmEmailAsync(Guid userId)
         {
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
@@ -145,17 +149,24 @@ namespace AspNetCoreSpa.Application.Services
             var providerType = ProviderType.Email;
 
             var securityCode = SecurityCode.Create(providerType, user.Email, codeActionType);
-            await _securityCodesRepository.CreateAsync(securityCode);
+            // await _securityCodesRepository.CreateAsync(securityCode);
 
             var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, codeActionType, providerType, securityCode.Code);
 
-            var callbackUrl = UrlHelperExtensions.Page(url, "", null, new { userId = user.Id, securityCode });
+            var url = $"{_configuration["UiBaseUrl"]}confirm-email?token={token}";
 
-            var htmlMessage = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
+            var htmlMessage = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(url)}'>clicking here</a>.";
 
             await _emailSender.SendEmailAsync(user.Email, "Confirm email", htmlMessage);
 
             return Result.OK(true);
+        }
+
+        public async Task<Result> ConfirmEmailAsync(string token)
+        {
+            var res = _jwtTokenHelper.DecodeToken(token);
+
+            throw new NotImplementedException();
         }
     }
 }

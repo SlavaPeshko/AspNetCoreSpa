@@ -33,6 +33,21 @@ namespace AspNetCoreSpa.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SecurityCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ProviderType = table.Column<int>(nullable: false),
+                    Provider = table.Column<string>(nullable: true),
+                    Code = table.Column<string>(type: "varchar(6)", nullable: true),
+                    CodeActionType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SecurityCodes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -41,12 +56,12 @@ namespace AspNetCoreSpa.Data.Migrations
                     LastName = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    Phone = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
-                    UserCode = table.Column<string>(type: "varchar(5)", nullable: true),
                     CountryId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -102,22 +117,18 @@ namespace AspNetCoreSpa.Data.Migrations
                 filter: "[Email] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Phone",
+                name: "IX_Users_PhoneNumber",
                 table: "Users",
-                column: "Phone",
+                column: "PhoneNumber",
                 unique: true,
-                filter: "[Phone] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_UserCode",
-                table: "Users",
-                column: "UserCode",
-                unique: true,
-                filter: "[UserCode] IS NOT NULL");
+                filter: "[PhoneNumber] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "SecurityCodes");
+
             migrationBuilder.DropTable(
                 name: "UserRole");
 

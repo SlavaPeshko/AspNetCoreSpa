@@ -5,7 +5,6 @@ using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Base;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.Application.Services.Contracts
 {
@@ -18,6 +17,7 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         // TODO SQRS
         Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model);
         Task<bool> IsExistEmailAsync(string email);
-        Task<Result<bool>> ConfirmEmailAsync(Guid userId, IUrlHelper url);
+        Task<Result<bool>> SendEmailConfirmEmailAsync(Guid userId);
+        Task<Result> ConfirmEmailAsync(string token);
     }
 }

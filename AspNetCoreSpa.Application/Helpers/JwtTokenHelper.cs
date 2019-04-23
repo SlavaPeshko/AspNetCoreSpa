@@ -15,6 +15,7 @@ namespace AspNetCoreSpa.Application.Helpers
     public interface IJwtTokenHelper
     {
         Task<string> GenerateTokenAsync(User user);
+        List<Claim> DecodeToken(string token);
         string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, ProviderType providerType, string code);
     }
 
@@ -97,6 +98,17 @@ namespace AspNetCoreSpa.Application.Helpers
             var token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
             return token;
+        }
+
+        public List<Claim> DecodeToken(string token)
+        {
+            var jwtSecurityToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+
+            var claims = new List<Claim>();
+
+            claims.AddRange(jwtSecurityToken.Claims.Select(x => new Claim(x.Type, x.Value)));
+
+            return claims;
         }
     }
 }

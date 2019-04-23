@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190422093827_Initial")]
+    [Migration("20190423141914_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,25 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Security.SecurityCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code")
+                        .HasColumnType("varchar(6)");
+
+                    b.Property<int>("CodeActionType");
+
+                    b.Property<string>("Provider");
+
+                    b.Property<int>("ProviderType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SecurityCodes");
+                });
+
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -71,10 +90,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<string>("PasswordHash");
 
-                    b.Property<string>("Phone");
+                    b.Property<string>("PhoneNumber");
 
-                    b.Property<string>("UserCode")
-                        .HasColumnType("varchar(5)");
+                    b.Property<bool>("PhoneNumberConfirmed");
 
                     b.HasKey("Id");
 
@@ -84,13 +102,9 @@ namespace AspNetCoreSpa.Data.Migrations
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
 
-                    b.HasIndex("Phone")
+                    b.HasIndex("PhoneNumber")
                         .IsUnique()
-                        .HasFilter("[Phone] IS NOT NULL");
-
-                    b.HasIndex("UserCode")
-                        .IsUnique()
-                        .HasFilter("[UserCode] IS NOT NULL");
+                        .HasFilter("[PhoneNumber] IS NOT NULL");
 
                     b.ToTable("Users");
                 });

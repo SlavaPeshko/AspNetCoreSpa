@@ -3,6 +3,7 @@ using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -11,10 +12,12 @@ namespace AspNetCoreSpa.WebApi.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly IConfiguration _configuration;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
+            _configuration = configuration;
         }
 
         [HttpPost("login")]
@@ -44,9 +47,9 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost("{userId}/email")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> ConfirmEmailAsync(Guid userId)
+        public async Task<IActionResult> SendEmailConfirmEmailAsync(Guid userId)
         {
-            var result = await _userService.ConfirmEmailAsync(userId, Url);
+            var result = await _userService.SendEmailConfirmEmailAsync(userId);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
@@ -54,16 +57,16 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok();
         }
 
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> ConfirmEmailAsync(Guid userId, string code)
-        //{
-        //    var result = await _userService.ConfirmEmailAsync(userId);
+        [HttpPost("confirm-email")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> ConfirmEmailAsync([FromBody]TokenInputModel model)
+        {
+            var result = await _userService.ConfirmEmailAsync(model.Token);
 
-        //    if (result.IsFailure)
-        //        return BadRequest(result.Errors);
+            if (result.IsFailure)
+                Redirect($"{_configuration["UiBaseUrl"]}login");
 
-        //    return Ok();
-        //}
+            return Redirect($"{_configuration["UiBaseUrl"]}login"); ;
+        }
     }
 }
