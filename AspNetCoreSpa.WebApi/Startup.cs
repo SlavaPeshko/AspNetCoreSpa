@@ -21,6 +21,7 @@ using AspNetCoreSpa.WebApi.Filters;
 using AspNetCoreSpa.Application.Validators;
 using AspNetCoreSpa.Application.Options;
 using Newtonsoft.Json.Serialization;
+using AspNetCoreSpa.WebApi.Misc;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -65,6 +66,12 @@ namespace AspNetCoreSpa.WebApi
                     ValidAudience = Configuration["JwtIssuerOptions:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtIssuerOptions:Key"]))
                 };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("CanWriteAdminData", policy => policy.Requirements.Add(new ClaimRequirement("Admin", "Write")));
+                options.AddPolicy("CanRemoveAdminData", policy => policy.Requirements.Add(new ClaimRequirement("Admin", "Remove")));
             });
 
             //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims

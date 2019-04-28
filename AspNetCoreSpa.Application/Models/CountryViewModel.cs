@@ -19,8 +19,8 @@ namespace AspNetCoreSpa.Application.Models
             return new CountryViewModel
             {
                 Id = country.Id,
-                CountryName = country.CountryName,
-                CountryRegioneCode = country.CountryRegioneCode
+                CountryName = country.Name,
+                CountryRegioneCode = country.RegioneCode
             };
         }
     }

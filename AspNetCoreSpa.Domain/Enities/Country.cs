@@ -11,8 +11,8 @@ namespace AspNetCoreSpa.Domain.Enities
             Users = new HashSet<User>();
         }
 
-        public string CountryName { get; set; }
-        public string CountryRegioneCode { get; set; }
+        public string Name { get; set; }
+        public string RegioneCode { get; set; }
 
         public ICollection<User> Users { get; set; }
     }

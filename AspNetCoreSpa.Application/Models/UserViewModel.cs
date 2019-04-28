@@ -28,7 +28,7 @@ namespace AspNetCoreSpa.Application.Models
                 LastName = user.LastName,
                 BirthDay = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
-                CountryName = user.Country?.CountryName
+                CountryName = user.Country?.Name
             };
         }
     }

@@ -13,9 +13,6 @@ using AspNetCoreSpa.Application.Helpers;
 using AspNetCoreSpa.Domain.Enities.Enum;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Configuration;
 
