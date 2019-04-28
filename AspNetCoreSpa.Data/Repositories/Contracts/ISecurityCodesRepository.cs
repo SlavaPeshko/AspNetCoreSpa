@@ -9,6 +9,7 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType, CodeActionType codeActionType);
 
         void Delete(SecurityCode securityCode);
+        void Delete(IEnumerable<SecurityCode> securityCodes);
         Task CreateAsync(SecurityCode securityCode);
     }
 }

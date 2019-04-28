@@ -11,6 +11,7 @@ namespace AspNetCoreSpa.Application.Models
         public string LastName { get; set; }
         public DateTime BirthDay { get; set; }
         public string Gender { get; set; }
+        public string CountryName { get; set; }
     }
 
     public static class UserViewModelExtensionMethods
@@ -27,6 +28,7 @@ namespace AspNetCoreSpa.Application.Models
                 LastName = user.LastName,
                 BirthDay = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
+                CountryName = user.Country?.CountryName
             };
         }
     }

@@ -50,6 +50,21 @@ namespace AspNetCoreSpa.Domain.Enities.Base
                 }
             };
         }
+
+        public static Result Fail(ErrorCode code, string description)
+        {
+            return new Result
+            {
+                Errors =
+                {
+                    new Error
+                    {
+                        Code = code,
+                        Description = description
+                    }
+                }
+            };
+        }
     }
 
     public class Result<T> : Result

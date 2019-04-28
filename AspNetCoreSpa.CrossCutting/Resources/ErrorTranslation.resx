@@ -129,6 +129,9 @@
   <data name="CountryNameRequired" xml:space="preserve">
     <value>CountryName is required</value>
   </data>
+  <data name="EmailAlreadyConfirmed" xml:space="preserve">
+    <value>Email is already confirmed</value>
+  </data>
   <data name="EmailAlreadyExists" xml:space="preserve">
     <value>Email is already exists</value>
   </data>
@@ -170,6 +173,9 @@
   </data>
   <data name="PhoneRequired" xml:space="preserve">
     <value>Phone is requred</value>
+  </data>
+  <data name="TokenInvalid" xml:space="preserve">
+    <value>Token is invalid</value>
   </data>
   <data name="UserCodeInvalidLength" xml:space="preserve">
     <value>User Code should be 5 length</value>

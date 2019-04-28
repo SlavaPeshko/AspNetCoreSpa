@@ -141,17 +141,13 @@ namespace AspNetCoreSpa.Application.Services
 
             if (user.EmailConfirmed)
             {
-                // TODO: error description
-                return Result.Fail<bool>(ErrorCode.EmailAlreadyConfirmed, "");
+                return Result.Fail<bool>(ErrorCode.EmailAlreadyConfirmed, ET.EmailAlreadyConfirmed);
             }
 
-            var codeActionType = CodeActionType.ConfirmEmail;
-            var providerType = ProviderType.Email;
+            var securityCode = SecurityCode.Create(ProviderType.Email, user.Email, CodeActionType.ConfirmEmail);
+            await _securityCodesRepository.CreateAsync(securityCode);
 
-            var securityCode = SecurityCode.Create(providerType, user.Email, codeActionType);
-            // await _securityCodesRepository.CreateAsync(securityCode);
-
-            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, codeActionType, securityCode.Code);
+            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode(user, securityCode.Code);
 
             var url = $"{_configuration["UiBaseUrl"]}confirm-email?token={token}";
 
@@ -159,14 +155,33 @@ namespace AspNetCoreSpa.Application.Services
 
             await _emailSender.SendEmailAsync(user.Email, "Confirm email", htmlMessage);
 
+            await _unitOfWorks.CommitAsync();
             return Result.OK(true);
         }
 
         public async Task<Result> ConfirmEmailAsync(string token)
         {
-            var res = _jwtTokenHelper.DecodeToken(token);
+            if (string.IsNullOrEmpty(token))
+            {
+                return Result.Fail(ErrorCode.TokenInvalid, ET.TokenInvalid);
+            }
 
-            throw new NotImplementedException();
+            var model = _jwtTokenHelper.DecodeToken<EmailUpdateToken>(token);
+
+            var codes = await _securityCodesRepository.GetSecurityCodesAsync(model.Email, ProviderType.Email, CodeActionType.ConfirmEmail);
+
+            if (codes.Any())
+            {
+                _securityCodesRepository.Delete(codes);
+            }
+
+            var user = await _userRepository.GetUserByIdAsync(model.Id);
+            user.EmailConfirmed = true;
+
+            _userRepository.Put(user);
+            await _unitOfWorks.CommitAsync();
+
+            return Result.OK(user);
         }
     }
 }

@@ -64,9 +64,9 @@ namespace AspNetCoreSpa.WebApi.Controllers
             var result = await _userService.ConfirmEmailAsync(model.Token);
 
             if (result.IsFailure)
-                Redirect($"{_configuration["UiBaseUrl"]}login");
+                return BadRequest(result.Errors);
 
-            return Redirect($"{_configuration["UiBaseUrl"]}login"); ;
+            return Ok(result);
         }
     }
 }

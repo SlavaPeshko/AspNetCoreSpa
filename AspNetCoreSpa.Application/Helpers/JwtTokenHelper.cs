@@ -4,6 +4,7 @@ using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,8 +18,8 @@ namespace AspNetCoreSpa.Application.Helpers
     public interface IJwtTokenHelper
     {
         Task<string> GenerateTokenAsync(User user);
-        EmailUpdateToken DecodeToken(string token);
-        string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, string code);
+        T DecodeToken<T>(string token);
+        string GenerateTokenWithSecurityCode(User user, string code);
     }
 
     public class JwtTokenHelper : IJwtTokenHelper
@@ -72,14 +73,13 @@ namespace AspNetCoreSpa.Application.Helpers
             return token;
         }
 
-        public string GenerateTokenWithSecurityCode(User user, CodeActionType codeActionType, string code)
+        public string GenerateTokenWithSecurityCode(User user, string code)
         {
             var claims = new List<Claim>
             {
-                new Claim(nameof(user.Id), user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(nameof(code), code),
-                new Claim(nameof(codeActionType), codeActionType.ToString("G")),
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Email", user.Email),
+                new Claim("Code", code),
              };
 
             var tokeOptions = new JwtSecurityToken(
@@ -94,17 +94,12 @@ namespace AspNetCoreSpa.Application.Helpers
             return token;
         }
 
-        public EmailUpdateToken DecodeToken(string token)
+        public T DecodeToken<T>(string token)
         {
-            var jwtSecurityToken = new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            var jwtSecurityToken =  new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            var json = JsonConvert.SerializeObject(jwtSecurityToken.Payload);
 
-            return new EmailUpdateToken
-            {
-                Id = Guid.Parse(jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.Id), StringComparison.OrdinalIgnoreCase)).Value),
-                Code = jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.Code), StringComparison.OrdinalIgnoreCase)).Value,
-                Email = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email).Value,
-                CodeActionType = Enum.Parse<CodeActionType>(jwtSecurityToken.Claims.FirstOrDefault(c => string.Equals(c.Type, nameof(EmailUpdateToken.CodeActionType), StringComparison.OrdinalIgnoreCase)).Value)
-            };
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

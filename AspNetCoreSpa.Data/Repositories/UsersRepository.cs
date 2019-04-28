@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Enities;
+using System.Linq;
 
 namespace AspNetCoreSpa.Data.Repositories
 {

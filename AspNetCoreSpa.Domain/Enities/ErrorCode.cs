@@ -6,6 +6,7 @@
         UserNotFound = 100,
         PasswordInvalid = 101,
         EmailAlreadyExists = 102,
-        EmailAlreadyConfirmed = 103
+        EmailAlreadyConfirmed = 103,
+        TokenInvalid = 104
     }
 }

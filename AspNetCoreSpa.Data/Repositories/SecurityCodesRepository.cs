@@ -25,6 +25,11 @@ namespace AspNetCoreSpa.Data.Repositories
             GetSet().Remove(securityCode);
         }
 
+        public void Delete(IEnumerable<SecurityCode> securityCodes)
+        {
+            GetSet().RemoveRange(securityCodes);
+        }
+
         public async Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType, CodeActionType codeActionType)
         {
             return await GetSet()

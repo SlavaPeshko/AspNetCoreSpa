@@ -97,6 +97,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email is already confirmed.
+        /// </summary>
+        public static string EmailAlreadyConfirmed {
+            get {
+                return ResourceManager.GetString("EmailAlreadyConfirmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email is already exists.
         /// </summary>
         public static string EmailAlreadyExists {
@@ -219,6 +228,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string PhoneRequired {
             get {
                 return ResourceManager.GetString("PhoneRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Token is invalid.
+        /// </summary>
+        public static string TokenInvalid {
+            get {
+                return ResourceManager.GetString("TokenInvalid", resourceCulture);
             }
         }
         
