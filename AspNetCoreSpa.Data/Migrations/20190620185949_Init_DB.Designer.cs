@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190423141914_Initial")]
-    partial class Initial
+    [Migration("20190620185949_Init_DB")]
+    partial class Init_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,10 +26,11 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("CountryName");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(60)");
 
-                    b.Property<string>("CountryRegioneCode")
-                        .HasColumnType("varchar(2)");
+                    b.Property<string>("RegioneCode")
+                        .HasColumnType("nvarchar(3)");
 
                     b.HasKey("Id");
 
@@ -41,11 +42,28 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.RoleClaim", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<string>("Type");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Security.SecurityCode", b =>
@@ -54,7 +72,7 @@ namespace AspNetCoreSpa.Data.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Code")
-                        .HasColumnType("varchar(6)");
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("CodeActionType");
 
@@ -78,17 +96,21 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<DateTime>("DateOfBirth");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Gender");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("PasswordHash");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber");
 

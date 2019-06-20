@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetCoreSpa.Data.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,8 +12,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    CountryName = table.Column<string>(nullable: true),
-                    CountryRegioneCode = table.Column<string>(type: "varchar(2)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(60)", nullable: true),
+                    RegioneCode = table.Column<string>(type: "nvarchar(3)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -21,11 +21,25 @@ namespace AspNetCoreSpa.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
+                    Value = table.Column<string>(nullable: true),
+                    RoleId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<int>(nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,7 +53,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     ProviderType = table.Column<int>(nullable: false),
                     Provider = table.Column<string>(nullable: true),
-                    Code = table.Column<string>(type: "varchar(6)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(6)", nullable: true),
                     CodeActionType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -52,13 +66,13 @@ namespace AspNetCoreSpa.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
-                    PasswordHash = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
@@ -126,6 +140,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RoleClaims");
+
             migrationBuilder.DropTable(
                 name: "SecurityCodes");
 

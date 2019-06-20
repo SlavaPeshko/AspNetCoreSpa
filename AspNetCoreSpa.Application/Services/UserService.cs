@@ -77,7 +77,7 @@ namespace AspNetCoreSpa.Application.Services
                 User = user,
                 Role = new Role
                 {
-                    Name = RoleEnum.User
+                    Name = RoleEnum.User.ToString()
                 }
             };
 

@@ -8,7 +8,7 @@ namespace AspNetCoreSpa.Data.Context
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            Database.EnsureCreated();
+
         }
 
         public DbSet<Country> Countries { get; set; }
@@ -19,39 +19,46 @@ namespace AspNetCoreSpa.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .ToTable("Users");
-            modelBuilder.Entity<User>()
-                .HasKey(u => u.Id);
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Email)
-                .IsUnique();
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.PhoneNumber)
-                .IsUnique();
+            modelBuilder.Entity<User>(e =>
+            {
+                e.ToTable("Users");
+                e.HasKey(u => u.Id);
+                e.HasIndex(u => u.Email).IsUnique();
+                e.HasIndex(u => u.PhoneNumber).IsUnique();
 
-            modelBuilder.Entity<Country>()
-                .ToTable("Countries");
-            modelBuilder.Entity<Country>()
-                .Property(c => c.RegioneCode)
-                .HasColumnType("varchar(2)");
+                e.Property(u => u.Email).HasColumnType("nvarchar(100)");
+                e.Property(u => u.FirstName).HasColumnType("nvarchar(100)");
+                e.Property(u => u.LastName).HasColumnType("nvarchar(100)");
+                e.Property(u => u.PasswordHash).HasColumnType("nvarchar(450)");
+            });
 
-            modelBuilder.Entity<UserRole>()
-                .HasKey(ur => new { ur.UserId, ur.RoleId });
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId);
+            modelBuilder.Entity<Country>(e =>
+            {
+                e.ToTable("Countries");
+                e.HasKey(u => u.Id);
 
-            modelBuilder.Entity<SecurityCode>()
-                .ToTable("SecurityCodes");
-            modelBuilder.Entity<SecurityCode>()
-                .Property(s => s.Code)
-                .HasColumnType("varchar(6)");
+                e.Property(c => c.RegioneCode).HasColumnType("nvarchar(3)");
+                e.Property(u => u.Name).HasColumnType("nvarchar(60)");
+            });
+
+            modelBuilder.Entity<UserRole>(e =>
+            {
+                e.HasKey(ur => new { ur.UserId, ur.RoleId });
+
+                e.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId);
+                e.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId);
+            });
+
+            modelBuilder.Entity<SecurityCode>(e =>
+            {
+                e.ToTable("SecurityCodes");
+                e.Property(s => s.Code).HasColumnType("nvarchar(6)");
+            });
+
+            modelBuilder.Entity<Role>(e =>
+            {
+                e.Property(r => r.Name).HasColumnType("nvarchar(100)");
+            });
 
             modelBuilder.Seed();
 

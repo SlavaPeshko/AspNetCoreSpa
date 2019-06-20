@@ -45,7 +45,7 @@ namespace AspNetCoreSpa.Application.Helpers
                  new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
              };
 
-            claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString("G"))));
+            claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString())));
 
             if (string.IsNullOrEmpty(user.PhoneNumber) && string.IsNullOrEmpty(user.Email))
             {
