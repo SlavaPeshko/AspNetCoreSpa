@@ -8,9 +8,10 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule, MatFormFieldModule, MatInputModule  } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ForgotComponent } from './forgot/forgot.component';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
-  declarations: [LoginComponent, ForgotComponent],
+  declarations: [LoginComponent, ForgotComponent, SignInComponent],
   imports: [
     CommonModule,
     MatButtonModule,
