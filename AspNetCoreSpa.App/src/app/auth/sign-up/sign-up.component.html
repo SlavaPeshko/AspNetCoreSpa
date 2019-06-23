@@ -1,0 +1,50 @@
+<div class="signUp-wrapper">
+  <form class="signUp-form" [formGroup]="signUpFormGroup">
+    <table class="signUp-full-width" cellspacing="0">
+      <tr>
+        <td>
+          <mat-form-field class="signUp-full-width">
+            <input matInput placeholder="First name" formControlName="firstName" type="text" required />
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="signUp-full-width">
+            <input matInput placeholder="Last Name" formControlName="lastName" type="text" required />
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+
+    <mat-form-field class="signUp-full-width">
+      <input matInput placeholder="Email or phone number" formControlName="emailOrPhoneNumber" required />
+    </mat-form-field>
+
+    <mat-form-field class="signUp-full-width">
+      <input matInput placeholder="Password" formControlName="password" type="password" required />
+    </mat-form-field>
+
+    <mat-form-field class="signUp-full-width">
+      <input matInput placeholder="Confirm password" formControlName="confirmPassword" type="password" required />
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Birthday">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="gender-wrapper">
+      <p class="label-position">Gender:</p>
+      <mat-radio-group [(ngModel)]="labelPosition" [ngModelOptions]="{standalone: true}">
+        <mat-radio-button class="radio-margin" value="after">Male</mat-radio-button>
+        <mat-radio-button class="radio-margin" value="before">Famale</mat-radio-button>
+        <mat-radio-button class="radio-margin" value="custom">Custom</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    
+
+    <div class="signUp-wrapper-btn">
+      <button mat-raised-button color="primary">Sign Up</button>
+    </div>
+  </form>
+</div>

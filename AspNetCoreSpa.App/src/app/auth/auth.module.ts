@@ -1,26 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from "./login/login.component";
+import { ForgotComponent } from './forgot/forgot.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
-// material
-import { MatButtonModule, MatFormFieldModule, MatInputModule  } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ForgotComponent } from './forgot/forgot.component';
-import { SignInComponent } from './sign-in/sign-in.component';
+import { AppMaterialModule } from "../app-material/app-material.module";
 
 @NgModule({
-  declarations: [LoginComponent, ForgotComponent, SignInComponent],
+  declarations: [LoginComponent, ForgotComponent, SignUpComponent],
   imports: [
     CommonModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    AppMaterialModule
   ]
 })
 export class AuthModule { }
