@@ -1,0 +1,34 @@
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #673ab7;
+    color: #fff;
+    padding: 12px;
+    font-size: 12px;
+    margin-top: 40px;
+}
+
+.footer-list {
+    align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 8px;
+}
+
+.footer-logo {
+    flex: 2;
+}
+
+.footer-angular-logo {
+    height: 50px;
+}
+
+.footer-copyright {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    flex-direction: column;
+    min-width: 225px;
+    text-align: center;
+}
