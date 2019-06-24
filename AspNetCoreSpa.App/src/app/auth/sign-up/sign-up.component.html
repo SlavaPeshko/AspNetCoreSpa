@@ -5,11 +5,22 @@
         <td>
           <mat-form-field class="signUp-full-width">
             <input matInput placeholder="First name" formControlName="firstName" type="text" required />
+            <mat-error *ngFor="let validation of user_validation_message.firstName">
+              <mat-error *ngIf="hasError('firstName', validation.type)">
+                {{validation.message}}
+              </mat-error>
+            </mat-error>
+            <!-- <mat-error *ngIf="hasError('firstName', 'required')">
+              First Name is required
+            </mat-error> -->
           </mat-form-field>
         </td>
         <td>
           <mat-form-field class="signUp-full-width">
             <input matInput placeholder="Last Name" formControlName="lastName" type="text" required />
+            <mat-error *ngIf="hasError('lastName', 'required')">
+              Last Name is required
+            </mat-error>
           </mat-form-field>
         </td>
       </tr>
@@ -17,20 +28,32 @@
 
     <mat-form-field class="signUp-full-width">
       <input matInput placeholder="Email or phone number" formControlName="emailOrPhoneNumber" required />
+      <mat-error *ngIf="hasError('emailOrPhoneNumber', 'required')">
+        Email or phone number is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="signUp-full-width">
       <input matInput placeholder="Password" formControlName="password" type="password" required />
+      <mat-error *ngIf="hasError('password', 'required')">
+        Password number is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field class="signUp-full-width">
       <input matInput placeholder="Confirm password" formControlName="confirmPassword" type="password" required />
+      <mat-error *ngIf="hasError('confirmPassword', 'required')">
+        Confirm password number is required
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="Birthday">
+      <input matInput [matDatepicker]="picker" placeholder="Birthday" formControlName="birthDay">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="hasError('birthDay', 'required')">
+        Birthday number is required
+      </mat-error>
     </mat-form-field>
 
     <div class="gender-wrapper">
@@ -41,7 +64,7 @@
         <mat-radio-button class="radio-margin" value="custom">Custom</mat-radio-button>
       </mat-radio-group>
     </div>
-    
+
 
     <div class="signUp-wrapper-btn">
       <button mat-raised-button color="primary">Sign Up</button>
