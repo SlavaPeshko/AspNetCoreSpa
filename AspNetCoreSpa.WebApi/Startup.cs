@@ -117,6 +117,14 @@ namespace AspNetCoreSpa.WebApi
                 .AddAuthorization()
                 .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CORS", builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -174,6 +182,7 @@ namespace AspNetCoreSpa.WebApi
             });
 
             app.UseMvc();
+            app.UseCors("CORS");
         }
 
         private static void RegisterService(IServiceCollection service)

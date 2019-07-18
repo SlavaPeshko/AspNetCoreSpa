@@ -14,7 +14,7 @@ import { AppMaterialModule } from "../app-material/app-material.module";
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    AppMaterialModule
+    AppMaterialModule,
   ]
 })
 export class AuthModule { }
