@@ -1,19 +1,12 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Text;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.IoC;
@@ -22,6 +15,9 @@ using AspNetCoreSpa.Application.Validators;
 using AspNetCoreSpa.Application.Options;
 using Newtonsoft.Json.Serialization;
 using AspNetCoreSpa.WebApi.Misc;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -181,8 +177,12 @@ namespace AspNetCoreSpa.WebApi
                 });
             });
 
-            app.UseMvc();
             app.UseCors("CORS");
+            app.UseMvc();
+
+            //app.UseMvcWithDefaultRoute();
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles();
         }
 
         private static void RegisterService(IServiceCollection service)

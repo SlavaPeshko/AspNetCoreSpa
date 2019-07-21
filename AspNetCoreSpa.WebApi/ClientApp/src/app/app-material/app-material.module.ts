@@ -10,6 +10,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [],
@@ -22,7 +23,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatIconModule
   ],
   exports: [
     MatButtonModule,
@@ -32,7 +34,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatIconModule
   ]
 })
 export class AppMaterialModule { }

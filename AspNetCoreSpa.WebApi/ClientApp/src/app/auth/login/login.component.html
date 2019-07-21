@@ -5,14 +5,23 @@
       <mat-error *ngIf="hasError('emailOrPhone', 'required')">
         Email or Phone is required
       </mat-error>
+      <mat-error *ngIf="hasError('emailOrPhone', 'pattern')">
+        Email or Phone is pattern
+      </mat-error>
     </mat-form-field>
     <mat-form-field class="login-full-width">
-      <input [(ngModel)]="password" matInput type="password" placeholder="Password" formControlName="password" required>
+      <input [(ngModel)]="password" matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password" required>
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
       <mat-error *ngIf="hasError('password', 'required')">
         Password is required
       </mat-error>
-      <mat-error *ngIf="hasError('password', 'minLength')">
-        Password must be at least 4 characters long.
+      <mat-error *ngIf="hasError('password', 'minlength')">
+        Password must be at least 8 characters long.
+      </mat-error>
+      <mat-error *ngIf="hasError('password', 'pattern') && !hasError('password', 'minlength')">
+        Password pattern.
       </mat-error>
     </mat-form-field>
 

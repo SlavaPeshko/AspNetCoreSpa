@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
-const emailOrPhonePattern: string = '([_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,5}))|(\d+$)$';
-
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json'
-  })
-};
+const emailRegex: RegExp = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g);
+const passwordRegex: RegExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$/g);
 
 @Component({
   selector: 'app-login',
@@ -19,14 +14,14 @@ export class LoginComponent implements OnInit {
   public loginFormGroup: FormGroup;
   public emailOrPhone: string;
   public password: string;
+  hide: boolean = true;
 
-  constructor(private http: HttpClient) { }
+  constructor(private auth: AuthService) { }
   
   ngOnInit() {
     this.loginFormGroup = new FormGroup({
-      // emailOrPhone: new FormControl('', [Validators.required, Validators.pattern(emailOrPhonePattern)]),
-      emailOrPhone: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8)])
+      emailOrPhone: new FormControl('', [Validators.required, Validators.pattern(emailRegex)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(passwordRegex)])
     })
   }
 
@@ -35,16 +30,8 @@ export class LoginComponent implements OnInit {
   }
 
   public login() {
-    const body = { emailOrPhone: this.emailOrPhone, password: this.password };
-    debugger;
-    try {
-      this.http.post('http://localhost:5000/api/user/login', body, {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json'
-        })
-      });
-    } catch (error) {
-      
+    if (this.emailOrPhone && this.password ){
+      this.auth.login({ emailOrPhone: this.emailOrPhone, password: this.password });
     }
   }
 }
