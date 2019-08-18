@@ -1,6 +1,5 @@
 <div class="login-wrapper">
-  <form class="login-form" [formGroup]="loginFormGroup">
-    <mat-form-field class="login-full-width">
+  <!-- <mat-form-field class="login-full-width">
       <input [(ngModel)]="emailOrPhone"  matInput placeholder="Email or Phone" formControlName="emailOrPhone" required>
       <mat-error *ngIf="hasError('emailOrPhone', 'required')">
         Email or Phone is required
@@ -23,11 +22,40 @@
       <mat-error *ngIf="hasError('password', 'pattern') && !hasError('password', 'minlength')">
         Password pattern.
       </mat-error>
-    </mat-form-field>
+    </mat-form-field> -->
+  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="form-group">
+      <label for="exampleInputEmail1">Email address</label>
+      <input formControlName="emailOrPhone" [(ngModel)]="loginForm.emailOrPhone" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': emailOrPhone.invalid && (emailOrPhone.dirty || emailOrPhone.touched)}">
 
-    <div class="login-wrapper-btn">
-      <button mat-raised-button color="primary" (click)="login()">Login</button>
-      <a [routerLink]="['/restore']">Forgot your password?</a>
+      <div *ngIf="emailOrPhone.invalid && (emailOrPhone.dirty || emailOrPhone.touched)" class="invalid-feedback d-block">
+        <div *ngIf="emailOrPhone.errors.required">
+          Name is required.
+        </div>
+        <div *ngIf="emailOrPhone.errors.pattern">
+          Email or Phone is pattern.
+        </div>
+      </div>
+
     </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input formControlName="password" [(ngModel)]="loginForm.password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+
+      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback d-block">
+        <div *ngIf="password.errors.required">
+          Password is required.
+        </div>
+        <div *ngIf="password.errors.minlength">
+          Password must be at least 8 characters long.
+        </div>
+        <div *ngIf="password.errors.pattern">
+          Password pattern.
+        </div>
+      </div>
+
+    </div>
+    <button type="button" class="btn btn-primary btn-login" (click)="login()" [disabled]="!loginForm.valid">Login</button>
+    <a [routerLink]="['/restore']">Forgot your password?</a>
   </form>
 </div>

@@ -11,27 +11,32 @@ const passwordRegex: RegExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  public loginFormGroup: FormGroup;
-  public emailOrPhone: string;
-  public password: string;
-  hide: boolean = true;
+  public loginForm: FormGroup;
 
   constructor(private auth: AuthService) { }
   
   ngOnInit() {
-    this.loginFormGroup = new FormGroup({
+    this.loginForm = new FormGroup({
       emailOrPhone: new FormControl('', [Validators.required, Validators.pattern(emailRegex)]),
       password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(passwordRegex)])
     })
   }
 
-  public hasError(controlName: string, errorName: string): boolean {
-    return this.loginFormGroup.controls[controlName].hasError(errorName);
+  get emailOrPhone() {
+    return this.loginForm.get('emailOrPhone');
   }
 
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  // public hasError(controlName: string, errorName: string): boolean {
+  //   return this.loginForm.controls[controlName].hasError(errorName);
+  // }
+
   public login() {
-    if (this.emailOrPhone && this.password ){
-      this.auth.login({ emailOrPhone: this.emailOrPhone, password: this.password });
+    if (this.emailOrPhone.value && this.password.value){
+      this.auth.login({ emailOrPhone: this.emailOrPhone.value, password: this.password.value });
     }
   }
 }
