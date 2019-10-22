@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 
-const emailRegex: RegExp = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g);
-const passwordRegex: RegExp = new RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$/g);
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,13 +14,13 @@ export class LoginComponent implements OnInit {
   
   ngOnInit() {
     this.loginForm = new FormGroup({
-      emailOrPhone: new FormControl('', [Validators.required, Validators.pattern(emailRegex)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(passwordRegex)])
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.pattern('(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')])
     })
   }
 
-  get emailOrPhone() {
-    return this.loginForm.get('emailOrPhone');
+  get email() {
+    return this.loginForm.get('email');
   }
 
   get password() {
@@ -35,8 +32,11 @@ export class LoginComponent implements OnInit {
   // }
 
   public login() {
-    if (this.emailOrPhone.value && this.password.value){
-      this.auth.login({ emailOrPhone: this.emailOrPhone.value, password: this.password.value });
+    if(this.email.errors || this.password.errors) {
+      this.loginForm.markAllAsTouched();
+    } else {
+      debugger;
+      this.auth.login({ email: this.email.value, password: this.password.value });
     }
   }
 }

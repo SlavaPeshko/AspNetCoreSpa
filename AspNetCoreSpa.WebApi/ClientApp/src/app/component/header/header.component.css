@@ -1,8 +1,32 @@
 .btn-margin {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
-.header-wrapper {
-    display: flex;
-    justify-content: flex-end;
+.navbar-brand {
+  height: 42px;
+  width: 42px;
+}
+
+.wrapper-input-search {
+    position: relative;
+    margin: 0 auto;
+}
+
+.icon-input-search {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 18px;
+  margin-left: 16px;
+  margin-top: -13px;
+  fill: #878a8c;
+}
+
+.input-search {
+  padding: 0 16px 0 40px;
+}
+
+.search {
+  width: 18px;
+  height: 18px;
 }

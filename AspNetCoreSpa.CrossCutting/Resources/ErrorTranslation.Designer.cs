@@ -160,6 +160,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Length photo should be less 2 megabyte.
+        /// </summary>
+        public static string LengthPhotoInvalid {
+            get {
+                return ResourceManager.GetString("LengthPhotoInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password must be digit.
         /// </summary>
         public static string PasswordDigit {
@@ -228,6 +237,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string PhoneRequired {
             get {
                 return ResourceManager.GetString("PhoneRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photo is invalid.
+        /// </summary>
+        public static string PhotoInvalid {
+            get {
+                return ResourceManager.GetString("PhotoInvalid", resourceCulture);
             }
         }
         

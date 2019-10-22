@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-forgot',
@@ -7,11 +7,25 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./forgot.component.css']
 })
 export class ForgotComponent implements OnInit {
-  public emailOrPhone: FormControl;
+  public fogotForm: FormGroup;
 
   constructor() { }
 
   ngOnInit() {
-    this.emailOrPhone = new FormControl('', [Validators.required]);
+    this.fogotForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+    })
+  }
+
+  get email() {
+    return this.fogotForm.get('email');
+  }
+
+  next() {
+    if(this.email.errors) {
+      this.email.markAsTouched();
+    } else {
+      console.log(this.email.value);
+    }
   }
 }

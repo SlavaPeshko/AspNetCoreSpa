@@ -2,6 +2,7 @@
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -64,6 +65,17 @@ namespace AspNetCoreSpa.WebApi.Controllers
                 return BadRequest(result.Errors);
 
             return Ok(result);
+        }
+
+        [HttpPost("upload-photo")]
+        public async Task<IActionResult> UploadUserPhotoAsync([FromForm]IFormFile file)
+        {
+            var result = await _userService.UploadUserPhotoAsync(file);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok();
         }
     }
 }

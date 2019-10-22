@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using AspNetCoreSpa.Application.Options;
 
 namespace AspNetCoreSpa.IoC
 {

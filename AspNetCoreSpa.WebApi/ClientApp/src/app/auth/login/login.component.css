@@ -11,19 +11,6 @@
     width: 100%;
 }
 
-.login-full-width {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.login-wrapper-btn {
-    text-align: center;
-}
-
-.login-wrapper-btn > a {
-    text-decoration: none;
-}
-
-.login-wrapper-btn > button {
+.btn-login {
     margin-right: 15px;
 }

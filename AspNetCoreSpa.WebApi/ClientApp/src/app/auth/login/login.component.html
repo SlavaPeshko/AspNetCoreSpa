@@ -1,61 +1,34 @@
 <div class="login-wrapper">
-  <!-- <mat-form-field class="login-full-width">
-      <input [(ngModel)]="emailOrPhone"  matInput placeholder="Email or Phone" formControlName="emailOrPhone" required>
-      <mat-error *ngIf="hasError('emailOrPhone', 'required')">
-        Email or Phone is required
-      </mat-error>
-      <mat-error *ngIf="hasError('emailOrPhone', 'pattern')">
-        Email or Phone is pattern
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field class="login-full-width">
-      <input [(ngModel)]="password" matInput [type]="hide ? 'password' : 'text'" placeholder="Password" formControlName="password" required>
-      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-      <mat-error *ngIf="hasError('password', 'required')">
-        Password is required
-      </mat-error>
-      <mat-error *ngIf="hasError('password', 'minlength')">
-        Password must be at least 8 characters long.
-      </mat-error>
-      <mat-error *ngIf="hasError('password', 'pattern') && !hasError('password', 'minlength')">
-        Password pattern.
-      </mat-error>
-    </mat-form-field> -->
-  <form class="login-form" [formGroup]="loginForm" (ngSubmit)="login()">
+  <form class="login-form" [formGroup]="loginForm">
     <div class="form-group">
-      <label for="exampleInputEmail1">Email address</label>
-      <input formControlName="emailOrPhone" [(ngModel)]="loginForm.emailOrPhone" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': emailOrPhone.invalid && (emailOrPhone.dirty || emailOrPhone.touched)}">
+      <label for="inputEmail">Email address</label>
+      <input formControlName="email" [(ngModel)]="loginForm.email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
 
-      <div *ngIf="emailOrPhone.invalid && (emailOrPhone.dirty || emailOrPhone.touched)" class="invalid-feedback d-block">
-        <div *ngIf="emailOrPhone.errors.required">
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
+        <div *ngIf="email.errors.required">
           Name is required.
         </div>
-        <div *ngIf="emailOrPhone.errors.pattern">
-          Email or Phone is pattern.
+        <div *ngIf="email.errors.email">
+          Email is incorrect.
         </div>
       </div>
 
     </div>
     <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input formControlName="password" [(ngModel)]="loginForm.password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+      <label for="inputPassword">Password</label>
+      <input formControlName="password" [(ngModel)]="loginForm.password" type="password" class="form-control" id="inputPassword" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
 
       <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback d-block">
         <div *ngIf="password.errors.required">
           Password is required.
         </div>
         <div *ngIf="password.errors.minlength">
-          Password must be at least 8 characters long.
-        </div>
-        <div *ngIf="password.errors.pattern">
-          Password pattern.
+          Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
         </div>
       </div>
 
     </div>
-    <button type="button" class="btn btn-primary btn-login" (click)="login()" [disabled]="!loginForm.valid">Login</button>
+    <button type="button" class="btn btn-primary btn-login" (click)="login()">Login</button>
     <a [routerLink]="['/restore']">Forgot your password?</a>
   </form>
 </div>

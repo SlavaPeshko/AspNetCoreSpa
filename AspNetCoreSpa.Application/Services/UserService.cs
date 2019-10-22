@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Services.Contracts;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
+using EC = AspNetCoreSpa.Domain.Enities.ErrorCode;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Enities;
@@ -15,6 +16,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Http;
+using AspNetCoreSpa.Application.Contracts;
+using AspNetCoreSpa.Application.Options;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -26,13 +30,17 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IEmailSender _emailSender;
         private readonly ISecurityCodesRepository _securityCodesRepository;
         private readonly IConfiguration _configuration;
+        private readonly IFileService _fileService;
+        private readonly GlobalSettings _settings;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
             IJwtTokenHelper jwtTokenHelper,
             IEmailSender emailSender,
             ISecurityCodesRepository securityCodesRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IFileService fileService,
+            GlobalSettings settings)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
@@ -40,6 +48,8 @@ namespace AspNetCoreSpa.Application.Services
             _emailSender = emailSender;
             _securityCodesRepository = securityCodesRepository;
             _configuration = configuration;
+            _fileService = fileService;
+            _settings = settings;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -57,7 +67,7 @@ namespace AspNetCoreSpa.Application.Services
             {
                 var isExistEmail = await _userRepository.IsExistEmailAsync(model.EmailOrPhone);
                 if (isExistEmail)
-                    return Result.Fail<UserViewModel>(ErrorCode.EmailAlreadyExists, ET.EmailAlreadyExists);
+                    return Result.Fail<UserViewModel>(EC.EmailAlreadyExists, ET.EmailAlreadyExists);
 
                 user.Email = model.EmailOrPhone;
             }
@@ -107,11 +117,11 @@ namespace AspNetCoreSpa.Application.Services
             }
 
             if (user == null)
-                return Result.Fail<LogInViewModel>(ErrorCode.UserNotFound, ET.UserNotFound);
+                return Result.Fail<LogInViewModel>(EC.UserNotFound, ET.UserNotFound);
 
             var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.Password);
             if (!verifyPassword)
-                return Result.Fail<LogInViewModel>(ErrorCode.PasswordInvalid, ET.PasswordInvalid);
+                return Result.Fail<LogInViewModel>(EC.PasswordInvalid, ET.PasswordInvalid);
 
             var logInViewModel = new LogInViewModel
             {
@@ -133,12 +143,12 @@ namespace AspNetCoreSpa.Application.Services
             var user = await _userRepository.GetUserByIdAsync(userId);
             if (user == null)
             {
-                return Result.Fail<bool>(ErrorCode.UserNotFound, ET.UserNotFound);
+                return Result.Fail<bool>(EC.UserNotFound, ET.UserNotFound);
             }
 
             if (user.EmailConfirmed)
             {
-                return Result.Fail<bool>(ErrorCode.EmailAlreadyConfirmed, ET.EmailAlreadyConfirmed);
+                return Result.Fail<bool>(EC.EmailAlreadyConfirmed, ET.EmailAlreadyConfirmed);
             }
 
             var securityCode = SecurityCode.Create(ProviderType.Email, user.Email, CodeActionType.ConfirmEmail);
@@ -160,7 +170,7 @@ namespace AspNetCoreSpa.Application.Services
         {
             if (string.IsNullOrEmpty(token))
             {
-                return Result.Fail(ErrorCode.TokenInvalid, ET.TokenInvalid);
+                return Result.Fail(EC.TokenInvalid, ET.TokenInvalid);
             }
 
             var model = _jwtTokenHelper.DecodeToken<EmailUpdateToken>(token);
@@ -179,6 +189,13 @@ namespace AspNetCoreSpa.Application.Services
             await _unitOfWorks.CommitAsync();
 
             return Result.OK(user);
+        }
+
+        public async Task<Result> UploadUserPhotoAsync(IFormFile file)
+        {
+            await _fileService.UploadPhotoAsync(file.OpenReadStream(), file.FileName, _settings.Paths.PhotoProfilePath);
+
+            return Result.OK(new Object());
         }
     }
 }

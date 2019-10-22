@@ -39,14 +39,15 @@ namespace AspNetCoreSpa.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var config = Configuration.Get<GlobalSettings>();
+            services.AddSingleton(config);
 
-            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection));
 
             services.Configure<JwtIssuerOptions>(options => {
-                options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)];
-                options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                options.Key = jwtAppSettingOptions[nameof(JwtIssuerOptions.Key)];
+                options.Audience = config.Jwt.Audience;
+                options.Issuer = config.Jwt.Issuer;
+                options.Key = config.Jwt.Key;
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -58,9 +59,9 @@ namespace AspNetCoreSpa.WebApi
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JwtIssuerOptions:Issuer"],
-                    ValidAudience = Configuration["JwtIssuerOptions:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtIssuerOptions:Key"]))
+                    ValidIssuer = config.Jwt.Issuer,
+                    ValidAudience = config.Jwt.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key))
                 };
             });
 
@@ -107,6 +108,7 @@ namespace AspNetCoreSpa.WebApi
             services.AddSwaggerGen(s =>
             {
                 s.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AspNetCoreSpa", Version = "v1" });
+                s.OperationFilter<FormFileSwaggerFilter>();
             });
             services
                 .AddMvcCore()
@@ -126,6 +128,8 @@ namespace AspNetCoreSpa.WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -156,33 +160,32 @@ namespace AspNetCoreSpa.WebApi
                 s.RoutePrefix = string.Empty;
             });
 
-            app.UseExceptionHandler(appError =>
-            {
-                appError.Run(async context =>
-                {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
+            //app.UseExceptionHandler(appError =>
+            //{
+            //    appError.Run(async context =>
+            //    {
+            //        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            //        context.Response.ContentType = "application/json";
 
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
-                    {
-                        //logger.LogError($"Something went wrong: {contextFeature.Error}");
+            //        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+            //        if (contextFeature != null)
+            //        {
+            //            //logger.LogError($"Something went wrong: {contextFeature.Error}");
 
-                        await context.Response.WriteAsync(new
-                        {
-                            context.Response.StatusCode,
-                            Message = "Internal Server Error."
-                        }.ToString());
-                    }
-                });
-            });
+            //            await context.Response.WriteAsync(new
+            //            {
+            //                context.Response.StatusCode,
+            //                Message = "Internal Server Error."
+            //            }.ToString());
+            //        }
+            //    });
+            //});
 
             app.UseCors("CORS");
             app.UseMvc();
 
             //app.UseMvcWithDefaultRoute();
             //app.UseDefaultFiles();
-            //app.UseStaticFiles();
         }
 
         private static void RegisterService(IServiceCollection service)

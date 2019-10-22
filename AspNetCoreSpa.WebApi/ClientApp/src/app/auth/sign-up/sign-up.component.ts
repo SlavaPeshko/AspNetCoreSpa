@@ -9,7 +9,6 @@ import { User_Validation_Message } from "../user_validation_message";
 })
 export class SignUpComponent implements OnInit {
   public signUpFormGroup: FormGroup;
-  public labelPosition: string = 'after';
   user_validation_message: any;
 
   constructor() { 
@@ -18,17 +17,21 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {
     this.signUpFormGroup = new FormGroup({
-      firstName: new FormControl('', Validators.required),
-      lastName: new FormControl('', Validators.required),
-      emailOrPhoneNumber: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required, Validators.pattern('(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$')]),
       confirmPassword: new FormControl('', Validators.required),
-      birthDay: new FormControl('', Validators.required)
     })
   }
 
-  public hasError(controlName: string, errorName: string): boolean {
-    return this.signUpFormGroup.controls[controlName].hasError(errorName);
+  get email() {
+    return this.signUpFormGroup.get('email');
   }
 
+  get password() {
+    return this.signUpFormGroup.get('password');
+  }
+
+  get confirmPassword() {
+    return this.signUpFormGroup.get('confirmPassword');
+  }
 }

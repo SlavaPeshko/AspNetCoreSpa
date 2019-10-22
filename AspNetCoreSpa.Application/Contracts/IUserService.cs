@@ -5,6 +5,7 @@ using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Base;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreSpa.Application.Services.Contracts
 {
@@ -19,5 +20,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         Task<bool> IsExistEmailAsync(string email);
         Task<Result<bool>> SendEmailConfirmEmailAsync(Guid userId);
         Task<Result> ConfirmEmailAsync(string token);
+        Task<Result> UploadUserPhotoAsync(IFormFile file);
     }
 }

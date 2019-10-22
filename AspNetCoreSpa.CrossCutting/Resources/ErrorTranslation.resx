@@ -150,6 +150,9 @@
   <data name="LastNameRequired" xml:space="preserve">
     <value>LastName is required</value>
   </data>
+  <data name="LengthPhotoInvalid" xml:space="preserve">
+    <value>Length photo should be less 2 megabyte</value>
+  </data>
   <data name="PasswordDigit" xml:space="preserve">
     <value>Password must be digit</value>
   </data>
@@ -173,6 +176,9 @@
   </data>
   <data name="PhoneRequired" xml:space="preserve">
     <value>Phone is requred</value>
+  </data>
+  <data name="PhotoInvalid" xml:space="preserve">
+    <value>Photo is invalid</value>
   </data>
   <data name="TokenInvalid" xml:space="preserve">
     <value>Token is invalid</value>

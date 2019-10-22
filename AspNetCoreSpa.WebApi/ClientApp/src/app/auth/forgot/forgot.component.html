@@ -1,20 +1,23 @@
-<p>it works</p>
-<!-- <div class="forgot-wrapper">
+<div class="forgot-wrapper">
   <div class="forgot-info">
-    Please enter the <b>phone number</b> or <b>email</b> that you used to sign in.
+    Please enter the or <b>email</b> that you used to sign in.
   </div>
   <div class="forgot-form">
-    <form>
-      <mat-form-field class="forgot-full-width">
-        <input matInput placeholder="Email or Phone" [formControl]="emailOrPhone" required>
-        <mat-error *ngIf="emailOrPhone.hasError('required')">
-            Email or Phone is required
-          </mat-error>
-      </mat-form-field>
-    
+    <form [formGroup]="fogotForm">
+      <input formControlName="email" [(ngModel)]="fogotForm.email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
+      
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
+        <div *ngIf="email.errors.required">
+          Name is required.
+        </div>
+        <div *ngIf="email.errors.email">
+          Email is incorrect.
+        </div>
+      </div>
+
       <div class="forgot-wrapper-btn">
-        <button mat-raised-button color="primary">Next</button>
+        <button type="button" class="btn btn-primary" (click)="next()">Next</button>
       </div>
     </form>
   </div>
-</div> -->
+</div>
