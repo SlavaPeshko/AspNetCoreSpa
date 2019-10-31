@@ -16,7 +16,7 @@ namespace AspNetCoreSpa.Application.Models
 
     public static class UserViewModelExtensionMethods
     {
-        public static UserViewModel ToEntity(this User user)
+        public static UserViewModel ToViewModel(this User user)
         {
             if (user == null) return null;
 

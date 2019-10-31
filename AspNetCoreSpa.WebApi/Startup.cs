@@ -18,6 +18,8 @@ using AspNetCoreSpa.WebApi.Misc;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -48,6 +50,7 @@ namespace AspNetCoreSpa.WebApi
                 options.Audience = config.Jwt.Audience;
                 options.Issuer = config.Jwt.Issuer;
                 options.Key = config.Jwt.Key;
+                options.ValidFor = TimeSpan.FromSeconds(config.Jwt.Expiration);
             });
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -61,7 +64,20 @@ namespace AspNetCoreSpa.WebApi
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = config.Jwt.Issuer,
                     ValidAudience = config.Jwt.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key)),
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

@@ -13,7 +13,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
     {
         Task<IEnumerable<UserViewModel>> GetUsersAsync();
         Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel userModel);
-        void Put(User user);
         
         // TODO SQRS
         Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model);

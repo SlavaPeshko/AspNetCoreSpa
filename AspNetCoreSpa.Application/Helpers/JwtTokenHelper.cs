@@ -1,7 +1,6 @@
-﻿using AspNetCoreSpa.Application.Models;
-using AspNetCoreSpa.Application.Options;
+﻿using AspNetCoreSpa.Application.Options;
 using AspNetCoreSpa.Domain.Enities;
-using AspNetCoreSpa.Domain.Enities.Security;
+using AspNetCoreSpa.Domain.Enities.Enum;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -10,16 +9,18 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.Application.Helpers
 {
     public interface IJwtTokenHelper
     {
-        Task<string> GenerateTokenAsync(User user);
+        string GenerateToken(User user);
+        string GenerateRefreshToken(User user);
         T DecodeToken<T>(string token);
         string GenerateTokenWithSecurityCode(User user, string code);
+        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 
     public class JwtTokenHelper : IJwtTokenHelper
@@ -33,32 +34,9 @@ namespace AspNetCoreSpa.Application.Helpers
             _key = Encoding.Default.GetBytes(_jwtIssuerOptions.Key);
         }
 
-        public async Task<string> GenerateTokenAsync(User user)
+        public string GenerateToken(User user)
         {
-            var claims = new List<Claim>
-            {
-                 new Claim(nameof(user.FirstName), user.FirstName),
-                 new Claim(nameof(user.LastName), user.LastName),
-                 new Claim(ClaimTypes.Gender, user.Gender.ToString("G")),
-                 new Claim(ClaimTypes.DateOfBirth, user.DateOfBirth.ToString("G")),
-                 new Claim(JwtRegisteredClaimNames.Jti, await _jwtIssuerOptions.JtiGenerator()),
-                 new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString())
-             };
-
-            claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString())));
-
-            if (string.IsNullOrEmpty(user.PhoneNumber) && string.IsNullOrEmpty(user.Email))
-            {
-                claims.AddRange(new List<Claim>
-                    {
-                        new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-                        new Claim(ClaimTypes.Email, user.Email)
-                    });
-            }
-            else
-            {
-                claims.Add(user.PhoneNumber != null ? new Claim(nameof(user.PhoneNumber), user.PhoneNumber) : new Claim(JwtRegisteredClaimNames.Email, user.Email));
-            }
+            List<Claim> claims = InitClaims(user);
 
             var tokeOptions = new JwtSecurityToken(
                 issuer: _jwtIssuerOptions.Issuer,
@@ -71,6 +49,16 @@ namespace AspNetCoreSpa.Application.Helpers
             var token = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
 
             return token;
+        }
+
+        public string GenerateRefreshToken(User user)
+        {
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                return Convert.ToBase64String(randomNumber);
+            }
         }
 
         public string GenerateTokenWithSecurityCode(User user, string code)
@@ -94,12 +82,68 @@ namespace AspNetCoreSpa.Application.Helpers
             return token;
         }
 
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtIssuerOptions.Key)),
+                ValidateLifetime = true
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+
+            return principal;
+        }
+
         public T DecodeToken<T>(string token)
         {
             var jwtSecurityToken =  new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
             var json = JsonConvert.SerializeObject(jwtSecurityToken.Payload);
 
             return JsonConvert.DeserializeObject<T>(json);
+        }
+
+        private List<Claim> InitClaims(User user)
+        {
+            var claims = new List<Claim>();
+
+            claims.Add(new Claim(nameof(user.Id), user.Id.ToString()));
+
+            if (user.FirstName != null)
+                claims.Add(new Claim(nameof(user.FirstName), user.FirstName));
+
+            if (user.LastName != null)
+                claims.Add(new Claim(nameof(user.LastName), user.LastName));
+
+            if (user.Gender != Gender.None)
+                claims.Add(new Claim(nameof(ClaimTypes.Gender), user.Gender.ToString("G")));
+
+            if (user.DateOfBirth != null)
+                claims.Add(new Claim(nameof(ClaimTypes.DateOfBirth), user.DateOfBirth.ToString("G")));
+
+            if (user.Email != null)
+            {
+                claims.Add(new Claim(nameof(ClaimTypes.Email), user.Email));
+                claims.Add(new Claim(ClaimTypes.Name, user.Email));
+            }
+
+            if (user.PhoneNumber != null)
+            {
+                claims.Add(new Claim(nameof(ClaimTypes.MobilePhone), user.PhoneNumber));
+                claims.Add(new Claim(ClaimTypes.Name, user.PhoneNumber));
+            }
+
+            claims.AddRange(user.UserRoles.Select(u => new Claim(nameof(ClaimTypes.Role), u.Role.Name.ToString())));
+
+            return claims;
         }
     }
 }

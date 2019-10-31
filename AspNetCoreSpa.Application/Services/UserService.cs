@@ -56,7 +56,7 @@ namespace AspNetCoreSpa.Application.Services
         {
             var users = await _userRepository.GetUsersAsync();
 
-            return users.Select(c => c.ToEntity());
+            return users.Select(c => c.ToViewModel());
         }
 
         public async Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel model)
@@ -76,10 +76,6 @@ namespace AspNetCoreSpa.Application.Services
                 user.PhoneNumber = model.EmailOrPhone;
             }
 
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.DateOfBirth = model.DateOfBirth;
-            user.Gender = Enum.Parse<Gender>(model.Gender);
             user.PasswordHash = PasswordHasher.GetHashPassword(model.Password);
 
             var userRole = new UserRole
@@ -96,12 +92,7 @@ namespace AspNetCoreSpa.Application.Services
             await _userRepository.PostAsync(user);
             await _unitOfWorks.CommitAsync();
 
-            return Result.OK(user.ToEntity());
-        }
-
-        public void Put(User user)
-        {
-            throw new NotImplementedException();
+            return Result.OK(user.ToViewModel());
         }
 
         public async Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model)
@@ -123,10 +114,21 @@ namespace AspNetCoreSpa.Application.Services
             if (!verifyPassword)
                 return Result.Fail<LogInViewModel>(EC.PasswordInvalid, ET.PasswordInvalid);
 
+            var refreshToken = _jwtTokenHelper.GenerateRefreshToken(user);
+
             var logInViewModel = new LogInViewModel
             {
-                Token = await _jwtTokenHelper.GenerateTokenAsync(user),
+                RerfreshToken = refreshToken,
+                AccessToken = new AccessToken
+                {
+                    Token = _jwtTokenHelper.GenerateToken(user),
+                    ExpiresIn = _settings.Jwt.Expiration
+                }
             };
+
+            user.RefreshToken = refreshToken;
+            _userRepository.Put(user);
+            await _unitOfWorks.CommitAsync();
 
             return Result.OK(logInViewModel);
         }

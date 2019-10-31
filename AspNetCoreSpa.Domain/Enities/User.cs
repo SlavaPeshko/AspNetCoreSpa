@@ -20,6 +20,7 @@ namespace AspNetCoreSpa.Domain.Enities
         public bool PhoneNumberConfirmed { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
+        public string RefreshToken { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
 

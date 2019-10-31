@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    public class UserController : BaseController
+    public class UserController : ApiController
     {
         private readonly IUserService _userService;
 
