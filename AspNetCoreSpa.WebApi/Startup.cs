@@ -71,7 +71,7 @@ namespace AspNetCoreSpa.WebApi
                     ValidIssuer = config.Jwt.Issuer,
                     //ValidAudience = config.Jwt.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key)),
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = new TimeSpan(0, 1, 0)
                 };
 
                 options.Events = new JwtBearerEvents

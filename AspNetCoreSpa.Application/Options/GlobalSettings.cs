@@ -1,4 +1,6 @@
-﻿namespace AspNetCoreSpa.Application.Options
+﻿using System;
+
+namespace AspNetCoreSpa.Application.Options
 {
     public class GlobalSettings
     {
@@ -7,6 +9,7 @@
         public Paths Paths { get; set; }
         public Logging Logging { get; set; }
         public string AllowedHosts { get; set; }
+        public Cache Cache { get; set; }
     }
 
     public class ConnectionStrings
@@ -36,5 +39,10 @@
     public class LogLevel
     {
         public string Default { get; set; }
+    }
+
+    public class Cache
+    {
+        public TimeSpan CountriesExpiration { get; set; }
     }
 }
