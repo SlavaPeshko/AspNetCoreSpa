@@ -141,7 +141,7 @@ namespace AspNetCoreSpa.Application.Helpers
                 claims.Add(new Claim(ClaimTypes.Name, user.PhoneNumber));
             }
 
-            claims.AddRange(user.UserRoles.Select(u => new Claim(nameof(ClaimTypes.Role), u.Role.Name.ToString())));
+            claims.AddRange(user.UserRoles.Select(u => new Claim(ClaimTypes.Role, u.Role.Name.ToString())));
 
             return claims;
         }

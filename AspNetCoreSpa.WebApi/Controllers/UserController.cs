@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.WebApi.Controllers
@@ -20,6 +21,10 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost("login")]
         [AllowAnonymous]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody]LogInInputModel model)
         {
             var result = await _userService.LogInAsync(model);
@@ -32,6 +37,9 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateUserAsync([FromBody]CreateUserInputModel model)
         {
             var result = await _userService.CreateUserAsync(model);
@@ -39,12 +47,15 @@ namespace AspNetCoreSpa.WebApi.Controllers
             if (result.IsFailure)
                 return BadRequest(result.Errors);
 
-            return Ok(result.Data);
+            return CreatedAtAction(nameof(Login),result.Data);
         }
-
 
         [HttpPost("{userId}/email")]
         [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SendEmailConfirmEmailAsync(Guid userId)
         {
             var result = await _userService.SendEmailConfirmEmailAsync(userId);
@@ -57,6 +68,10 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost("confirm-email")]
         [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ConfirmEmailAsync([FromBody]TokenInputModel model)
         {
             var result = await _userService.ConfirmEmailAsync(model.Token);
@@ -68,6 +83,11 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpPost("upload-photo")]
+        [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadUserPhotoAsync([FromForm]IFormFile file)
         {
             var result = await _userService.UploadUserPhotoAsync(file);

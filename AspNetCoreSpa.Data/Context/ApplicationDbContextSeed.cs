@@ -24,7 +24,7 @@ namespace AspNetCoreSpa.Data.Context
             //        Name = RoleEnum.Admin.ToString()
             //    });
 
-            // modelBuilder.Entity<Country>().HasData(PopulateCounty());
+            //modelBuilder.Entity<Country>().HasData(PopulateCounty());
         }
 
         public static List<Country> PopulateCounty()

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -53,17 +54,22 @@ namespace AspNetCoreSpa.WebApi
                 options.ValidFor = TimeSpan.FromSeconds(config.Jwt.Expiration);
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+            services.AddAuthentication(c =>
             {
+                c.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                c.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = config.Jwt.Issuer,
-                    ValidAudience = config.Jwt.Audience,
+                    //ValidAudience = config.Jwt.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key)),
                     ClockSkew = TimeSpan.Zero
                 };
@@ -125,6 +131,13 @@ namespace AspNetCoreSpa.WebApi
             {
                 s.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AspNetCoreSpa", Version = "v1" });
                 s.OperationFilter<FormFileSwaggerFilter>();
+                s.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
             });
             services
                 .AddMvcCore()
@@ -172,7 +185,7 @@ namespace AspNetCoreSpa.WebApi
 
             app.UseSwaggerUI(s =>
             {
-                s.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned API v1.0");
                 s.RoutePrefix = string.Empty;
             });
 

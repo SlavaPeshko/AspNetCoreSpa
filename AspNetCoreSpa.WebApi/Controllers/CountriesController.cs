@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
+using Microsoft.AspNetCore.Authorization;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    [Route("api/[controller]")]
     public class CountriesController : ApiController
     {
         private readonly ICountryService _countryService;
@@ -16,6 +18,10 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAsync()
         {
             var vm = await _countryService.GetCountriesAsync();
