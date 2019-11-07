@@ -16,8 +16,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Http;
-using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Application.Options;
 
 namespace AspNetCoreSpa.Application.Services
@@ -30,7 +28,6 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IEmailSender _emailSender;
         private readonly ISecurityCodesRepository _securityCodesRepository;
         private readonly IConfiguration _configuration;
-        private readonly IFileService _fileService;
         private readonly GlobalSettings _settings;
 
         public UserService(IUnitOfWorks unitOfWorks,
@@ -39,7 +36,6 @@ namespace AspNetCoreSpa.Application.Services
             IEmailSender emailSender,
             ISecurityCodesRepository securityCodesRepository,
             IConfiguration configuration,
-            IFileService fileService,
             GlobalSettings settings)
         {
             _unitOfWorks = unitOfWorks;
@@ -48,7 +44,6 @@ namespace AspNetCoreSpa.Application.Services
             _emailSender = emailSender;
             _securityCodesRepository = securityCodesRepository;
             _configuration = configuration;
-            _fileService = fileService;
             _settings = settings;
         }
 
@@ -97,8 +92,8 @@ namespace AspNetCoreSpa.Application.Services
 
         public async Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model)
         {
-            User user = null;
-            if(model.EmailOrPhone.IndexOf("@") > -1)
+            User user;
+            if (model.EmailOrPhone.IndexOf("@") > -1)
             {
                 user = await _userRepository.GetUserByEmailAsync(model.EmailOrPhone);
             }
@@ -191,13 +186,6 @@ namespace AspNetCoreSpa.Application.Services
             await _unitOfWorks.CommitAsync();
 
             return Result.OK(user);
-        }
-
-        public async Task<Result> UploadUserPhotoAsync(IFormFile file)
-        {
-            await _fileService.UploadPhotoAsync(file.OpenReadStream(), file.FileName, _settings.Paths.PhotoProfilePath);
-
-            return Result.OK(new Object());
         }
     }
 }

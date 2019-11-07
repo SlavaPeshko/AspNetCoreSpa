@@ -1,9 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>3</WarningLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +21,10 @@
   <ItemGroup>
     <ProjectReference Include="..\AspNetCoreSpa.Application\AspNetCoreSpa.Application.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.IoC\AspNetCoreSpa.IoC.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="userAssets\userProfilePictures\" />
   </ItemGroup>
 
 </Project>

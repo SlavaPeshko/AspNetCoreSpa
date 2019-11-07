@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -138,6 +140,7 @@ namespace AspNetCoreSpa.WebApi
                     In = "header",
                     Type = "apiKey"
                 });
+                s.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {{ "Bearer", Enumerable.Empty<string>() },});
             });
             services
                 .AddMvcCore()

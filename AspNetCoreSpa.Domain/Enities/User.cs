@@ -26,5 +26,6 @@ namespace AspNetCoreSpa.Domain.Enities
 
         public Country Country { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<Image> Images { get; set; }
     }
 }

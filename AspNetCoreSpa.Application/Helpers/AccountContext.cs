@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using AspNetCoreSpa.Domain.Enities.Enum;
 using AspNetCoreSpa.Application.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreSpa.Application.Helpers
 {
@@ -25,7 +26,7 @@ namespace AspNetCoreSpa.Application.Helpers
         //{
         //    get
         //    {
-        //        var user = HttpContext.Current.User;
+        //        HttpContext context = CallContext.LogicalGetData("CurrentContextKey") as HttpContext;
         //        var model = user as UserViewModel;
         //        return model;
         //    }

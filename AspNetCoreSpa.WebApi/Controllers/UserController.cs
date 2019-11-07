@@ -1,4 +1,5 @@
-﻿using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Contracts;
+using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,13 @@ namespace AspNetCoreSpa.WebApi.Controllers
     public class UserController : ApiController
     {
         private readonly IUserService _userService;
+        private readonly IFileService _fileService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService,
+            IFileService fileService)
         {
             _userService = userService;
+            _fileService = fileService;
         }
 
         [HttpPost("login")]
@@ -83,19 +87,18 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpPost("upload-photo")]
-        [Authorize(Roles = "User")]
-        [Consumes(MediaTypeNames.Application.Json)]
+        [Authorize]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadUserPhotoAsync([FromForm]IFormFile file)
         {
-            var result = await _userService.UploadUserPhotoAsync(file);
+            var result = await _fileService.UploadPhotoAsync(file);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
 
-            return Ok();
+            return Ok(result);
         }
     }
 }
