@@ -9,9 +9,9 @@ using TestClinet.Data.Repositories.Contracts;
 
 namespace TestClinet.Data.Repositories
 {
-    public class CountriesRepository : BaseRepository<Country, Guid>, ICountriesRepository
+    public class CountryRepository : BaseRepository<Country, Guid>, ICountryRepository
     {
-        public CountriesRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public CountryRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 

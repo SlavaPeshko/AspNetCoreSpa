@@ -16,6 +16,10 @@ namespace AspNetCoreSpa.Data.Context
         public DbSet<Role> Roles { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<SecurityCode> SecurityCodes { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,6 +96,18 @@ namespace AspNetCoreSpa.Data.Context
 
                 e.HasOne(l => l.User)
                 .WithMany(p => p.Likes);
+            });
+
+            modelBuilder.Entity<Image>(e =>
+            {
+                e.ToTable("Images");
+
+                e.HasOne(i => i.Post)
+                .WithMany(p => p.Images);
+
+                e.HasOne(i => i.User)
+                .WithOne(u => u.Image)
+                .HasForeignKey<Image>(i => i.UserXref);
             });
 
             modelBuilder.Seed();

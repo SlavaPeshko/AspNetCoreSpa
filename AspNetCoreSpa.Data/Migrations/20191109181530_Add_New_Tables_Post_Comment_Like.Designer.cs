@@ -4,14 +4,16 @@ using AspNetCoreSpa.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191109181530_Add_New_Tables_Post_Comment_Like")]
+    partial class Add_New_Tables_Post_Comment_Like
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,29 +59,6 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
-                });
-
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Image", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Path");
-
-                    b.Property<Guid?>("PostId");
-
-                    b.Property<Guid>("UserXref");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserXref")
-                        .IsUnique();
-
-                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Like", b =>
@@ -243,18 +222,6 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Image", b =>
-                {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Post", "Post")
-                        .WithMany("Images")
-                        .HasForeignKey("PostId");
-
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
-                        .WithOne("Image")
-                        .HasForeignKey("AspNetCoreSpa.Domain.Enities.Image", "UserXref")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Like", b =>

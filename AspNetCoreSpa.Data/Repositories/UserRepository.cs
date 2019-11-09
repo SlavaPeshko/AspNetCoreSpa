@@ -8,9 +8,9 @@ using AspNetCoreSpa.Domain.Enities;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class UsersRepository : BaseRepository<User, Guid>, IUserRepository
+    public class UserRepository : BaseRepository<User, Guid>, IUserRepository
     {
-        public UsersRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 

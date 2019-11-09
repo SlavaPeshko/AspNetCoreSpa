@@ -13,11 +13,11 @@ namespace AspNetCoreSpa.Application.Services
 {
     public class CountryService : ICountryService
     {
-        private readonly ICountriesRepository _countriesRepository;
+        private readonly ICountryRepository _countriesRepository;
         private readonly IMemoryCache _cache;
         private readonly GlobalSettings _globalSettings;
 
-        public CountryService(ICountriesRepository countriesRepository, 
+        public CountryService(ICountryRepository countriesRepository, 
             IMemoryCache cache,
             GlobalSettings globalSettings)
         {

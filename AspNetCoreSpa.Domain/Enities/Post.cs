@@ -11,6 +11,7 @@ namespace AspNetCoreSpa.Domain.Enities
         public DateTime UpdateAt { get; set; }
 
         public User User { get; set; }
+        public ICollection<Image> Images { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Like> Likes { get; set; }
     }
