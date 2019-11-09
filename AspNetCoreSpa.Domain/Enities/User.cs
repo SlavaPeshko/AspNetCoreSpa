@@ -9,7 +9,7 @@ namespace AspNetCoreSpa.Domain.Enities
     {
         public User()
         {
-            UserRoles = new HashSet<UserRole>();
+            Roles = new HashSet<UserRole>();
         }
 
         public string FirstName { get; set; }
@@ -25,7 +25,9 @@ namespace AspNetCoreSpa.Domain.Enities
         public Gender Gender { get; set; }
 
         public Country Country { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public ICollection<UserRole> Roles { get; set; }
+        public ICollection<Post> Posts { get; set; }
+        public ICollection<Comment> Comments { get; set; }
+        public ICollection<Like> Likes { get; set; }
     }
 }

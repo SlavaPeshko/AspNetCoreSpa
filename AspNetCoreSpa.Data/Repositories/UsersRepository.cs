@@ -41,7 +41,7 @@ namespace AspNetCoreSpa.Data.Repositories
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await GetSet()
-                .Include(u => u.UserRoles)
+                .Include(u => u.Roles)
                     .ThenInclude(u => u.Role)
                 .Include(u => u.Country)
                 .SingleOrDefaultAsync(u => u.Email == email);

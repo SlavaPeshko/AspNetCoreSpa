@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+VisualStudioVersion = 15.0.28307.852
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0925C19A-3E5E-46C5-856D-2BB83B737F48}"
 EndProject
@@ -32,7 +32,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreSpa.IoC", "AspNet
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{A15CE3CF-BD21-46EB-AE3C-604276749AB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSpa.Tetst.Unit", "AspNetCoreSpa.Tetst.Unit\AspNetCoreSpa.Tetst.Unit.csproj", "{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreSpa.Tetst.Unit", "AspNetCoreSpa.Tetst.Unit\AspNetCoreSpa.Tetst.Unit.csproj", "{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreSpa.Infrastructure", "AspNetCoreSpa.Infrastructure\AspNetCoreSpa.Infrastructure.csproj", "{FE937092-CDD0-4B24-BA51-51A923439726}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,10 @@ Global
 		{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE937092-CDD0-4B24-BA51-51A923439726}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE937092-CDD0-4B24-BA51-51A923439726}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE937092-CDD0-4B24-BA51-51A923439726}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE937092-CDD0-4B24-BA51-51A923439726}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{1448E115-C447-4C59-901C-AF5154B7AEAC} = {595E76B7-6223-439C-BB72-89755606216C}
 		{D6AC05A0-4F73-4114-817F-90085F567CB1} = {595E76B7-6223-439C-BB72-89755606216C}
 		{BEFA0F0F-C741-4A6F-B1E2-510E3454EAAA} = {A15CE3CF-BD21-46EB-AE3C-604276749AB3}
+		{FE937092-CDD0-4B24-BA51-51A923439726} = {595E76B7-6223-439C-BB72-89755606216C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E3C8A19F-8801-4254-96F9-D9428A8D1AB3}

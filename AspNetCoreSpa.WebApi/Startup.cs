@@ -46,6 +46,7 @@ namespace AspNetCoreSpa.WebApi
         {
             var config = Configuration.Get<GlobalSettings>();
             services.AddSingleton(config);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection));
 

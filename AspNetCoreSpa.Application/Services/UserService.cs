@@ -78,11 +78,11 @@ namespace AspNetCoreSpa.Application.Services
                 User = user,
                 Role = new Role
                 {
-                    Name = RoleEnum.User.ToString()
+                    RoleEnum = RoleEnum.User
                 }
             };
 
-            user.UserRoles.Add(userRole);
+            user.Roles.Add(userRole);
 
             await _userRepository.PostAsync(user);
             await _unitOfWorks.CommitAsync();

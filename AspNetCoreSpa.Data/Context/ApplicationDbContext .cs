@@ -43,10 +43,16 @@ namespace AspNetCoreSpa.Data.Context
 
             modelBuilder.Entity<UserRole>(e =>
             {
+                e.ToTable("XrefUserRole");
                 e.HasKey(ur => new { ur.UserId, ur.RoleId });
 
-                e.HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId);
-                e.HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId);
+                e.HasOne(ur => ur.User)
+                .WithMany(u => u.Roles)
+                .HasForeignKey(ur => ur.UserId);
+
+                e.HasOne(ur => ur.Role)
+                .WithMany(r => r.Users)
+                .HasForeignKey(ur => ur.RoleId);
             });
 
             modelBuilder.Entity<SecurityCode>(e =>
@@ -55,9 +61,37 @@ namespace AspNetCoreSpa.Data.Context
                 e.Property(s => s.Code).HasColumnType("nvarchar(6)");
             });
 
-            modelBuilder.Entity<Role>(e =>
+            modelBuilder.Entity<Post>(e =>
             {
-                e.Property(r => r.Name).HasColumnType("nvarchar(100)");
+                e.ToTable("Posts");
+
+                e.HasOne(p => p.User)
+                .WithMany(u => u.Posts);
+            });
+
+            modelBuilder.Entity<Comment>(e =>
+            {
+                e.ToTable("Comments");
+
+                e.HasOne(c => c.User)
+                .WithMany(u => u.Comments);
+
+                e.HasOne(c => c.Post)
+                .WithMany(p => p.Comments);
+            });
+
+            modelBuilder.Entity<Like>(e =>
+            {
+                e.ToTable("Likes");
+
+                e.HasOne(l => l.Post)
+                .WithMany(p => p.Likes);
+
+                e.HasOne(l => l.Comment)
+                .WithMany(p => p.Likes);
+
+                e.HasOne(l => l.User)
+                .WithMany(p => p.Likes);
             });
 
             modelBuilder.Seed();

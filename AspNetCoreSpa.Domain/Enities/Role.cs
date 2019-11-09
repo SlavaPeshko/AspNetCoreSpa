@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AspNetCoreSpa.Domain.Enities.Base;
+using AspNetCoreSpa.Domain.Enities.Enum;
 
 namespace AspNetCoreSpa.Domain.Enities
 {
@@ -8,11 +9,11 @@ namespace AspNetCoreSpa.Domain.Enities
     {
         public Role()
         {
-            UserRoles = new HashSet<UserRole>();
+            Users = new HashSet<UserRole>();
         }
 
-        public string Name { get; set; }
+        public RoleEnum RoleEnum { get; set; }
 
-        public ICollection<UserRole> UserRoles { get; set; }
+        public ICollection<UserRole> Users { get; set; }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using AspNetCoreSpa.Domain.Enities;
 
 namespace AspNetCoreSpa.Application.Models
 {
-    public class UserViewModel
+    public class UserViewModel : ClaimsPrincipal
     {
+        public Guid Id { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string FirstName { get; set; }
@@ -12,6 +15,7 @@ namespace AspNetCoreSpa.Application.Models
         public DateTime BirthDay { get; set; }
         public string Gender { get; set; }
         public string CountryName { get; set; }
+        public IEnumerable<string> Roles { get; set; }
     }
 
     public static class UserViewModelExtensionMethods
