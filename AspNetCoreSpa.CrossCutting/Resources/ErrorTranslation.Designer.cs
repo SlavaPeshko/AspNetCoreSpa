@@ -160,6 +160,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description should be less 500 symbol.
+        /// </summary>
+        public static string LengthDescriptionPostInvalid {
+            get {
+                return ResourceManager.GetString("LengthDescriptionPostInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length photo should be less 2 megabyte.
         /// </summary>
         public static string LengthPhotoInvalid {
@@ -246,6 +255,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string PhotoInvalid {
             get {
                 return ResourceManager.GetString("PhotoInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Post not found.
+        /// </summary>
+        public static string PostNotFound {
+            get {
+                return ResourceManager.GetString("PostNotFound", resourceCulture);
             }
         }
         

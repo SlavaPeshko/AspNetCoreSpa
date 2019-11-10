@@ -1,4 +1,5 @@
-﻿using AspNetCoreSpa.Data.Repositories.Contracts;
+﻿using AspNetCoreSpa.Data.Context;
+using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Enities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,7 +10,7 @@ namespace AspNetCoreSpa.Data.Repositories
 {
     public class PostRepository : BaseRepository<Post, Guid>, IPostRepository
     {
-        public PostRepository(DbContext dbContext) : base(dbContext)
+        public PostRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 

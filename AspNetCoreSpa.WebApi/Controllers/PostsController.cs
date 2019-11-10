@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Contracts;
+using AspNetCoreSpa.Application.Models.Post;
+using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,33 +14,48 @@ namespace AspNetCoreSpa.WebApi.Controllers
     [Route("api/[controller]")]
     public class PostsController : ApiController
     {
+        private readonly IPostService _postService;
+
+        public PostsController(IPostService postService)
+        {
+            _postService = postService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetPostsAsync()
         {
-            return Ok();
+            var result = await _postService.GetPostsAsync();
+
+            return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPostByIdAsync()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPostByIdAsync(Guid id)
         {
-            return Ok();
+            var vm = await _postService.GetPostByIdAsync(id);
+
+            return Ok(vm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync()
+        public async Task<IActionResult> PostAsync(CreatePostInputModel post, List<IFormFile> image)
         {
-            return Ok();
+            var vm = await _postService.CreatePostAsync(post);
+
+            return Ok(vm);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync()
+        public async Task<IActionResult> PutAsync(Guid id, Post post)
         {
+            var result = await _postService.UpdatePostAsync(id, post);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync()
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
+            await _postService.DeletePostByIdAsync(id);
             return Ok();
         }
     }

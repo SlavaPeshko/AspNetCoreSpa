@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using System.Collections.Generic;
+using AutoMapper;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -47,6 +48,7 @@ namespace AspNetCoreSpa.WebApi
             var config = Configuration.Get<GlobalSettings>();
             services.AddSingleton(config);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection));
 
