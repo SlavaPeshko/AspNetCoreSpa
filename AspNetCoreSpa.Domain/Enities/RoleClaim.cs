@@ -9,5 +9,6 @@ namespace AspNetCoreSpa.Domain.Enities
         public string Value { get; set; }
 
         public Guid RoleId { get; set; }
+        public Role Role { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Data.Repositories;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Data.Context;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using AspNetCoreSpa.Application.Options;
+using AspNetCoreSpa.Application.Services.Contracts;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -16,14 +15,6 @@ namespace AspNetCoreSpa.IoC
     {
         public static void RegisterServiceCollection(IServiceCollection service)
         {
-            // Repositories
-            //service.AddScoped<IUserRepository, UsersRepository>();
-            //service.AddScoped<ICountriesRepository, CountriesRepository>();
-
-            // Services
-            //service.AddScoped<IUserService, UserService>();
-            //service.AddScoped<ICountryService, CountryService>();
-
             // Services/Helpers
             service.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
             service.AddTransient<IEmailSender, EmailSender>();

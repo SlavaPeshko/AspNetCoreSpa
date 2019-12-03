@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AspNetCoreSpa.Domain.Enities.Base;
+using System;
 
 namespace AspNetCoreSpa.Data.Repositories
 {

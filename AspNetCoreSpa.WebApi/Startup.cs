@@ -24,6 +24,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using AspNetCoreSpa.WebApi.Controllers;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -31,7 +34,7 @@ namespace AspNetCoreSpa.WebApi
     {
         public IConfiguration Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -48,11 +51,13 @@ namespace AspNetCoreSpa.WebApi
             var config = Configuration.Get<GlobalSettings>();
             services.AddSingleton(config);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection));
 
-            services.Configure<JwtIssuerOptions>(options => {
+            services.AddControllers();
+
+            services.Configure<JwtIssuerOptions>(options =>
+            {
                 options.Audience = config.Jwt.Audience;
                 options.Issuer = config.Jwt.Issuer;
                 options.Key = config.Jwt.Key;
@@ -76,7 +81,7 @@ namespace AspNetCoreSpa.WebApi
                     ValidIssuer = config.Jwt.Issuer,
                     //ValidAudience = config.Jwt.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.Jwt.Key)),
-                    ClockSkew = new TimeSpan(0, 1, 0)
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 options.Events = new JwtBearerEvents
@@ -92,36 +97,6 @@ namespace AspNetCoreSpa.WebApi
                 };
             });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("CanWriteAdminData", policy => policy.Requirements.Add(new ClaimRequirement("Admin", "Write")));
-                options.AddPolicy("CanRemoveAdminData", policy => policy.Requirements.Add(new ClaimRequirement("Admin", "Remove")));
-            });
-
-            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // => remove default claims
-            //services
-            //    .AddAuthentication(options =>
-            //    {
-            //        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            //    })
-            //    .AddJwtBearer(cfg =>
-            //    {
-            //        cfg.RequireHttpsMetadata = false;
-            //        cfg.SaveToken = true;
-            //        cfg.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidIssuer = Configuration["JwtIssuer"],
-            //            ValidAudience = Configuration["JwtIssuer"],
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"])),
-            //            ClockSkew = TimeSpan.Zero // remove delay of token when expire
-            //        };
-            //    });
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
             services.AddMvc(opt =>
             {
                 opt.Filters.Add(typeof(ValidatorActionFilter));
@@ -132,36 +107,11 @@ namespace AspNetCoreSpa.WebApi
 
             RegisterService(services);
 
-            services.AddSwaggerGen(s =>
-            {
-                s.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "AspNetCoreSpa", Version = "v1" });
-                s.OperationFilter<FormFileSwaggerFilter>();
-                s.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-                s.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {{ "Bearer", Enumerable.Empty<string>() },});
-            });
-            services
-                .AddMvcCore()
-                .AddAuthorization()
-                .AddJsonFormatters(options => options.ContractResolver = new CamelCasePropertyNamesContractResolver());
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CORS", builder =>
-                {
-                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().AllowCredentials().Build();
-                });
-            });
-
+            AddSwagger(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseStaticFiles();
 
@@ -175,17 +125,6 @@ namespace AspNetCoreSpa.WebApi
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-            //else
-            //{
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
-
-            //app.UseHttpsRedirection();
-
-            // app.UseIdentityServer();
-
-            app.UseAuthentication();
 
             app.UseSwagger();
 
@@ -216,16 +155,34 @@ namespace AspNetCoreSpa.WebApi
             //    });
             //});
 
-            app.UseCors("CORS");
-            app.UseMvc();
+            app.UseRouting();
+            
+            app.UseAuthentication();
 
-            //app.UseMvcWithDefaultRoute();
-            //app.UseDefaultFiles();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapControllers();
+            });
         }
 
         private static void RegisterService(IServiceCollection service)
         {
             NativeDependencyInjection.RegisterServiceCollection(service);
+        }
+
+        private static void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "AspNetCoreSpa", Version = "v1" });
+                s.MapType<IFormFile>(() => new OpenApiSchema { Type = "file" });
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                });
+            });
         }
     }
 }

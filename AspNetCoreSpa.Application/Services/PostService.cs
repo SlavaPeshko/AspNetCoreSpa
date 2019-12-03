@@ -1,5 +1,4 @@
-﻿using AspNetCoreSpa.Application.Contracts;
-using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Base;
@@ -11,6 +10,7 @@ using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using EC = AspNetCoreSpa.Domain.Enities.ErrorCode;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Application.Models.Post;
+using AspNetCoreSpa.Application.Services.Contracts;
 
 namespace AspNetCoreSpa.Application.Services
 {

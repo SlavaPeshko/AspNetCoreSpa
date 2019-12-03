@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Domain.Enities.Base;
 

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Models;
 
-namespace AspNetCoreSpa.Application.Contracts
+namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface ICountryService : IBaseService
     {

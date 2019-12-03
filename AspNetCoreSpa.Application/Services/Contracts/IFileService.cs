@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace AspNetCoreSpa.Application.Contracts
+namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface IFileService : IBaseService
     {

@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreSpa.Application.Options
+﻿namespace AspNetCoreSpa.Infrastructure.Options
 {
     public class AuthMessageSenderOptions
     {

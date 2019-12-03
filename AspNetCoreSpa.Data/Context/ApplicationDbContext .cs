@@ -107,7 +107,16 @@ namespace AspNetCoreSpa.Data.Context
 
                 e.HasOne(i => i.User)
                 .WithOne(u => u.Image)
-                .HasForeignKey<Image>(i => i.UserXref);
+                .HasForeignKey<Image>(i => i.UserId);
+            });
+
+            modelBuilder.Entity<RoleClaim>(e =>
+            {
+                e.ToTable("RoleClaims");
+
+                e.HasOne(r => r.Role)
+                .WithMany(r => r.RoleClaims)
+                .HasForeignKey(r => r.RoleId);
             });
 
             modelBuilder.Seed();

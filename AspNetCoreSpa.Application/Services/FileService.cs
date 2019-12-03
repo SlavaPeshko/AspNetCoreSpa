@@ -1,5 +1,4 @@
-﻿using AspNetCoreSpa.Application.Contracts;
-using AspNetCoreSpa.Domain.Enities.Base;
+﻿using AspNetCoreSpa.Domain.Enities.Base;
 using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
@@ -11,7 +10,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Http;
-using AspNetCoreSpa.Application.Options;
+using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Infrastructure.Options;
 
 namespace AspNetCoreSpa.Application.Services
 {

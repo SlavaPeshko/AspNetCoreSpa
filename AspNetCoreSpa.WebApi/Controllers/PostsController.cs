@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Contracts;
 using AspNetCoreSpa.Application.Models.Post;
+using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Http;
