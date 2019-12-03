@@ -21,8 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AspNetCoreSpa.Contracts\AspNetCoreSpa.Contracts.csproj" />
+    <ProjectReference Include="..\AspNetCoreSpa.CrossCutting\AspNetCoreSpa.CrossCutting.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.Data\AspNetCoreSpa.Data.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.Domain\AspNetCoreSpa.Domain.csproj" />
+    <ProjectReference Include="..\AspNetCoreSpa.Infrastructure\AspNetCoreSpa.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

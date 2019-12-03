@@ -1,6 +1,6 @@
-﻿using AspNetCoreSpa.Application.Options;
-using AspNetCoreSpa.Domain.Enities;
+﻿using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Domain.Enities.Enum;
+using AspNetCoreSpa.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;

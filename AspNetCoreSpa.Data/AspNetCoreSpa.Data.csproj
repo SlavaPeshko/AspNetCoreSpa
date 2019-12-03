@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AspNetCoreSpa.Contracts\AspNetCoreSpa.Contracts.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.Domain\AspNetCoreSpa.Domain.csproj" />
+    <ProjectReference Include="..\AspNetCoreSpa.Infrastructure\AspNetCoreSpa.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

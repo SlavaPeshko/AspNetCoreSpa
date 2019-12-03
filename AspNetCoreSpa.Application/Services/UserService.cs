@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Text.Encodings.Web;
 using AspNetCoreSpa.Domain.Enities.Security;
 using Microsoft.Extensions.Configuration;
-using AspNetCoreSpa.Application.Options;
+using AspNetCoreSpa.Infrastructure.Options;
 
 namespace AspNetCoreSpa.Application.Services
 {

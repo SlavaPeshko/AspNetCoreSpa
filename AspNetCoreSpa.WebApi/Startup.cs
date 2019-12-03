@@ -12,7 +12,6 @@ using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.IoC;
 using AspNetCoreSpa.WebApi.Filters;
 using AspNetCoreSpa.Application.Validators;
-using AspNetCoreSpa.Application.Options;
 using Newtonsoft.Json.Serialization;
 using AspNetCoreSpa.WebApi.Misc;
 using System.Net;
@@ -27,6 +26,7 @@ using AutoMapper;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using AspNetCoreSpa.WebApi.Controllers;
+using AspNetCoreSpa.Infrastructure.Options;
 
 namespace AspNetCoreSpa.WebApi
 {
