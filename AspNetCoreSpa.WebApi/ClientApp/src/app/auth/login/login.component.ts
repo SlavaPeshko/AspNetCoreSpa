@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
     if(this.email.errors || this.password.errors) {
       this.loginForm.markAllAsTouched();
     } else {
-      debugger;
       this.auth.login({ email: this.email.value, password: this.password.value });
     }
   }

@@ -1,14 +1,14 @@
 ﻿using AspNetCoreSpa.Application.Helpers;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Services.Contracts;
-using AspNetCoreSpa.Domain.Enities.Base;
 using System.Threading.Tasks;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
-using EC = AspNetCoreSpa.Domain.Enities.ErrorCode;
+using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using System.Linq;
-using AspNetCoreSpa.Domain.Enities;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using System;
+using AspNetCoreSpa.Domain.Entities;
+using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Application.Services
 {

@@ -1,5 +1,5 @@
 ﻿using AspNetCoreSpa.Application.Models;
-using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Entities;
 using AutoMapper;
 
 namespace AspNetCoreSpa.Application.Mapping

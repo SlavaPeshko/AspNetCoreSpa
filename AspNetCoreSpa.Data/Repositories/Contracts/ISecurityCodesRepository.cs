@@ -1,6 +1,6 @@
-﻿using AspNetCoreSpa.Domain.Enities.Security;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Domain.Entities.Security;
 
 namespace AspNetCoreSpa.Data.Repositories.Contracts
 {

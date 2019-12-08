@@ -1,6 +1,6 @@
 ﻿using AspNetCoreSpa.Application.Models;
-using AspNetCoreSpa.Domain.Enities.Base;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Application.Services.Contracts
 {

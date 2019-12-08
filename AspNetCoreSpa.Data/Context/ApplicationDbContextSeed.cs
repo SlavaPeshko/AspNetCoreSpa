@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using AspNetCoreSpa.Domain.Enities;
 using System.Collections.Generic;
+using AspNetCoreSpa.Domain.Entities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using AspNetCoreSpa.Domain.Enities.Enum;
 
 namespace AspNetCoreSpa.Data.Context
 {

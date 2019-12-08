@@ -1,4 +1,4 @@
-﻿using AspNetCoreSpa.Domain.Enities;
+﻿using AspNetCoreSpa.Domain.Entities;
 using FluentValidation;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 

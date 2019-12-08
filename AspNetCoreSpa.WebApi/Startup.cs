@@ -27,12 +27,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using AspNetCoreSpa.WebApi.Controllers;
 using AspNetCoreSpa.Infrastructure.Options;
+using FluentValidation;
 
 namespace AspNetCoreSpa.WebApi
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public Startup(IWebHostEnvironment env)
         {
@@ -101,10 +102,11 @@ namespace AspNetCoreSpa.WebApi
             {
                 opt.Filters.Add(typeof(ValidatorActionFilter));
             });
+            
+            services.AddCors();
 
-            services.AddMvc().AddFluentValidation(fvc =>
-                fvc.RegisterValidatorsFromAssemblyContaining<CreateUserModelValidator>());
-
+            RegisterValidator(services);
+            
             RegisterService(services);
 
             AddSwagger(services);
@@ -156,19 +158,27 @@ namespace AspNetCoreSpa.WebApi
             //});
 
             app.UseRouting();
-            
+
+            app.UseCors(x => x
+                .WithOrigins("http://localhost:4200")
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
             });
+
         }
 
-        private static void RegisterService(IServiceCollection service)
+        private static void RegisterService(IServiceCollection services)
         {
-            NativeDependencyInjection.RegisterServiceCollection(service);
+            NativeDependencyInjection.RegisterServiceCollection(services);
         }
 
         private static void AddSwagger(IServiceCollection services)
@@ -182,6 +192,15 @@ namespace AspNetCoreSpa.WebApi
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
                 });
+            });
+        }
+
+        private static void RegisterValidator(IServiceCollection services)
+        {
+            services.AddMvc().AddFluentValidation(fvc =>
+            {
+                fvc.RegisterValidatorsFromAssemblyContaining<CreateUserModelValidator>();
+                fvc.RegisterValidatorsFromAssemblyContaining<UpdatePasswordInputModelValidator>();
             });
         }
     }

@@ -1,6 +1,4 @@
-﻿using AspNetCoreSpa.Domain.Enities;
-using AspNetCoreSpa.Domain.Enities.Enum;
-using AspNetCoreSpa.Infrastructure.Options;
+﻿using AspNetCoreSpa.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
@@ -11,6 +9,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using AspNetCoreSpa.Domain.Entities;
+using AspNetCoreSpa.Domain.Entities.Enum;
 
 namespace AspNetCoreSpa.Application.Helpers
 {
@@ -19,7 +19,7 @@ namespace AspNetCoreSpa.Application.Helpers
         string GenerateToken(User user);
         string GenerateRefreshToken(User user);
         T DecodeToken<T>(string token);
-        string GenerateTokenWithSecurityCode(User user, string code);
+        string GenerateTokenWithSecurityCode(string id, string email, string code);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 
@@ -61,12 +61,12 @@ namespace AspNetCoreSpa.Application.Helpers
             }
         }
 
-        public string GenerateTokenWithSecurityCode(User user, string code)
+        public string GenerateTokenWithSecurityCode(string id, string email, string code)
         {
             var claims = new List<Claim>
             {
-                new Claim("Id", user.Id.ToString()),
-                new Claim("Email", user.Email),
+                new Claim("Id", id),
+                new Claim("Email", email),
                 new Claim("Code", code),
              };
 
@@ -106,16 +106,17 @@ namespace AspNetCoreSpa.Application.Helpers
         public T DecodeToken<T>(string token)
         {
             var jwtSecurityToken =  new JwtSecurityTokenHandler().ReadToken(token) as JwtSecurityToken;
+            if (jwtSecurityToken == null) return default(T);
             var json = JsonConvert.SerializeObject(jwtSecurityToken.Payload);
 
             return JsonConvert.DeserializeObject<T>(json);
+
         }
 
         private List<Claim> InitClaims(User user)
         {
-            var claims = new List<Claim>();
+            var claims = new List<Claim> {new Claim(nameof(user.Id), user.Id.ToString())};
 
-            claims.Add(new Claim(nameof(user.Id), user.Id.ToString()));
 
             if (user.FirstName != null)
                 claims.Add(new Claim(nameof(user.FirstName), user.FirstName));
@@ -126,8 +127,7 @@ namespace AspNetCoreSpa.Application.Helpers
             if (user.Gender != Gender.None)
                 claims.Add(new Claim(nameof(ClaimTypes.Gender), user.Gender.ToString("G")));
 
-            if (user.DateOfBirth != null)
-                claims.Add(new Claim(nameof(ClaimTypes.DateOfBirth), user.DateOfBirth.ToString("G")));
+            claims.Add(new Claim(nameof(ClaimTypes.DateOfBirth), user.DateOfBirth.ToString("G")));
 
             if (user.Email != null)
             {

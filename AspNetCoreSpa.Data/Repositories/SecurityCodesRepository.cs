@@ -1,11 +1,11 @@
 ﻿using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
-using AspNetCoreSpa.Domain.Enities.Security;
 using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using AspNetCoreSpa.Domain.Entities.Security;
 
 namespace AspNetCoreSpa.Data.Repositories
 {

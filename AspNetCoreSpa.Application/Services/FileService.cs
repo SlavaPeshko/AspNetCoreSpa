@@ -1,26 +1,26 @@
-﻿using AspNetCoreSpa.Domain.Enities.Base;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using EC = AspNetCoreSpa.Domain.Enities.ErrorCode;
+using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Http;
 using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Infrastructure.Options;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class FileService : IFileService
     {
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment  _environment;
         private readonly GlobalSettings _settings;
 
-        public FileService(IHostingEnvironment environment,
+        public FileService(IWebHostEnvironment  environment,
             GlobalSettings settings)
         {
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));

@@ -11,11 +11,11 @@ namespace AspNetCoreSpa.Application.Models.Post
 
     public static class CreatePostInputModelExtensionMethods
     {
-        public static Domain.Enities.Post ToEntity(this CreatePostInputModel post)
+        public static Domain.Entities.Post ToEntity(this CreatePostInputModel post)
         {
             if (post == null) return null;
 
-            return new Domain.Enities.Post
+            return new Domain.Entities.Post
             {
                 Description = post.Description,
             };

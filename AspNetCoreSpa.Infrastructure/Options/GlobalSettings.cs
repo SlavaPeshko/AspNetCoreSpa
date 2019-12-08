@@ -10,6 +10,7 @@ namespace AspNetCoreSpa.Infrastructure.Options
         public Logging Logging { get; set; }
         public string AllowedHosts { get; set; }
         public Cache Cache { get; set; }
+        public EmailSettings EmailSettings { get; set; }
     }
 
     public class ConnectionStrings
@@ -44,5 +45,14 @@ namespace AspNetCoreSpa.Infrastructure.Options
     public class Cache
     {
         public TimeSpan CountriesExpiration { get; set; }
+    }
+
+    public class EmailSettings
+    {
+        public string MailServer { get; set; }
+        public int MailPort { get; set; }
+        public string SenderName { get; set; }
+        public string Sender { get; set; }
+        public string Password { get; set; }
     }
 }

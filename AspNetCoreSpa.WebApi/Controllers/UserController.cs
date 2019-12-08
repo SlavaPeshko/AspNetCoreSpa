@@ -53,7 +53,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return CreatedAtAction(nameof(Login),result.Data);
         }
 
-        [HttpPost("{userId}/email")]
+        [HttpGet("{userId}/email")]
         [Authorize(Roles = "User")]
         [Consumes(MediaTypeNames.Application.Json)]
         [Produces(MediaTypeNames.Application.Json)]
@@ -86,7 +86,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpPost("upload-photo")]
-        [Authorize]
+        [Authorize(Roles = "User")]
         [Consumes("multipart/form-data")]
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -99,6 +99,30 @@ namespace AspNetCoreSpa.WebApi.Controllers
                 return BadRequest(result.Errors);
 
             return Ok(result);
+        }
+
+        [HttpPost("{id:guid}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> UpdateUserAsync(Guid id, UpdateUserInputModel model)
+        {
+            var result = await _userService.UpdateUserAsync(id, model);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+            
+            return Ok();
+        }
+        
+        [HttpPost("{id:guid}/password")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> UpdatePasswordAsync(Guid id, UpdatePasswordInputModel model)
+        {
+            var result = await _userService.UpdatePasswordAsync(id, model);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok();
         }
     }
 }

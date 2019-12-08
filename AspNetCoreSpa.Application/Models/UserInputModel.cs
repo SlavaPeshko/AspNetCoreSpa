@@ -2,7 +2,7 @@
 {
     public class UserInputModel
     {
-        public string EmailOrPhone { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

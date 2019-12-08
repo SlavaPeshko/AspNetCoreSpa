@@ -1,16 +1,16 @@
 ﻿using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Data.Repositories.Contracts;
-using AspNetCoreSpa.Domain.Enities;
-using AspNetCoreSpa.Domain.Enities.Base;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
-using EC = AspNetCoreSpa.Domain.Enities.ErrorCode;
+using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Domain.Entities;
+using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Application.Services
 {

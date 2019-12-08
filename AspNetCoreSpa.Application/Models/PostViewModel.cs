@@ -11,7 +11,7 @@ namespace AspNetCoreSpa.Application.Models
 
     public static class PostViewModelExtensionMethods
     {
-        public static PostViewModel ToViewModel(this Domain.Enities.Post post)
+        public static PostViewModel ToViewModel(this Domain.Entities.Post post)
         {
             if (post == null) return null;
 

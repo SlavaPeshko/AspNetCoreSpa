@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using AspNetCoreSpa.Domain.Enities;
-using AspNetCoreSpa.Domain.Enities.Security;
+using AspNetCoreSpa.Domain.Entities;
+using AspNetCoreSpa.Domain.Entities.Security;
 
 namespace AspNetCoreSpa.Data.Context
 {

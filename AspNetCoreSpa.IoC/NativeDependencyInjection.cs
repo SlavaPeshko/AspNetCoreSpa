@@ -8,10 +8,11 @@ using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Data.QueryRepository.Base;
 
 namespace AspNetCoreSpa.IoC
 {
-    public class NativeDependencyInjection
+    public static class NativeDependencyInjection
     {
         public static void RegisterServiceCollection(IServiceCollection service)
         {
@@ -27,13 +28,23 @@ namespace AspNetCoreSpa.IoC
 
             RegisterServices(service, typeof(IBaseService));
             RegisterRepositories(service, typeof(BaseRepository<,>));
+            RegisterQueryRepositories(service, typeof(QueryRepositoryBase));
+        }
+
+        private static void RegisterQueryRepositories(IServiceCollection service, Type baseTypeOf)
+        {
+            var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
+                .Where(x => !x.IsAbstract && !x.IsInterface
+                    && x.BaseType != null && x.BaseType == baseTypeOf);
+
+            AddScoped(types, service);
         }
 
         private static void RegisterRepositories(IServiceCollection service, Type baseTypeOf)
         {
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
-                .Where(x => !x.IsAbstract && !x.IsInterface && x.BaseType != null 
+                .Where(x => !x.IsAbstract && !x.IsInterface && x.BaseType != null
                     && x.BaseType.IsGenericType && x.BaseType.GetGenericTypeDefinition() == baseTypeOf);
 
             AddScoped(types, service);

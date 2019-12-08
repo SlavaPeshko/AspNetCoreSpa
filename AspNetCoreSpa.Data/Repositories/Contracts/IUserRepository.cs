@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Entities;
 
 namespace AspNetCoreSpa.Data.Repositories.Contracts
 {
@@ -11,10 +11,7 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         Task PostAsync(User user);
         void Put(User user);
         Task<User> GetUserByIdAsync(Guid id);
-        
-        // TODO SQRS pattern use for query
         Task<User> GetUserByEmailAsync(string email);
         Task<User> GetUserByPhoneAsync(string phone);
-        Task<bool> IsExistEmailAsync(string email);
     }
 }

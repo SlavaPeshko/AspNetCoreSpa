@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using AspNetCoreSpa.Domain.Enities.Base;
+﻿using AspNetCoreSpa.Domain.Entities.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {

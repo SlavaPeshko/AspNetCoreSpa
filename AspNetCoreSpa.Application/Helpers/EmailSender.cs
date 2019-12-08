@@ -1,43 +1,39 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
 using AspNetCoreSpa.Infrastructure.Options;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.Extensions.Options;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 
 namespace AspNetCoreSpa.Application.Helpers
 {
     public class EmailSender : IEmailSender
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        private readonly GlobalSettings _globalSettings;
+
+        public EmailSender(GlobalSettings globalSettings)
         {
-            Options = optionsAccessor.Value;
+            _globalSettings = globalSettings;
         }
 
-        public AuthMessageSenderOptions Options { get; }
-
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            return Execute(Options.SendGridKey, subject, htmlMessage, email);
-        }
-
-        private Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
+            SmtpClient client = new SmtpClient(_globalSettings.EmailSettings.MailServer, _globalSettings.EmailSettings.MailPort)
             {
-                From = new EmailAddress("slava.peshko@gmail.com", "Slava Peshko"),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
+                UseDefaultCredentials = true,
+                EnableSsl = true,
+                Credentials = new NetworkCredential(_globalSettings.EmailSettings.Sender, _globalSettings.EmailSettings.Password)
             };
-            msg.AddTo(new EmailAddress(email));
 
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
+            MailMessage mailMessage = new MailMessage
+            {
+                From = new MailAddress(_globalSettings.EmailSettings.Sender)
+            };
+            mailMessage.To.Add(email);
+            mailMessage.Body = htmlMessage;
+            mailMessage.Subject = subject;
+            client.Send(mailMessage);
 
-            return client.SendEmailAsync(msg);
+            await Task.CompletedTask;
         }
     }
 }

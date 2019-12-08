@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using AspNetCoreSpa.Domain.Enities;
+using AspNetCoreSpa.Domain.Entities;
 
 namespace AspNetCoreSpa.Application.Models
 {
