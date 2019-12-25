@@ -191,6 +191,21 @@ namespace AspNetCoreSpa.WebApi
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                     Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                    { 
+                        new OpenApiSecurityScheme 
+                        { 
+                            Reference = new OpenApiReference 
+                            { 
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer" 
+                            } 
+                        },
+                        new string[] { } 
+                    } 
                 });
             });
         }

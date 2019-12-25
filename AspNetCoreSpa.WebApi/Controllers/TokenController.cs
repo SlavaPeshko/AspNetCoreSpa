@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    [Route("api/[controller]")]
     public class TokenController : ApiController
     {
         private readonly ITokenService _tokenService;

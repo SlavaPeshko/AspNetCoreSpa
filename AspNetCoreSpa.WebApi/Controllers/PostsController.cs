@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
-    [Route("api/[controller]")]
     public class PostsController : ApiController
     {
         private readonly IPostService _postService;

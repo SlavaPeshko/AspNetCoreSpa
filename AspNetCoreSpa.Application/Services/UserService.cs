@@ -18,6 +18,7 @@ using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using AspNetCoreSpa.Domain.Entities.Security;
+using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSpa.Application.Services
 {
