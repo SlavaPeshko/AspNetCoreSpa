@@ -19,18 +19,25 @@ namespace AspNetCoreSpa.Data.Repositories
             GetSet().Remove(post);
         }
 
-        public async Task<IEnumerable<Post>> GetAllPostAsync()
+        // public async Task<IEnumerable<Post>> GetAllPostAsync(PostPageFilters filters)
+        // {
+        //     return await GetSet()
+        //         .Include(p => p.Comments)
+        //         .Include(p => p.Likes)
+        //         .AsNoTracking()
+        //         .ToListAsync();
+        // }
+
+        public async Task<Post> GetPostByIdAndUserIdAsync(Guid id, Guid userId)
         {
             return await GetSet()
-                .Include(p => p.Comments)
-                .Include(p => p.Likes)
-                .AsNoTracking()
-                .ToListAsync();
+                .Include(p=>p.User)
+                .SingleOrDefaultAsync(p => p.Id == id && p.User.Id == userId);
         }
-
+        
         public async Task<Post> GetPostByIdAsync(Guid id)
         {
-            return await GetSet().SingleOrDefaultAsync(u => u.Id == id);
+            return await GetSet().SingleOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task PostAsync(Post post)

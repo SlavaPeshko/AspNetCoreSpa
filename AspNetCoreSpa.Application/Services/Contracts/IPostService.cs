@@ -10,7 +10,7 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface IPostService : IBaseService
     {
-        Task<IEnumerable<PostViewModel>> GetPostsAsync();
+        Task<IEnumerable<PostViewModel>> GetPostsAsync(PostPageFilters filters);
         Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post);
         Task<Result<PostViewModel>> GetPostByIdAsync(Guid id);
         Task<Result> DeletePostByIdAsync(Guid id);

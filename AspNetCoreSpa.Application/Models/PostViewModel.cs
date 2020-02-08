@@ -1,4 +1,5 @@
 ﻿using System;
+using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 
 namespace AspNetCoreSpa.Application.Models
 {
@@ -12,6 +13,18 @@ namespace AspNetCoreSpa.Application.Models
     public static class PostViewModelExtensionMethods
     {
         public static PostViewModel ToViewModel(this Domain.Entities.Post post)
+        {
+            if (post == null) return null;
+
+            return new PostViewModel
+            {
+                Description = post.Description,
+                CreateAt = post.CreateAt,
+                UpdateAt = post.UpdateAt
+            };
+        }
+
+        public static PostViewModel ToViewModel(this PostDto post)
         {
             if (post == null) return null;
 

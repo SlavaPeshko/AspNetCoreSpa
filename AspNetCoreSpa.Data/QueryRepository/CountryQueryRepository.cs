@@ -20,10 +20,8 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-
-                string query = "Select Name, RegioneCode From Contries";
-
-                connection.Open();
+                string query = @"SELECT [Id], [Name], [RegioneCode]
+                    FROM [AspNetCoreSpa].[dbo].[Countries]";
 
                 return await connection.QueryAsync<CountryDto>(query);
             }
