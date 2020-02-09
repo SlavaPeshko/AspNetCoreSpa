@@ -57,9 +57,13 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, Post post)
+        public async Task<IActionResult> PutAsync(Guid id, UpdatePostInputModel post)
         {
             var result = await _postService.UpdatePostAsync(id, post);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+            
             return Ok();
         }
 

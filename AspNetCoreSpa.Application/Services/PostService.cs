@@ -12,7 +12,6 @@ using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
-using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using PostPageFilters = AspNetCoreSpa.Application.Models.Post.PostPageFilters;
@@ -78,12 +77,9 @@ namespace AspNetCoreSpa.Application.Services
         public async Task<Result<PostViewModel>> GetPostByIdAsync(Guid id)
         {
             var post = await _postQueryRepository.GetPostByIdAsync(id);
-            // var post = await _postRepository.GetPostByIdAsync(id);
 
             if(post == null)
-            {
                 return Result.Fail<PostViewModel>(EC.PostNotFound, ET.PostNotFound);
-            }
 
             var vm = _mapper.Map<PostDto, PostViewModel>(post);
 
@@ -101,9 +97,19 @@ namespace AspNetCoreSpa.Application.Services
             return posts.Select(x => x.ToViewModel());
         }
 
-        public Task<Result> UpdatePostAsync(Guid id, Post post)
+        public async Task<Result> UpdatePostAsync(Guid id, UpdatePostInputModel post)
         {
-            throw new NotImplementedException();
+            var entity = await _postRepository.GetPostByIdAndUserIdAsync(id, _userContext.UserId);
+            if(entity == null)
+                return Result.Fail(EC.PostNotFound, ET.PostNotFound);
+
+            entity.Description = post.Description;
+            entity.UpdateAt = DateTime.UtcNow;
+
+            _postRepository.Put(entity);
+            await _unitOfWorks.CommitAsync();
+
+            return Result.Ok();
         }
     }
 }

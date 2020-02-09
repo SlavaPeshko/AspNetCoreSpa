@@ -14,6 +14,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post);
         Task<Result<PostViewModel>> GetPostByIdAsync(Guid id);
         Task<Result> DeletePostByIdAsync(Guid id);
-        Task<Result> UpdatePostAsync(Guid id, Post post);
+        Task<Result> UpdatePostAsync(Guid id, UpdatePostInputModel post);
     }
 }
