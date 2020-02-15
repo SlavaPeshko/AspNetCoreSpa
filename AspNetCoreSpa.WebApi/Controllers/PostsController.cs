@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Models.Comment;
 using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Domain.Entities;
@@ -15,10 +16,13 @@ namespace AspNetCoreSpa.WebApi.Controllers
     public class PostsController : ApiController
     {
         private readonly IPostService _postService;
+        private readonly ICommentService _commentService;
 
-        public PostsController(IPostService postService)
+        public PostsController(IPostService postService,
+            ICommentService commentService)
         {
             _postService = postService;
+            _commentService = commentService;
         }
 
         [HttpGet("{page}/{items}")]
@@ -75,6 +79,18 @@ namespace AspNetCoreSpa.WebApi.Controllers
             if(result.IsFailure)
                 return BadRequest(result.Errors);
             
+            return Ok();
+        }
+
+        [HttpPost("{postId}/comment")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> PostAsync([FromBody]CreateCommentInputModel comment, Guid postId)
+        {
+            var result = await _commentService.CreateComment(comment, postId);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
             return Ok();
         }
     }

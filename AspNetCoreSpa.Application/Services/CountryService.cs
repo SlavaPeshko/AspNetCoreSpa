@@ -37,7 +37,7 @@ namespace AspNetCoreSpa.Application.Services
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(_globalSettings.Cache.CountriesExpiration);
 
-                _cache.Set(CacheKeys.Country, countries, cacheEntryOptions);
+               _cache.Set(CacheKeys.Country, countries, cacheEntryOptions);
             }
 
             return countries.Select(x => x.ToViewModel());

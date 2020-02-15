@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
@@ -20,11 +21,34 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"SELECT [Id], [Description], [CreateAt], [UpdateAt], [UserId]
-                                   FROM [AspNetCoreSpa].[dbo].[Posts] ORDER BY [CreateAt] DESC
-                                    OFFSET @Limit * (@Offset - 1)  ROWS FETCH NEXT @Limit ROWS ONLY";
+                string query = @"SELECT ps.[Id] PostId, ps.[Description] PostDescription, ps.[CreateAt] PostCreateAt, ps.[UpdateAt] PostUpdateAt,
+                                    cm.[Id] CommentId, cm.[Description] CommentDescription, cm.[CreateAt] CommentCreateAt, cm.[UpdateAt] CommentUpdateAt
+                                    FROM (SELECT * FROM [AspNetCoreSpa].[dbo].[Posts] ORDER BY [CreateAt] DESC OFFSET @Limit * (@Offset - 1)  ROWS FETCH NEXT @Limit ROWS ONLY) ps
+                                    LEFT JOIN [AspNetCoreSpa].[dbo].[Comments] AS cm ON cm.[PostId] = ps.[Id]";
 
-                return await connection.QueryAsync<PostDto>(query, new { Limit = filtersDto.ItemsPerPage, Offset = filtersDto.PageNumber });
+                var postDtoDictionary = new Dictionary<Guid, PostDto>();
+
+                var list = await connection.QueryAsync<PostDto, CommentDto, PostDto>(
+                    query,
+                    (postDto, commentDto) =>
+                    {
+                        PostDto postDtoEntry;
+                        if (!postDtoDictionary.TryGetValue(postDto.PostId, out postDtoEntry))
+                        {
+                            postDtoEntry = postDto;
+                            postDtoEntry.Comments = new List<CommentDto>();
+                            postDtoDictionary.Add(postDtoEntry.PostId, postDtoEntry);
+                        }
+
+                        if(commentDto != null)
+                            postDtoEntry.Comments.Add(commentDto);
+
+                        return postDtoEntry;
+                    },
+                    new { Limit = filtersDto.ItemsPerPage, Offset = filtersDto.PageNumber },
+                    splitOn: "PostUpdateAt, CommentId");
+
+                return list.Distinct();
             }
         }
 
