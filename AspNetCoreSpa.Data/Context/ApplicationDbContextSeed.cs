@@ -15,21 +15,23 @@ namespace AspNetCoreSpa.Data.Context
             //    .HasData(new Role
             //    {
             //        Id = Guid.NewGuid(),
-            //        Name = RoleEnum.User.ToString()
+            //        RoleEnum = Domain.Entities.Enum.RoleEnum.User,
+            //        RoleName = Domain.Entities.Enum.RoleEnum.User.ToString()
             //    },
             //    new Role
             //    {
             //        Id = Guid.NewGuid(),
-            //        Name = RoleEnum.Admin.ToString()
+            //        RoleEnum = Domain.Entities.Enum.RoleEnum.Admin,
+            //        RoleName = Domain.Entities.Enum.RoleEnum.Admin.ToString()
             //    });
 
-            //modelBuilder.Entity<Country>().HasData(PopulateCounty());
+            // modelBuilder.Entity<Country>().HasData(PopulateCounty());
         }
 
         public static List<Country> PopulateCounty()
         {
             var countries = new List<Country>();
-            string path = @"C:\slim-3.json";
+            string path = @"C:\Countries.json";
             var content = System.IO.File.ReadAllText(path);
 
             foreach (var country in JsonConvert.DeserializeObject<List<JObject>>(content))
@@ -38,7 +40,7 @@ namespace AspNetCoreSpa.Data.Context
                 {
                     Id = Guid.NewGuid(),
                     Name = country.Value<string>("name"),
-                    RegioneCode = country.Value<string>("alpha-3"),
+                    RegionCode = country.Value<string>("alpha3code"),
                 });
             }
 

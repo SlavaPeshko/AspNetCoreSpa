@@ -21,7 +21,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
             using (IDbConnection connection = Connection)
             {
 
-                string query = "Select Name, RegioneCode From Contries";
+                string query = "Select Name, RegionCode From Countries";
 
                 connection.Open();
 

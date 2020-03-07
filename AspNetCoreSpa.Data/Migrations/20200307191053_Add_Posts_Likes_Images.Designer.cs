@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20191203184413_Add_ForegnKey_RoleClaims")]
-    partial class Add_ForegnKey_RoleClaims
+    [Migration("20200307191053_Add_Posts_Likes_Images")]
+    partial class Add_Posts_Likes_Images
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace AspNetCoreSpa.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Comment", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Comment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Country", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Country", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -60,7 +60,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(60)");
 
-                    b.Property<string>("RegioneCode")
+                    b.Property<string>("RegionCode")
                         .HasColumnType("nvarchar(3)");
 
                     b.HasKey("Id");
@@ -68,7 +68,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Image", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -96,7 +96,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Like", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Like", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Likes");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Post", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Post", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Role", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -164,7 +164,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.RoleClaim", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.RoleClaim", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -186,7 +186,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("RoleClaims");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Security.SecurityCode", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Security.SecurityCode", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -209,7 +209,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("SecurityCodes");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.User", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,7 +266,7 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.UserRole", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -281,77 +281,77 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("XrefUserRole");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Comment", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Comment", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Post", "Post")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Image", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Image", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Post", "Post")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Post", "Post")
                         .WithMany("Images")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
                         .WithOne("Image")
-                        .HasForeignKey("AspNetCoreSpa.Domain.Enities.Image", "UserId")
+                        .HasForeignKey("AspNetCoreSpa.Domain.Entities.Image", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Like", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Like", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Comment", "Comment")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Comment", "Comment")
                         .WithMany("Likes")
                         .HasForeignKey("CommentId");
 
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Post", "Post")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId");
 
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.Post", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Post", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.RoleClaim", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.RoleClaim", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Role", "Role")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Role", "Role")
                         .WithMany("RoleClaims")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.User", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.User", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Country", "Country")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Country", "Country")
                         .WithMany("Users")
                         .HasForeignKey("CountryId");
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Enities.UserRole", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.Role", "Role")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AspNetCoreSpa.Domain.Enities.User", "User")
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
                         .WithMany("Roles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

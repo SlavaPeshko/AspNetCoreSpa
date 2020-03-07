@@ -12,7 +12,7 @@ namespace AspNetCoreSpa.Domain.Entities
         }
 
         public string Name { get; set; }
-        public string RegioneCode { get; set; }
+        public string RegionCode { get; set; }
 
         public ICollection<User> Users { get; set; }
     }

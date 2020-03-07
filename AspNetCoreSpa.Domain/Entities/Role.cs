@@ -14,6 +14,8 @@ namespace AspNetCoreSpa.Domain.Entities
 
         public RoleEnum RoleEnum { get; set; }
 
+        public string RoleName { get; set; }
+
         public ICollection<UserRole> Users { get; set; }
 
         public ICollection<RoleClaim> RoleClaims { get; set; }
