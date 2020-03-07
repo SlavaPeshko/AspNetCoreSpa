@@ -36,12 +36,19 @@ namespace AspNetCoreSpa.Data.Context
                 e.Property(u => u.PasswordHash).HasColumnType("nvarchar(450)");
             });
 
+            modelBuilder.Entity<Role>(e =>
+            {
+                e.ToTable("Roles");
+
+                e.Property(r => r.RoleName).HasColumnType("nvarchar(100)");
+            });
+
             modelBuilder.Entity<Country>(e =>
             {
                 e.ToTable("Countries");
                 e.HasKey(u => u.Id);
 
-                e.Property(c => c.RegioneCode).HasColumnType("nvarchar(3)");
+                e.Property(c => c.RegionCode).HasColumnType("nvarchar(3)");
                 e.Property(u => u.Name).HasColumnType("nvarchar(60)");
             });
 
@@ -101,6 +108,9 @@ namespace AspNetCoreSpa.Data.Context
             modelBuilder.Entity<Image>(e =>
             {
                 e.ToTable("Images");
+
+                e.HasOne(i => i.Post)
+                .WithMany(p => p.Images);
 
                 e.HasOne(i => i.Post)
                 .WithMany(p => p.Images);

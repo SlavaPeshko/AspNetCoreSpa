@@ -3,6 +3,6 @@
     public class CountryDto
     {
         public string Name { get; set; }
-        public string RegioneCode { get; set; }
+        public string RegionCode { get; set; }
     }
 }

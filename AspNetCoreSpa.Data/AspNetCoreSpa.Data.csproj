@@ -8,6 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190620190113_Populate_Role.cs" />
+    <Compile Remove="Migrations\20190620190113_Populate_Role.Designer.cs" />
+    <Compile Remove="Migrations\20190620190209_Populate_Country.cs" />
+    <Compile Remove="Migrations\20190620190209_Populate_Country.Designer.cs" />
+    <Compile Remove="Migrations\20191031192838_Update_Database.cs" />
+    <Compile Remove="Migrations\20191031192838_Update_Database.Designer.cs" />
+    <Compile Remove="Migrations\20200307191053_Add_Posts_Likes_Images.cs" />
+    <Compile Remove="Migrations\20200307191053_Add_Posts_Likes_Images.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AspNetCoreSpa.Contracts\AspNetCoreSpa.Contracts.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.Domain\AspNetCoreSpa.Domain.csproj" />
     <ProjectReference Include="..\AspNetCoreSpa.Infrastructure\AspNetCoreSpa.Infrastructure.csproj" />
