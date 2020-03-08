@@ -15,5 +15,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
         public string RefreshToken { get; set; }
         public DateTime DateOfBirth { get; set; }
         public GenderDto Gender { get; set; }
+        public Guid? CountryId { get; set; } 
+        public CountryDto CountryDto { get; set; }
     }
 }

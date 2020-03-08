@@ -1,0 +1,16 @@
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.profile-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.btn-profile {
+    margin-right: 15px;
+}

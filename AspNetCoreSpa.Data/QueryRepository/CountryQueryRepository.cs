@@ -3,7 +3,6 @@ using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 using AspNetCoreSpa.Data.QueryRepository.Base;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;

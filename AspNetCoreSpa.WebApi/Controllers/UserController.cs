@@ -53,6 +53,22 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return CreatedAtAction(nameof(Login),result.Data);
         }
 
+        [HttpGet("{userId}")]
+        [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUser(Guid userId)
+        {
+            var result = await _userService.GetUserAsync(userId);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Data);
+        }
+
         [HttpGet("{userId}/email")]
         [Authorize(Roles = "User")]
         [Consumes(MediaTypeNames.Application.Json)]

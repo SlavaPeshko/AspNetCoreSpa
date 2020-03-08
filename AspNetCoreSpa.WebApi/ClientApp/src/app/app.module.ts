@@ -8,6 +8,7 @@ import { ComponentModule } from './component/component.module';
 import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { AuthGuard } from './guards/CanActivate';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
+import { UserModule } from './user/user.module';
 
 import { JwtModule } from "@auth0/angular-jwt";
 
@@ -17,7 +18,7 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,6 +27,7 @@ export function tokenGetter() {
     FormsModule,
     ComponentModule,
     HttpClientModule,
+    UserModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

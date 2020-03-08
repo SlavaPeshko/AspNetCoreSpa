@@ -2,7 +2,7 @@
 {
     public class CountryDto
     {
-        public string Name { get; set; }
+        public string CountryName { get; set; }
         public string RegionCode { get; set; }
     }
 }

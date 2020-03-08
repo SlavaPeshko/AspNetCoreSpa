@@ -229,5 +229,18 @@ namespace AspNetCoreSpa.Application.Services
 
             return Result.OK(user);
         }
+
+        public async Task<Result<UserViewModel>> GetUserAsync(Guid userId)
+        {
+            var user = await _userQueryRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
+            }
+
+            var viewModel = user.ToViewModel();
+
+            return Result.OK(viewModel);
+        }
     }
 }

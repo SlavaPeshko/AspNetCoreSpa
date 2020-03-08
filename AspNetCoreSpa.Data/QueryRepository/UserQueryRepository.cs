@@ -5,6 +5,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.Data.QueryRepository
@@ -19,13 +20,23 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"SELECT [FirstName], [LastName]
+                string query = @"SELECT TOP(1) [FirstName], [LastName]
                                       ,[Email], [EmailConfirmed], [PhoneNumber]
                                       ,[PhoneNumberConfirmed], [PasswordHash], [AccessFailedCount]
-                                      ,[DateOfBirth], [Gender], [RefreshToken]
-                                  FROM[dbo].[Users] WHERE [Id] = @Id";
+                                      ,[DateOfBirth], [Gender], [RefreshToken], [CountryId]
+                                      FROM [dbo].[Users]
+                                      WHERE [Id] = @Id";
 
-                return await connection.QueryFirstOrDefaultAsync<UserDto>(query, new { Id = id });
+                var user = await connection.QueryFirstOrDefaultAsync<UserDto>(query, new { Id = id });
+
+                if (user.CountryId.HasValue)
+                {
+                    user.CountryDto = await connection
+                        .QueryFirstAsync<CountryDto>(@"SELECT TOP (1) [Name] FROM[AspNetCoreSpa].[dbo].[Countries] WHERE Id = @id",
+                                                                new { Id = user.CountryId });
+                }
+
+                return user;
             }
         }
 

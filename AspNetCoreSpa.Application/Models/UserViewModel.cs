@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 using AspNetCoreSpa.Domain.Entities;
 
 namespace AspNetCoreSpa.Application.Models
@@ -33,6 +34,22 @@ namespace AspNetCoreSpa.Application.Models
                 BirthDay = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
                 CountryName = user.Country?.Name
+            };
+        }
+
+        public static UserViewModel ToViewModel(this UserDto user)
+        {
+            if (user == null) return null;
+
+            return new UserViewModel
+            {
+                Email = user.Email ?? string.Empty,
+                Phone = user.PhoneNumber ?? string.Empty,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                BirthDay = user.DateOfBirth,
+                Gender = user.Gender.ToString("G"),
+                CountryName = user.CountryDto?.CountryName
             };
         }
     }

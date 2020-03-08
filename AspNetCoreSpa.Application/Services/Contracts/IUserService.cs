@@ -17,5 +17,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model);
         Task<Result<bool>> SendEmailConfirmEmailAsync(Guid userId);
         Task<Result> ConfirmEmailAsync(string token);
+        Task<Result<UserViewModel>> GetUserAsync(Guid id);
     }
 }
