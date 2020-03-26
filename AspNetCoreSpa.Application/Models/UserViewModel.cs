@@ -16,6 +16,7 @@ namespace AspNetCoreSpa.Application.Models
         public DateTime BirthDay { get; set; }
         public string Gender { get; set; }
         public string CountryName { get; set; }
+        public CountryViewModel Country { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
 
@@ -40,17 +41,30 @@ namespace AspNetCoreSpa.Application.Models
         public static UserViewModel ToViewModel(this UserDto user)
         {
             if (user == null) return null;
-
-            return new UserViewModel
+            
+            var userViewModel = new UserViewModel
             {
+                Id = user.Id,
                 Email = user.Email ?? string.Empty,
                 Phone = user.PhoneNumber ?? string.Empty,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 BirthDay = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
-                CountryName = user.CountryDto?.CountryName
+                CountryName = user.CountryDto?.Name,
             };
+
+            if (user.CountryDto != null)
+            {
+                userViewModel.Country = new CountryViewModel
+                {
+                    Id = user.CountryDto.Id,
+                    Name = user.CountryDto.Name,
+                    RegioneCode = user.CountryDto.RegionCode
+                };
+            }
+
+            return userViewModel;
         }
     }
 }

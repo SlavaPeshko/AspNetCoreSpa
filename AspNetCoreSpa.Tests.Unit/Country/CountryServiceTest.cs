@@ -43,7 +43,7 @@ namespace AspNetCoreSpa.Tests.Unit.Country
             {
                 new CountryDto
                 {
-                    CountryName = "Belarus",
+                    Name = "Belarus",
                     RegionCode = "BLR"
                 }
             });

@@ -20,7 +20,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"SELECT TOP(1) [FirstName], [LastName]
+                string query = @"SELECT TOP(1) [Id], [FirstName], [LastName]
                                       ,[Email], [EmailConfirmed], [PhoneNumber]
                                       ,[PhoneNumberConfirmed], [PasswordHash], [AccessFailedCount]
                                       ,[DateOfBirth], [Gender], [RefreshToken], [CountryId]
@@ -32,7 +32,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
                 if (user.CountryId.HasValue)
                 {
                     user.CountryDto = await connection
-                        .QueryFirstAsync<CountryDto>(@"SELECT TOP (1) [Name] FROM[AspNetCoreSpa].[dbo].[Countries] WHERE Id = @id",
+                        .QueryFirstAsync<CountryDto>(@"SELECT TOP (1) [Id], [Name], [RegionCode] FROM[AspNetCoreSpa].[dbo].[Countries] WHERE Id = @id",
                                                                 new { Id = user.CountryId });
                 }
 

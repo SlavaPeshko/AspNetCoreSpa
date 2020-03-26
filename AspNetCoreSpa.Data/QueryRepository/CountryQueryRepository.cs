@@ -20,7 +20,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
             using (IDbConnection connection = Connection)
             {
                 string query = @"SELECT [Id], [Name], [RegionCode]
-                    FROM [AspNetCoreSpa].[dbo].[Countries]";
+                    FROM [AspNetCoreSpa].[dbo].[Countries] ORDER BY [Name]";
 
                 return await connection.QueryAsync<CountryDto>(query);
             }

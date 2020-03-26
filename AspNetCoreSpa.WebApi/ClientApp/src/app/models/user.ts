@@ -1,3 +1,5 @@
+import { Country } from '../models/country';
+
 export class User {
     id: string;
     email: string;
@@ -7,4 +9,5 @@ export class User {
     birthDay: string;
     gender: string;
     countryName: string;
+    country: Country;
 }
