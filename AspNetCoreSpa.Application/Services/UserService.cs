@@ -105,8 +105,21 @@ namespace AspNetCoreSpa.Application.Services
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.Gender = (Gender)model.Gender;
+            user.Gender = Enum.Parse<Gender>(model.Gender);
             user.DateOfBirth = model.DateOfBirth;
+            user.CountryId = model.CountryId;
+
+            if (user.Email != model.Email)
+            {
+                user.Email = model.Email;
+                user.EmailConfirmed = false;
+            }
+
+            if (user.PhoneNumber != model.Phone)
+            {
+                user.PhoneNumber = model.Phone;
+                user.PhoneNumberConfirmed = false;
+            }
 
             _userRepository.Put(user);
             await _unitOfWorks.CommitAsync();
@@ -228,6 +241,19 @@ namespace AspNetCoreSpa.Application.Services
             await _unitOfWorks.CommitAsync();
 
             return Result.OK(user);
+        }
+
+        public async Task<Result<UserViewModel>> GetUserAsync(Guid userId)
+        {
+            var user = await _userQueryRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
+            }
+
+            var viewModel = user.ToViewModel();
+
+            return Result.OK(viewModel);
         }
     }
 }

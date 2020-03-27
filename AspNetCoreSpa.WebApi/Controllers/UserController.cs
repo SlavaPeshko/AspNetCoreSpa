@@ -53,6 +53,22 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return CreatedAtAction(nameof(Login),result.Data);
         }
 
+        [HttpGet("{userId}")]
+        [Authorize(Roles = "User")]
+        [Consumes(MediaTypeNames.Application.Json)]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetUser(Guid userId)
+        {
+            var result = await _userService.GetUserAsync(userId);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Data);
+        }
+
         [HttpGet("{userId}/email")]
         [Authorize(Roles = "User")]
         [Consumes(MediaTypeNames.Application.Json)]
@@ -101,7 +117,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id:guid}")]
+        [HttpPut("{id:guid}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUserAsync(Guid id, UpdateUserInputModel model)
         {
@@ -113,7 +129,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok();
         }
         
-        [HttpPost("{id:guid}/password")]
+        [HttpPut("{id:guid}/password")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdatePasswordAsync(Guid id, UpdatePasswordInputModel model)
         {

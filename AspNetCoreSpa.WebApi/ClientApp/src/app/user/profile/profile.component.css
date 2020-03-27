@@ -1,0 +1,30 @@
+.profile-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: auto !important;
+    padding-top: 80px;
+}
+
+.profile-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.btn-profile {
+    margin-right: 15px;
+}
+
+@media (min-width: 768px) {
+    .col-md-9 {
+        padding-left: 50px;
+        padding-top: 80px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .col-md-9 {
+        padding-top: 30px;
+    }
+  }

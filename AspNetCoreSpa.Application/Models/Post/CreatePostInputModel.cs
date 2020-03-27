@@ -14,7 +14,7 @@ namespace AspNetCoreSpa.Application.Models.Post
         public static Domain.Entities.Post ToEntity(this CreatePostInputModel post)
         {
             if (post == null) return null;
-
+    
             return new Domain.Entities.Post
             {
                 Description = post.Description,

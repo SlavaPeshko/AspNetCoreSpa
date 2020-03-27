@@ -2,6 +2,6 @@
 {
     public static class CacheKeys
     {
-        public static string Country { get { return "_Country"; } }
+        public static string Country => "_Country";
     }
 }

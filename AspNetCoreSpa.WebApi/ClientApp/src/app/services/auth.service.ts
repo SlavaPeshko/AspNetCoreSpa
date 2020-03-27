@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { HttpHeaders } from '@angular/common/http';
 import { config } from '../config';
 import { Tokens } from '../models/tokens';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService extends BaseService {
+export class AuthService extends BaseService<any> {
   
   private readonly JWT_TOKEN = 'jwt';
   private readonly REFRESH_TOKEN = 're_jwt';
 
-  constructor(private http: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(httpClient,
+      config.apiUrl,
+      config.endpoint.login);
   }
 
   login(body: any) {
-    const headers = new HttpHeaders()
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json');
-    return this.http.post(`${config.apiUrl}user/login`, body, { headers })
+
+    return this.create(body)
       .subscribe(response => {
         let accessToken = (<any>response).accessToken;
         let token = accessToken.token;

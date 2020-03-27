@@ -6,9 +6,12 @@ using AspNetCoreSpa.Application.Helpers;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using AspNetCoreSpa.Application.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Data.QueryRepository.Base;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -19,6 +22,8 @@ namespace AspNetCoreSpa.IoC
             // Services/Helpers
             service.AddSingleton<IJwtTokenHelper, JwtTokenHelper>();
             service.AddTransient<IEmailSender, EmailSender>();
+            service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            service.AddSingleton<IUserContext, UserContext>();
 
             // UoW
             service.AddScoped<IUnitOfWorks, UnitOfWorks>();
@@ -29,6 +34,17 @@ namespace AspNetCoreSpa.IoC
             RegisterServices(service, typeof(IBaseService));
             RegisterRepositories(service, typeof(BaseRepository<,>));
             RegisterQueryRepositories(service, typeof(QueryRepositoryBase));
+            
+            // Mapper
+            var configuration = new MapperConfiguration(cfg =>
+            {
+                // cfg.CreateMap<CreatePostInputModel, Post>();
+                // cfg.CreateMap<Foo, FooDto>();
+                // cfg.CreateMap<Bar, BarDto>();
+            });
+            configuration.AssertConfigurationIsValid();
+            var mapper = configuration.CreateMapper();
+            service.AddSingleton(mapper);
         }
 
         private static void RegisterQueryRepositories(IServiceCollection service, Type baseTypeOf)

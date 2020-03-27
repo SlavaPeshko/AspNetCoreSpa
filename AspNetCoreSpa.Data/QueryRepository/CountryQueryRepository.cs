@@ -3,7 +3,6 @@ using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 using AspNetCoreSpa.Data.QueryRepository.Base;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -20,10 +19,8 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-
-                string query = "Select Name, RegionCode From Countries";
-
-                connection.Open();
+                string query = @"SELECT [Id], [Name], [RegionCode]
+                    FROM [AspNetCoreSpa].[dbo].[Countries] ORDER BY [Name]";
 
                 return await connection.QueryAsync<CountryDto>(query);
             }

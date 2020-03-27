@@ -14,7 +14,7 @@ namespace AspNetCoreSpa.Application.Helpers
 
         public static string GetHashPassword(string password)
         {
-            if (password == null)
+            if (string.IsNullOrEmpty(password))
             {
                 throw new ArgumentNullException(nameof(password));
             }
@@ -24,11 +24,11 @@ namespace AspNetCoreSpa.Application.Helpers
 
         public static bool VerifyHashedPassword(string hashedPassword, string providedPassword)
         {
-            if (hashedPassword == null)
+            if (string.IsNullOrEmpty(hashedPassword))
             {
                 throw new ArgumentNullException(nameof(hashedPassword));
             }
-            if (providedPassword == null)
+            if (string.IsNullOrEmpty(providedPassword))
             {
                 throw new ArgumentNullException(nameof(providedPassword));
             }

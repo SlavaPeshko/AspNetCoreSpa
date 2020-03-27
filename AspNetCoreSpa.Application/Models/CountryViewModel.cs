@@ -1,11 +1,13 @@
-﻿using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
+﻿using System;
+using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 
 namespace AspNetCoreSpa.Application.Models
 {
     public class CountryViewModel
     {
-        public string CountryName { get; set; }
-        public string CountryRegioneCode { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string RegioneCode { get; set; }
     }
 
     public static class CountryViewModelExtensionMethods
@@ -16,8 +18,9 @@ namespace AspNetCoreSpa.Application.Models
 
             return new CountryViewModel
             {
-                CountryName = country.Name,
-                CountryRegioneCode = country.RegionCode
+                Id = country.Id,
+                Name = country.Name,
+                RegioneCode = country.RegionCode
             };
         }
     }
