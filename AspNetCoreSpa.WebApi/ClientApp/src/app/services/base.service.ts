@@ -1,39 +1,60 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpHeaders } from '@angular/common/http';
+import { Base } from '../models/base';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BaseService {
+export class BaseService<T extends Base> {
 
-  constructor() { }
+  constructor(
+    private httpClient: HttpClient,
+    private url: string,
+    private endpoint: string,
+  ) { }
 
-  public extractData(res: Response) {
-    let body = res.json();
-
-    return body || {};
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  }
+  
+  get(): Observable<T[]> {
+    return this.httpClient
+      .get<T[]>(`${this.url}/${this.endpoint}`)
+      .pipe(catchError(this.handleError))
   }
 
-  public handleError(error: Response | any) {
-    let errMsg: string;
+  getById(id: string): Observable<T> {
+    return this.httpClient
+      .get<T>(`${this.url}/${this.endpoint}/${id}`)
+      .pipe(catchError(this.handleError))
+  }
 
-    if(error instanceof Response) {
-      const body = error.json() || '';
-      const err = body || JSON.stringify(body);
+  create(item: T): Observable<T> {
+    return this.httpClient.post<T>(`${this.url}/${this.endpoint}`, JSON.stringify(item), this.httpOptions)
+      .pipe(catchError(this.handleError))
+  }
 
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+  update(item: T): Observable<T> {
+    return this.httpClient.put<T>(`${this.url}/${this.endpoint}/${item.id}`, JSON.stringify(item), this.httpOptions)
+      .pipe(catchError(this.handleError))
+  }  
+  
+  delete(item: T) {
+    return this.httpClient.delete<T>(`${this.url}/${this.endpoint}/${item.id}`, this.httpOptions)
+      .pipe(catchError(this.handleError))
+  }  
+
+  private handleError(error: HttpErrorResponse){
+    let errorMessage = '';
+
+    if(error.error instanceof ErrorEvent){
+      errorMessage = error.error.message; 
     } else {
-      errMsg = error.message ? error.message : error.toString();
+      errorMessage = `${error.status}, ${error.message}`;
     }
 
-    console.error(errMsg);
-
-    return Observable.throw(errMsg);
-  }
-
-  public header() {
-    let header = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return { headers: header };
+    return throwError(errorMessage);
   }
 }

@@ -105,8 +105,21 @@ namespace AspNetCoreSpa.Application.Services
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.Gender = (Gender)model.Gender;
+            user.Gender = Enum.Parse<Gender>(model.Gender);
             user.DateOfBirth = model.DateOfBirth;
+            user.CountryId = model.CountryId;
+
+            if (user.Email != model.Email)
+            {
+                user.Email = model.Email;
+                user.EmailConfirmed = false;
+            }
+
+            if (user.PhoneNumber != model.Phone)
+            {
+                user.PhoneNumber = model.Phone;
+                user.PhoneNumberConfirmed = false;
+            }
 
             _userRepository.Put(user);
             await _unitOfWorks.CommitAsync();

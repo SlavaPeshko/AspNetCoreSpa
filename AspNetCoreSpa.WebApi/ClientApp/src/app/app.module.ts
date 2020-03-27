@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { AuthGuard } from './guards/CanActivate';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { UserModule } from './user/user.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { JwtModule } from "@auth0/angular-jwt";
 
@@ -28,6 +29,7 @@ export function tokenGetter() {
     ComponentModule,
     HttpClientModule,
     UserModule,
+    NgbModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

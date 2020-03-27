@@ -7,13 +7,25 @@ import { User } from '../models/user';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService extends BaseService {
+export class UserService extends BaseService<User> {
   
-  constructor(private http: HttpClient) {
-    super();
+  constructor(httpClient: HttpClient) {
+    super(
+      httpClient,
+      config.apiUrl,
+      config.endpoint.user);
   }
 
-  getUser(id: string) {
-    return this.http.get<User>(`${config.apiUrl}user/${id}`);
-  }
+  // getUser(id: string) {
+  //   return this.http.get<User>(`${config.apiUrl}user/${id}`);
+  // }
+
+  // postUser(user: User, id: string) {
+
+  //   const headers = new HttpHeaders()
+  //     .set('Content-Type', 'application/json')
+  //     .set('Accept', 'application/json');
+
+  //   return this.http.post<any>(`${config.apiUrl}user/${id}`, user, { headers });
+  // }
 }

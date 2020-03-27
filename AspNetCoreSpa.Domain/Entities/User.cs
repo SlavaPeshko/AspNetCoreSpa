@@ -24,6 +24,7 @@ namespace AspNetCoreSpa.Domain.Entities
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
 
+        public Guid CountryId { get; set; }
         public Country Country { get; set; }
         public Image Image { get; set; }
         public ICollection<UserRole> Roles { get; set; }

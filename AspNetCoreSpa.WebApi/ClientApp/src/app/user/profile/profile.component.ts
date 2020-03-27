@@ -4,6 +4,7 @@ import { CountryService } from '../../services/country.service';
 import { User } from '../../models/user';
 import { Country } from '../../models/country';
 import { Jwt } from '../../helpers/jwt';
+import { Gender } from '../../models/gender';
 
 @Component({
   selector: 'app-profile',
@@ -11,13 +12,13 @@ import { Jwt } from '../../helpers/jwt';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
+  public fileUploaded: File = null;
+  public url: any = null;
   public countries: Country[];
   public selectedCountryName: Country;
   public user: User;
-  public isMale: boolean = false;
-  public isFemale: boolean = false;
-  female: string = 'Female';
-  male: string = 'Male';
+  public userId: string;
+  public genderNames = Object.values(Gender).filter(e => typeof(e) == "string");
 
   constructor(private userService: UserService,
      private jwt: Jwt,
@@ -25,22 +26,22 @@ export class ProfileComponent implements OnInit {
    }
 
   ngOnInit() {
-    const userId: string = this.jwt.getUserId();
+    this.userId = this.jwt.getUserId();
 
-    this.userService.getUser(userId).subscribe(data => {
+    this.userService.getById(this.userId).subscribe(data => {
       this.user = data;
-      this.isFemale = this.user.gender === this.female;
-      this.isMale = this.user.gender === this.male;
     });
 
-    this.countryService.getCountries().subscribe(data => {
+    this.countryService.get().subscribe(data => {
       this.countries = data;
     })
-
   }
 
   public save() {
-    console.log(this.selectedCountryName);
+    debugger;
+    this.userService.update(this.user).subscribe(data=> {
+      console.log(data);
+    })
   }
 
   onItemChange(item){
@@ -51,5 +52,27 @@ export class ProfileComponent implements OnInit {
   updateWorkout(event){
     debugger;
     this.user.country = this.countries.find(x => x.name === event);
+  }
+
+  handleFileInput(files: FileList){
+    if(!files && !files[0])
+      return;
+
+    this.fileUploaded = files[0];
+
+    this.setUrl(this.fileUploaded);
+  }
+
+  onRadioChange(item: Gender){
+    this.user.gender = item;
+  }
+
+  private setUrl(file: File){
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = (event: Event) => {
+      this.url = reader.result;
+    }
   }
 }

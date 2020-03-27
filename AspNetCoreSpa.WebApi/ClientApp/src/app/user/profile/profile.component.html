@@ -1,13 +1,30 @@
 <div class="profile-wrapper">
     <div class="container">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-md-3">
                 <div class="text-center">
-                    <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="rounded-circle img-thumbnail" alt="avatar">
+                    <img *ngIf="fileUploaded == null; else templateUrl" 
+                        src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                        class="rounded-circle img-thumbnail img-fluid"
+                        alt="avatar"
+                        style="width: 202px; height: 202px;">
+
+                    <ng-template #templateUrl>
+                        <img [src]="url" class="rounded-circle img-thumbnail" alt="avatar" style="width: 202px; height: 202px;">
+                    </ng-template>
+
                     <h6>Upload a different photo...</h6>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label text-left" for="customFile">Choose file</label>
+                        <input type="file" class="custom-file-input" id="customFile" (change)="handleFileInput($event.target.files)">
+
+                        <label *ngIf="fileUploaded != null; else templateName" class="custom-file-label text-left" for="customFile">
+                            {{ fileUploaded.name }}
+                        </label>
+
+                        <ng-template #templateName>
+                            <label class="custom-file-label text-left" for="customFile">Choose file</label>
+                        </ng-template>
+
                     </div>
                     <ul class="list-group mt-3">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -25,7 +42,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-9 mt-5 pl-5">
+            <div class="col-md-9">
                 <form class="profile-form">
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -43,7 +60,7 @@
                         <div class="form-group col-md-6">
                             <label for="inputEmail">Email</label>
                             <input [ngModel]="user?.email" (ngModelChange)="user.email=$event" type="text" class="form-control" id="inputEmail"
-                                placeholder="Email" name="email">
+                                placeholder="Email" name="email" pattern="email">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputPhone">Phone</label>
@@ -63,23 +80,9 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="genderFormControlBtnGroupToggle">Gender</label>
-                            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="genderFormControlBtnGroupToggle">
-                                <!-- <label class="btn btn-primary active">
-                                    <input type="radio" name="options" id="option1" checked> male
-                                </label> -->
-                                <label class="btn btn-primary" [ngClass]="{'active': user?.gender === 'Male'}">
-                                    <input type="radio" name="gender" value="Male" [ngModel]="user?.gender" (ngModelChange)="user.gender=$event"> Male<br>
-                                  <!-- <input type="radio" name="options" id="option1" [checked]="isMale" (change)="onItemChange(isMale)"> male -->
-                                </label>
-                                <label class="btn btn-primary" [ngClass]="{'active': user?.gender === 'None'}">
-                                    <input type="radio" name="gender" value="None" [ngModel]="user?.gender" (ngModelChange)="user.gender=$event"> Other<br>
-        
-                                    <!-- <input type="radio" name="options" id="option2" [checked]="isFemale" (change)="onItemChange(isFemale)"> other -->
-                                  </label>
-                                <label class="btn btn-primary" [ngClass]="{'active': user?.gender === 'Female'}">
-                                    <input type="radio" name="gender" value="Female" [ngModel]="user?.gender" (ngModelChange)="user.gender=$event"> Female<br>
-        
-                                    <!-- <input type="radio" name="options" id="option2" [checked]="isFemale" (change)="onItemChange(isFemale)"> female -->
+                            <div  class="btn-group btn-group-toggle" data-toggle="buttons" id="genderFormControlBtnGroupToggle">
+                                <label *ngFor="let name of genderNames;" class="btn btn-primary" [ngClass]="{'active': user?.gender === name }" (click)="onRadioChange(name)">
+                                    <input type="radio" name="{{name}}" [value]="name"> {{name}}<br>
                                 </label>
                               </div>
                         </div>

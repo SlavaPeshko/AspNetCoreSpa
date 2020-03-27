@@ -7,13 +7,11 @@ import { Country } from '../models/country';
 @Injectable({
   providedIn: 'root'
 })
-export class CountryService extends BaseService {
+export class CountryService extends BaseService<Country> {
   
-  constructor(private http: HttpClient) {
-    super();
-  }
-
-  getCountries() {
-    return this.http.get<Country[]>(`${config.apiUrl}countries`);
+  constructor(httpClient: HttpClient) {
+    super(httpClient,
+      config.apiUrl,
+      config.endpoint.country);
   }
 }

@@ -117,7 +117,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id:guid}")]
+        [HttpPut("{id:guid}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdateUserAsync(Guid id, UpdateUserInputModel model)
         {
@@ -129,7 +129,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok();
         }
         
-        [HttpPost("{id:guid}/password")]
+        [HttpPut("{id:guid}/password")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> UpdatePasswordAsync(Guid id, UpdatePasswordInputModel model)
         {
