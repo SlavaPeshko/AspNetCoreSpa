@@ -50,7 +50,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
             if (result.IsFailure)
                 return BadRequest(result.Errors);
 
-            return CreatedAtAction(nameof(Login),result.Data);
+            return CreatedAtAction(nameof(Login), result.Data);
         }
 
         [HttpGet("{userId}")]

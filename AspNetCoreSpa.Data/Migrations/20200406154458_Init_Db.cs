@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetCoreSpa.Data.Migrations
 {
-    public partial class InitDB : Migration
+    public partial class Init_Db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,7 +25,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    RoleEnum = table.Column<int>(nullable: false)
+                    RoleEnum = table.Column<int>(nullable: false),
+                    RoleName = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {

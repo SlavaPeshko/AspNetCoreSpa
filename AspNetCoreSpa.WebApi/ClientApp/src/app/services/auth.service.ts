@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { config } from '../config';
 import { Tokens } from '../models/tokens';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService extends BaseService<any> {
   private readonly JWT_TOKEN = 'jwt';
   private readonly REFRESH_TOKEN = 're_jwt';
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient,  private router: Router) {
     super(httpClient,
       config.apiUrl,
       config.endpoint.login);
@@ -27,8 +28,7 @@ export class AuthService extends BaseService<any> {
         let refreshToken = (<any>response).rerfreshToken;
         this.storeTokens({ jwt: token, refreshToken: refreshToken });
 
-        // this.invalidLogin = false;
-        // this.router.navigate(["/"]);
+        this.router.navigate(['/profile']);
       }, err => {
         // this.invalidLogin = true;
       });

@@ -13,7 +13,7 @@ namespace AspNetCoreSpa.Application.Models
         public string Phone { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime BirthDay { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
         public string CountryName { get; set; }
         public CountryViewModel Country { get; set; }
@@ -32,7 +32,7 @@ namespace AspNetCoreSpa.Application.Models
                 Phone = user.PhoneNumber ?? string.Empty,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                BirthDay = user.DateOfBirth,
+                DateOfBirth = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
                 CountryName = user.Country?.Name
             };
@@ -49,7 +49,7 @@ namespace AspNetCoreSpa.Application.Models
                 Phone = user.PhoneNumber ?? string.Empty,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                BirthDay = user.DateOfBirth,
+                DateOfBirth = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
                 CountryName = user.CountryDto?.Name,
             };

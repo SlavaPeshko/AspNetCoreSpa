@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { CountryService } from '../../services/country.service';
 import { User } from '../../models/user';
 import { Country } from '../../models/country';
 import { Jwt } from '../../helpers/jwt';
 import { Gender } from '../../models/gender';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-profile',
@@ -15,10 +16,11 @@ export class ProfileComponent implements OnInit {
   public fileUploaded: File = null;
   public url: any = null;
   public countries: Country[];
-  public selectedCountryName: Country;
+  public selectedCountry: Country = null;
   public user: User;
   public userId: string;
   public genderNames = Object.values(Gender).filter(e => typeof(e) == "string");
+  public model: NgbDateStruct;
 
   constructor(private userService: UserService,
      private jwt: Jwt,
@@ -30,6 +32,7 @@ export class ProfileComponent implements OnInit {
 
     this.userService.getById(this.userId).subscribe(data => {
       this.user = data;
+      this.setDate();
     });
 
     this.countryService.get().subscribe(data => {
@@ -37,21 +40,26 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  public save() {
-    debugger;
+  private setDate() {
+    const date = new Date(this.user.dateOfBirth);
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    this.model = { year, month, day };
+  }
+
+  public update() {
+    if(this.selectedCountry){
+      this.user.countryId = this.selectedCountry.id;
+    }
+
+    //4/7/2018Z
+    this.user.dateOfBirth = new Date(`${this.model.month}/${this.model.day}/${this.model.year}Z`).toISOString();
+
     this.userService.update(this.user).subscribe(data=> {
-      console.log(data);
     })
-  }
-
-  onItemChange(item){
-    debugger;
-    item = !item;
-  }
-
-  updateWorkout(event){
-    debugger;
-    this.user.country = this.countries.find(x => x.name === event);
   }
 
   handleFileInput(files: FileList){

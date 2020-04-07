@@ -50,6 +50,10 @@ namespace AspNetCoreSpa.Data.Context
 
                 e.Property(c => c.RegionCode).HasColumnType("nvarchar(3)");
                 e.Property(u => u.Name).HasColumnType("nvarchar(60)");
+
+                e.HasMany(c => c.Users)
+                    .WithOne(ur => ur.Country)
+                    .HasForeignKey(u => u.CountryId);
             });
 
             modelBuilder.Entity<UserRole>(e =>
@@ -129,7 +133,7 @@ namespace AspNetCoreSpa.Data.Context
                 .HasForeignKey(r => r.RoleId);
             });
 
-            modelBuilder.Seed();
+            // modelBuilder.Seed();
 
             base.OnModelCreating(modelBuilder);
         }

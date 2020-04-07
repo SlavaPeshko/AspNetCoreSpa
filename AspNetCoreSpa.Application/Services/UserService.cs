@@ -109,13 +109,13 @@ namespace AspNetCoreSpa.Application.Services
             user.DateOfBirth = model.DateOfBirth;
             user.CountryId = model.CountryId;
 
-            if (user.Email != model.Email)
+            if (user.Email != null && user.Email != model.Email)
             {
                 user.Email = model.Email;
                 user.EmailConfirmed = false;
             }
 
-            if (user.PhoneNumber != model.Phone)
+            if (user.PhoneNumber != null && user.PhoneNumber != model.Phone)
             {
                 user.PhoneNumber = model.Phone;
                 user.PhoneNumberConfirmed = false;

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AspNetCoreSpa.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200307191053_Add_Posts_Likes_Images")]
-    partial class Add_Posts_Likes_Images
+    [Migration("20200406154458_Init_Db")]
+    partial class Init_Db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -158,6 +158,9 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.Property<int>("RoleEnum")
                         .HasColumnType("int");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 

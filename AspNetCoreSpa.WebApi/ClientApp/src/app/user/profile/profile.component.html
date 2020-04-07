@@ -73,24 +73,40 @@
                         <div class="form-group col-md-6">
                             <div class="form-group">
                                 <label for="countryFormControlSelect">Countries</label>
-                                <select [(ngModel)]="selectedCountryName" [ngModelOptions]="{standalone: true}" class="form-control" id="countryFormControlSelect">
-                                  <option *ngFor="let country of countries;" [ngValue]="country" [selected]="country.name === user?.country?.name">{{ country.name }}</option>
-                                </select>
+                                <select [(ngModel)]="selectedCountry" [ngModelOptions]="{standalone: true}" class="form-control" id="countryFormControlSelect">
+                                    <option [ngValue]="null" [selected]="selectedCountry === null" [disabled]="true">Select</option>>
+                                    <option *ngFor="let country of countries;" [ngValue]="country" [selected]="country.name === user?.country?.name">{{ country.name }}</option>
+                                  </select>
                               </div>
                         </div>
+                        <div class="form-group col-md-6">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="genderFormControlBtnGroupToggle">Gender</label>
                             <div  class="btn-group btn-group-toggle" data-toggle="buttons" id="genderFormControlBtnGroupToggle">
                                 <label *ngFor="let name of genderNames;" class="btn btn-primary" [ngClass]="{'active': user?.gender === name }" (click)="onRadioChange(name)">
                                     <input type="radio" name="{{name}}" [value]="name"> {{name}}<br>
                                 </label>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="countryFormControlSelect">Birthday</label>
+                            <div class="input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd"
+                                       name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                                </div>
                               </div>
                         </div>
                     </div>
 
                     <div class="form-row mt-3">
                         <div class="form-group col-md-12">
-                            <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+                            <button type="button" class="btn btn-primary" (click)="update()">Save</button>
                         </div>
                     </div>
                 </form>

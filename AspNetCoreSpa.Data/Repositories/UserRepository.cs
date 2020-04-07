@@ -16,7 +16,9 @@ namespace AspNetCoreSpa.Data.Repositories
 
         public async Task<User> GetUserByIdAsync(Guid id)
         {
-            return await GetSet().SingleOrDefaultAsync(u => u.Id == id);
+            return await GetSet()
+                .Include(x => x.Country)
+                .SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<User>> GetUsersAsync()

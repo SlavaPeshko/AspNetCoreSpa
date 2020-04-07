@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProfileComponent } from './profile/profile.component';
 import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [ProfileComponent],
   imports: [
     CommonModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   exports: [
     ProfileComponent

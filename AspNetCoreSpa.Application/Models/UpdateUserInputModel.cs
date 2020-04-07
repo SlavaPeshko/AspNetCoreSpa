@@ -10,6 +10,6 @@ namespace AspNetCoreSpa.Application.Models
         public string Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
-        public Guid CountryId { get; set; }
+        public Guid? CountryId { get; set; }
     }
 }

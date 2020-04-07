@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { User_Validation_Message } from "../user_validation_message";
+import { UserService } from '../../services/user.service';
+import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +14,7 @@ export class SignUpComponent implements OnInit {
   public signUpFormGroup: FormGroup;
   user_validation_message: any;
 
-  constructor() { 
+  constructor(private userService: UserService,  private router: Router) { 
     this.user_validation_message = User_Validation_Message;
   }
 
@@ -33,5 +36,15 @@ export class SignUpComponent implements OnInit {
 
   get confirmPassword() {
     return this.signUpFormGroup.get('confirmPassword');
+  }
+
+  create() {
+    let user = new User();
+    user.email = this.email.value;
+    user.password = this.password.value;
+
+    this.userService.create(user).subscribe(response => {
+      this.router.navigate(['/profile']);
+    });
   }
 }
