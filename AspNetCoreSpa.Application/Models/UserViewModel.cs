@@ -15,8 +15,8 @@ namespace AspNetCoreSpa.Application.Models
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
-        public string CountryName { get; set; }
         public CountryViewModel Country { get; set; }
+        public ImageViewModel Image { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
 
@@ -34,7 +34,6 @@ namespace AspNetCoreSpa.Application.Models
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
-                CountryName = user.Country?.Name
             };
         }
 
@@ -51,7 +50,6 @@ namespace AspNetCoreSpa.Application.Models
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
                 Gender = user.Gender.ToString("G"),
-                CountryName = user.CountryDto?.Name,
             };
 
             if (user.CountryDto != null)
@@ -61,6 +59,16 @@ namespace AspNetCoreSpa.Application.Models
                     Id = user.CountryDto.Id,
                     Name = user.CountryDto.Name,
                     RegioneCode = user.CountryDto.RegionCode
+                };
+            }
+
+            if (user.ImageDto != null)
+            {
+                userViewModel.Image = new ImageViewModel
+                {
+                    Id = user.ImageDto.Id,
+                    Name = user.ImageDto.Name,
+                    Path = user.ImageDto.Path
                 };
             }
 

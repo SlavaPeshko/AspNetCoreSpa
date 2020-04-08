@@ -11,6 +11,7 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { UserModule } from './user/user.module';
 
 import { JwtModule } from "@auth0/angular-jwt";
+import { FileService } from './services/file.service';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");

@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { FileService } from '../../services/file.service';
 import { CountryService } from '../../services/country.service';
 import { User } from '../../models/user';
 import { Country } from '../../models/country';
 import { Jwt } from '../../helpers/jwt';
 import { Gender } from '../../models/gender';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { config } from '../../config';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
   public fileUploaded: File = null;
@@ -24,7 +26,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(private userService: UserService,
      private jwt: Jwt,
-     private countryService: CountryService) {
+     private countryService: CountryService,
+     private fileService: FileService) {
    }
 
   ngOnInit() {
@@ -55,11 +58,19 @@ export class ProfileComponent implements OnInit {
       this.user.countryId = this.selectedCountry.id;
     }
 
-    //4/7/2018Z
     this.user.dateOfBirth = new Date(`${this.model.month}/${this.model.day}/${this.model.year}Z`).toISOString();
 
     this.userService.update(this.user).subscribe(data=> {
     })
+
+    if(this.fileUploaded) {
+      const url = `${config.apiUrl}/${config.endpoint.user}/${this.user.id}/upload-photo`;
+      let formData: FormData = new FormData();
+      formData.append('file', this.fileUploaded, this.fileUploaded.name);
+
+      this.fileService.uploadUserImage(formData, url).subscribe(data=> {
+      });
+    }
   }
 
   handleFileInput(files: FileList){
@@ -73,6 +84,16 @@ export class ProfileComponent implements OnInit {
 
   onRadioChange(item: Gender){
     this.user.gender = item;
+  }
+
+  profileImageUrl() {
+    if(this.url)
+      return this.url;
+
+    if(!this.user && !this.user.image)
+      return;
+
+    return this.user.image.url;
   }
 
   private setUrl(file: File){

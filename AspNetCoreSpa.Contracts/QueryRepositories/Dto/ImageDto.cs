@@ -2,10 +2,10 @@
 
 namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
 {
-    public class CountryDto
+    public class ImageDto
     {
-        public Guid? Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public string RegionCode { get; set; }
+        public string Path { get; set; }
     }
 }

@@ -3,14 +3,14 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="text-center">
-                    <img *ngIf="fileUploaded == null; else templateUrl" 
-                        src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                    <img *ngIf="user?.image == null && url == null; else templateUrl" 
+                        src="assets/img/avatar_2x.png"
                         class="rounded-circle img-thumbnail img-fluid"
                         alt="avatar"
                         style="width: 202px; height: 202px;">
 
                     <ng-template #templateUrl>
-                        <img [src]="url" class="rounded-circle img-thumbnail" alt="avatar" style="width: 202px; height: 202px;">
+                        <img [src]="profileImageUrl()" class="rounded-circle img-thumbnail" alt="avatar" style="width: 202px; height: 202px;">
                     </ng-template>
 
                     <h6>Upload a different photo...</h6>

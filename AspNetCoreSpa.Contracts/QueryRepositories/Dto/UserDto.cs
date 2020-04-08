@@ -15,5 +15,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
         public GenderDto Gender { get; set; }
         public Guid? CountryId { get; set; } 
         public CountryDto CountryDto { get; set; }
+        
+        public ImageDto ImageDto { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 import { Country } from '../models/country';
 import { Gender } from '../models/gender';
+import { Image } from '../models/image';
 
 export class User {
     id: string;
@@ -12,4 +13,5 @@ export class User {
     gender: Gender;
     countryId: string;
     country: Country;
+    image: Image;
 }

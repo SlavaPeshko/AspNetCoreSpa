@@ -19,7 +19,7 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ErrorTranslation {
@@ -151,6 +151,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Image is invalid.
+        /// </summary>
+        public static string ImageInvalid {
+            get {
+                return ResourceManager.GetString("ImageInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LastName is required.
         /// </summary>
         public static string LastNameRequired {
@@ -171,9 +180,9 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Length photo should be less 2 megabyte.
         /// </summary>
-        public static string LengthPhotoInvalid {
+        public static string LengthImageInvalid {
             get {
-                return ResourceManager.GetString("LengthPhotoInvalid", resourceCulture);
+                return ResourceManager.GetString("LengthImageInvalid", resourceCulture);
             }
         }
         
@@ -246,15 +255,6 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string PhoneRequired {
             get {
                 return ResourceManager.GetString("PhoneRequired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Photo is invalid.
-        /// </summary>
-        public static string PhotoInvalid {
-            get {
-                return ResourceManager.GetString("PhotoInvalid", resourceCulture);
             }
         }
         

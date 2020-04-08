@@ -20,23 +20,35 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
             using (IDbConnection connection = Connection)
             {
-                string query = @"SELECT TOP(1) [Id], [FirstName], [LastName]
+                string query = @"SELECT TOP(1) [dbo].[Users].[Id], [FirstName], [LastName]
                                       ,[Email], [EmailConfirmed], [PhoneNumber]
                                       ,[PhoneNumberConfirmed], [PasswordHash], [AccessFailedCount]
                                       ,[DateOfBirth], [Gender], [RefreshToken], [CountryId]
+									  ,[dbo].[Countries].[Name], [dbo].[Countries].[RegionCode]
+									  ,[dbo].[Images].[Id], [dbo].[Images].[Name]
+									  ,[dbo].[Images].[Path]
                                       FROM [dbo].[Users]
-                                      WHERE [Id] = @Id";
+									  LEFT JOIN [dbo].[Countries] ON [dbo].[Countries].[Id] = [dbo].[Users].[CountryId]
+									  LEFT JOIN [dbo].[Images] ON [dbo].[Images].[UserId] = [dbo].[Users].[Id] AND [dbo].[Images].[PostId] IS NULL
+                                      WHERE [dbo].[Users].[Id] = @Id";
 
-                var user = await connection.QueryFirstOrDefaultAsync<UserDto>(query, new { Id = id });
+                var user = await connection.QueryAsync<UserDto, CountryDto, ImageDto, UserDto>(query,
+                    (userDto, countryDto, imageDto) =>
+                    {
+                        UserDto userDtoEntry = userDto;
 
-                if (user.CountryId.HasValue)
-                {
-                    user.CountryDto = await connection
-                        .QueryFirstAsync<CountryDto>(@"SELECT TOP (1) [Id], [Name], [RegionCode] FROM[AspNetCoreSpa].[dbo].[Countries] WHERE Id = @id",
-                                                                new { Id = user.CountryId });
-                }
+                        if (countryDto != null)
+                            userDtoEntry.CountryDto = countryDto;
 
-                return user;
+                        if (imageDto != null)
+                            userDto.ImageDto = imageDto;
+
+                        return userDtoEntry;
+                    },
+                    new {Id = id},
+                    splitOn: "Name, Id");
+
+                return user.FirstOrDefault();
             }
         }
 

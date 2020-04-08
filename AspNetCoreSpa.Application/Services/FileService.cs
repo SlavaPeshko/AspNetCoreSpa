@@ -3,60 +3,59 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
-using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using Microsoft.AspNetCore.Http;
 using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Data.Repositories.Contracts;
+using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Infrastructure.Options;
+using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
+using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
+using Image = AspNetCoreSpa.Domain.Entities.Image;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class FileService : IFileService
     {
+        private readonly IUserRepository _userRepository;
+        private readonly IImageRepository _imageRepository;
         private readonly IWebHostEnvironment  _environment;
         private readonly GlobalSettings _settings;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public FileService(IWebHostEnvironment  environment,
-            GlobalSettings settings)
+        public FileService(IUserRepository userRepository,
+            IImageRepository imageRepository,
+            IWebHostEnvironment  environment,
+            GlobalSettings settings, IUnitOfWorks unitOfWorks)
         {
+            _userRepository = userRepository;
+            _imageRepository = imageRepository;
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _settings = settings;
+            _unitOfWorks = unitOfWorks;
         }
-        public async Task<Result<string>> UploadPhotoAsync(IFormFile file)
+        public async Task<Result<string>> UploadPhotoAsync(Guid id, IFormFile file)
         {
-            await Task.CompletedTask;
-
             if (file == null)
-            {
-                return Result.Fail<string>(EC.PhotoInvalid, ET.PhotoInvalid);
-            }
+                return Result.Fail<string>(EC.ImageInvalid, ET.ImageInvalid);
 
+            if(file.Length > 2_101_156L)
+                return Result.Fail<string>(EC.LengthImageInvalid, ET.LengthImageInvalid);
+            
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+                return Result.Fail<string>(EC.UserNotFound, ET.UserNotFound);
+            
             using (var stream = file.OpenReadStream())
             {
-                if (stream.Length > 2_101_156L)
-                {
-                    return Result.Fail<string>(EC.LengthPhotoInvalid, ET.LengthPhotoInvalid);
-                }
-
-                var folderPaths = Path.Combine(
-                    new[] { _environment.ContentRootPath, "" }.Concat(_settings.Paths.PhotoProfilePath.Split('\\', '/')).ToArray()
-                );
-
-                if (!Directory.Exists(folderPaths))
-                {
-                    Directory.CreateDirectory(folderPaths);
-                }
-
-                var resultPath = Path.Combine(folderPaths, file.FileName);
                 using (var image = new Bitmap(stream))
                 {
                     int width, height;
-                    const int size = 900;
-                    const int quality = 40;
+                    const int size = 200;
+                    const int quality = 4;
                     if (image.Width > image.Height)
                     {
                         width = size;
@@ -75,6 +74,14 @@ namespace AspNetCoreSpa.Application.Services
                         graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                         graphics.CompositingMode = CompositingMode.SourceCopy;
                         graphics.DrawImage(image, 0, 0, width, height);
+
+                        var folderPaths = Path.Combine(_environment.WebRootPath, _settings.Paths.PhotoProfilePath);
+
+                        if (!Directory.Exists(folderPaths))
+                            Directory.CreateDirectory(folderPaths);
+
+                        var resultPath = Path.Combine(folderPaths, file.FileName);
+                        
                         using (var output = File.Open(resultPath, FileMode.Create))
                         {
                             var qualityParamId = Encoder.Quality;
@@ -86,7 +93,28 @@ namespace AspNetCoreSpa.Application.Services
                     }
                 }
 
-                return Result.OK(resultPath);
+                var path = Path.Combine(_settings.Paths.PhotoProfilePath, file.FileName);
+                var imageProfile = await _imageRepository.GetProfilePhotoByUserId(id);
+                if (imageProfile == null)
+                {
+                    await _imageRepository.PostAsync(new Image
+                    {
+                        Name = file.FileName,
+                        Path = path,
+                        UserId = id
+                    });
+                }
+                else
+                {
+                    imageProfile.Name = file.FileName;
+                    imageProfile.Path = path;
+                    
+                    _imageRepository.Put(imageProfile);
+                }
+
+                await _unitOfWorks.CommitAsync();
+                
+                return Result.OK(path);
             }
         }
     }

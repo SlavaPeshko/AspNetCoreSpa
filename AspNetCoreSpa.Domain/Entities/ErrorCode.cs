@@ -8,8 +8,8 @@
         EmailAlreadyExists = 102,
         EmailAlreadyConfirmed = 103,
         TokenInvalid = 104,
-        PhotoInvalid = 105,
-        LengthPhotoInvalid = 106,
+        ImageInvalid = 105,
+        LengthImageInvalid = 106,
 
         //Post error
         PostNotFound = 200,

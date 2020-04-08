@@ -22,12 +22,14 @@ using System.Threading.Tasks;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Linq;
 using System.Collections.Generic;
+using System.IO;
 using AutoMapper;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using AspNetCoreSpa.WebApi.Controllers;
 using AspNetCoreSpa.Infrastructure.Options;
 using FluentValidation;
+using Microsoft.Extensions.FileProviders;
 
 namespace AspNetCoreSpa.WebApi
 {
@@ -135,6 +137,14 @@ namespace AspNetCoreSpa.WebApi
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned API v1.0");
                 s.RoutePrefix = string.Empty;
             });
+
+            app.UseStaticFiles();
+            
+            // app.UseDirectoryBrowser(new DirectoryBrowserOptions()
+            // {
+            //     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot", "userProfilePictures")),
+            //     RequestPath = new PathString("/userProfilePictures")
+            // });
 
             //app.UseExceptionHandler(appError =>
             //{

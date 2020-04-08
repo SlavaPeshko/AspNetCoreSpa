@@ -12,6 +12,7 @@ using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Data.QueryRepository.Base;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using AppContext = AspNetCoreSpa.Application.Services.AppContext;
 
 namespace AspNetCoreSpa.IoC
 {
@@ -24,6 +25,7 @@ namespace AspNetCoreSpa.IoC
             service.AddTransient<IEmailSender, EmailSender>();
             service.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             service.AddSingleton<IUserContext, UserContext>();
+            service.AddSingleton<IAppContext, AppContext>();
 
             // UoW
             service.AddScoped<IUnitOfWorks, UnitOfWorks>();

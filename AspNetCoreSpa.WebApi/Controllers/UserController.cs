@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
@@ -14,12 +16,14 @@ namespace AspNetCoreSpa.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IFileService _fileService;
+        private readonly IWebHostEnvironment  _environment;
 
         public UserController(IUserService userService,
-            IFileService fileService)
+            IFileService fileService, IWebHostEnvironment environment)
         {
             _userService = userService;
             _fileService = fileService;
+            _environment = environment;
         }
 
         [HttpPost("login")]
@@ -101,15 +105,11 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("upload-photo")]
+        [HttpPost("{id:guid}/upload-photo")]
         [Authorize(Roles = "User")]
-        [Consumes("multipart/form-data")]
-        [Produces(MediaTypeNames.Application.Json)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UploadUserPhotoAsync(IFormFile file)
+        public async Task<IActionResult> UploadUserPhotoAsync([FromRoute]Guid id, IFormFile file)
         {
-            var result = await _fileService.UploadPhotoAsync(file);
+            var result = await _fileService.UploadPhotoAsync(id, file);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);

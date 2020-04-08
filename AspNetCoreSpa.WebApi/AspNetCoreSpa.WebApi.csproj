@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="userAssets\userProfilePictures\" />
+    <Folder Include="wwwroot\userProfilePictures" />
   </ItemGroup>
 
   <ItemGroup>

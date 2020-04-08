@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Services.Contracts;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
@@ -18,6 +20,7 @@ using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using AspNetCoreSpa.Domain.Entities.Security;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace AspNetCoreSpa.Application.Services
@@ -32,6 +35,7 @@ namespace AspNetCoreSpa.Application.Services
         private readonly ISecurityCodesRepository _securityCodesRepository;
         private readonly IConfiguration _configuration;
         private readonly GlobalSettings _settings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
@@ -40,7 +44,8 @@ namespace AspNetCoreSpa.Application.Services
             IEmailSender emailSender,
             ISecurityCodesRepository securityCodesRepository,
             IConfiguration configuration,
-            GlobalSettings settings)
+            GlobalSettings settings, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
@@ -50,6 +55,7 @@ namespace AspNetCoreSpa.Application.Services
             _securityCodesRepository = securityCodesRepository;
             _configuration = configuration;
             _settings = settings;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -99,9 +105,7 @@ namespace AspNetCoreSpa.Application.Services
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
-            {
                 return Result.Fail(EC.UserNotFound, ET.UserNotFound);
-            }
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
@@ -131,9 +135,7 @@ namespace AspNetCoreSpa.Application.Services
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
-            {
                 return Result.Fail(EC.UserNotFound, ET.UserNotFound);
-            }
             
             var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.OldPassword);
             if (!verifyPassword)
@@ -190,14 +192,10 @@ namespace AspNetCoreSpa.Application.Services
         {
             var user = await _userQueryRepository.GetUserByIdAsync(userId);
             if (user == null)
-            {
                 return Result.Fail<bool>(EC.UserNotFound, ET.UserNotFound);
-            }
 
             if (user.EmailConfirmed)
-            {
                 return Result.Fail<bool>(EC.EmailAlreadyConfirmed, ET.EmailAlreadyConfirmed);
-            }
 
             var securityCode = SecurityCode.Create(ProviderType.Email, user.Email, CodeActionType.ConfirmEmail);
             await _securityCodesRepository.CreateAsync(securityCode);
@@ -217,9 +215,7 @@ namespace AspNetCoreSpa.Application.Services
         public async Task<Result> ConfirmEmailAsync(string token)
         {
             if (string.IsNullOrEmpty(token))
-            {
                 return Result.Fail(EC.TokenInvalid, ET.TokenInvalid);
-            }
 
             var model = _jwtTokenHelper.DecodeToken<EmailUpdateToken>(token);
 
@@ -247,11 +243,21 @@ namespace AspNetCoreSpa.Application.Services
         {
             var user = await _userQueryRepository.GetUserByIdAsync(userId);
             if (user == null)
-            {
                 return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
-            }
 
             var viewModel = user.ToViewModel();
+
+            if (viewModel.Image == null) 
+                return Result.OK(viewModel);
+
+            var url = new StringBuilder();
+            url.Append(_httpContextAccessor.HttpContext?.Request?.Scheme);
+            url.Append("://");
+            url.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
+            url.Append("/");
+            url.Append(viewModel.Image.Path.Replace(@"\", "/"));
+            
+            viewModel.Image.Url = url.ToString();
 
             return Result.OK(viewModel);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Domain.Entities.Base;
 
@@ -6,6 +7,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface IFileService : IBaseService
     {
-        Task<Result<string>> UploadPhotoAsync(IFormFile file);
+        Task<Result<string>> UploadPhotoAsync(Guid id, IFormFile file);
     }
 }
