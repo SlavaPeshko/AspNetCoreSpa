@@ -109,9 +109,12 @@ namespace AspNetCoreSpa.Application.Services
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
-            user.Gender = Enum.Parse<Gender>(model.Gender);
             user.DateOfBirth = model.DateOfBirth;
             user.CountryId = model.CountryId;
+            
+            bool success = Enum.TryParse(model.Gender, out Gender gender);
+            if (success)
+                user.Gender = gender;
 
             if (user.Email != null && user.Email != model.Email)
             {

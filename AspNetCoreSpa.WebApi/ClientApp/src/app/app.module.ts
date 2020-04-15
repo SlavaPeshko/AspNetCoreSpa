@@ -9,6 +9,9 @@ import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { AuthGuard } from './guards/CanActivate';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { UserModule } from './user/user.module';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ErrorIntercept } from './helpers/error.interceptor';
 
 import { JwtModule } from "@auth0/angular-jwt";
 import { FileService } from './services/file.service';
@@ -29,6 +32,12 @@ export function tokenGetter() {
     ComponentModule,
     HttpClientModule,
     UserModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 5000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -39,6 +48,7 @@ export function tokenGetter() {
   ],
   providers: [AuthGuard, 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorIntercept, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -13,10 +13,11 @@ export class AuthService extends BaseService<any> {
   private readonly JWT_TOKEN = 'jwt';
   private readonly REFRESH_TOKEN = 're_jwt';
 
-  constructor(httpClient: HttpClient,  private router: Router) {
+  constructor(httpClient: HttpClient,  
+    private router: Router) {
     super(httpClient,
       config.apiUrl,
-      config.endpoint.login);
+      config.endpoint.login,);
   }
 
   login(body: any) {
@@ -29,8 +30,6 @@ export class AuthService extends BaseService<any> {
         this.storeTokens({ jwt: token, refreshToken: refreshToken });
 
         this.router.navigate(['/profile']);
-      }, err => {
-        // this.invalidLogin = true;
       });
   }
 
