@@ -12,6 +12,7 @@ import { UserModule } from './user/user.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorIntercept } from './helpers/error.interceptor';
+import { SpinnerHttpInterceptor } from './helpers/http.interceptor';
 
 import { JwtModule } from "@auth0/angular-jwt";
 import { FileService } from './services/file.service';
@@ -48,7 +49,8 @@ export function tokenGetter() {
   ],
   providers: [AuthGuard, 
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorIntercept, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorIntercept, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: SpinnerHttpInterceptor, multi: true },
   ],
   bootstrap: [AppComponent]
 })

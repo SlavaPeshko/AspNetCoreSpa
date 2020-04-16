@@ -20,6 +20,8 @@ namespace AspNetCoreSpa.Domain.Entities
         public bool PhoneNumberConfirmed { get; set; }
         public string PasswordHash { get; set; }
         public int AccessFailedCount { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
+        public bool LockoutEnabled { get; set; }
         public string RefreshToken { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }

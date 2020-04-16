@@ -178,7 +178,7 @@
     <value>Password must be upper letter</value>
   </data>
   <data name="PhoneRequired" xml:space="preserve">
-    <value>Phone is requred</value>
+    <value>Phone is required</value>
   </data>
   <data name="PostNotFound" xml:space="preserve">
     <value>Post not found</value>
@@ -197,5 +197,8 @@
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found</value>
+  </data>
+  <data name="AccessFailedCount" xml:space="preserve">
+    <value>Exceeded the number of login attempts</value>
   </data>
 </root>

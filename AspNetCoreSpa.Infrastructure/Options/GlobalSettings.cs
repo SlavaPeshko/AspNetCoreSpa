@@ -11,6 +11,7 @@ namespace AspNetCoreSpa.Infrastructure.Options
         public string AllowedHosts { get; set; }
         public Cache Cache { get; set; }
         public EmailSettings EmailSettings { get; set; }
+        public Configurations Configurations { get; set; }
     }
 
     public class ConnectionStrings
@@ -54,5 +55,11 @@ namespace AspNetCoreSpa.Infrastructure.Options
         public string SenderName { get; set; }
         public string Sender { get; set; }
         public string Password { get; set; }
+    }
+
+    public class Configurations
+    {
+        public int AccessFailedCount { get; set; }
+        public int ResetTime { get; set; }
     }
 }

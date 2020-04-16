@@ -21,7 +21,7 @@ export class ErrorIntercept implements HttpInterceptor {
     ): Observable<HttpEvent<any>> {
         return next.handle(request)
             .pipe(
-                retry(1),
+                retry(0),
                 catchError((error: HttpErrorResponse) => {
                     let errorMessage = '';
                     if (error.error instanceof Array && error.error.length > 0) {

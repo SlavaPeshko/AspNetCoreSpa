@@ -10,6 +10,7 @@
         TokenInvalid = 104,
         ImageInvalid = 105,
         LengthImageInvalid = 106,
+        AccessFailedCount = 107,
 
         //Post error
         PostNotFound = 200,

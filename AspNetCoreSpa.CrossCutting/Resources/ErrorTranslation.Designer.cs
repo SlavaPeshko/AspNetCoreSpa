@@ -19,7 +19,7 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ErrorTranslation {
@@ -57,6 +57,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exceeded the number of login attempts.
+        /// </summary>
+        public static string AccessFailedCount {
+            get {
+                return ResourceManager.GetString("AccessFailedCount", resourceCulture);
             }
         }
         
@@ -250,7 +259,7 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone is requred.
+        ///   Looks up a localized string similar to Phone is required.
         /// </summary>
         public static string PhoneRequired {
             get {

@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 import { HeaderComponent } from "./header/header.component";
 // import { AppMaterialModule } from "../app-material/app-material.module";
 import { FooterComponent } from './footer/footer.component';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent],
+  declarations: [HeaderComponent, FooterComponent, SpinnerComponent],
   imports: [
     CommonModule,
     // AppMaterialModule,
@@ -14,7 +15,8 @@ import { FooterComponent } from './footer/footer.component';
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    SpinnerComponent
   ]
 })
 export class ComponentModule { }

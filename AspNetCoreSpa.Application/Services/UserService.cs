@@ -34,7 +34,7 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IEmailSender _emailSender;
         private readonly ISecurityCodesRepository _securityCodesRepository;
         private readonly IConfiguration _configuration;
-        private readonly GlobalSettings _settings;
+        private readonly GlobalSettings _globalSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public UserService(IUnitOfWorks unitOfWorks,
@@ -44,7 +44,7 @@ namespace AspNetCoreSpa.Application.Services
             IEmailSender emailSender,
             ISecurityCodesRepository securityCodesRepository,
             IConfiguration configuration,
-            GlobalSettings settings, 
+            GlobalSettings globalSettings, 
             IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWorks = unitOfWorks;
@@ -54,7 +54,7 @@ namespace AspNetCoreSpa.Application.Services
             _emailSender = emailSender;
             _securityCodesRepository = securityCodesRepository;
             _configuration = configuration;
-            _settings = settings;
+            _globalSettings = globalSettings;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -168,9 +168,15 @@ namespace AspNetCoreSpa.Application.Services
             if (user == null)
                 return Result.Fail<LogInViewModel>(EC.UserNotFound, ET.UserNotFound);
 
+            if(user.LockoutEnd.HasValue && user.LockoutEnd >= DateTimeOffset.UtcNow)
+                return Result.Fail<LogInViewModel>(EC.AccessFailedCount, ET.AccessFailedCount);
+            
             var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.Password);
             if (!verifyPassword)
+            {
+                await SetLockoutUser(user);
                 return Result.Fail<LogInViewModel>(EC.PasswordInvalid, ET.PasswordInvalid);
+            }
 
             var refreshToken = _jwtTokenHelper.GenerateRefreshToken(user);
 
@@ -180,7 +186,7 @@ namespace AspNetCoreSpa.Application.Services
                 AccessToken = new AccessToken
                 {
                     Token = _jwtTokenHelper.GenerateToken(user),
-                    ExpiresIn = _settings.Jwt.Expiration
+                    ExpiresIn = _globalSettings.Jwt.Expiration
                 }
             };
 
@@ -263,6 +269,23 @@ namespace AspNetCoreSpa.Application.Services
             viewModel.Image.Url = url.ToString();
 
             return Result.OK(viewModel);
+        }
+        
+        private async Task SetLockoutUser(User user)
+        {
+            if (user.AccessFailedCount >= _globalSettings.Configurations.AccessFailedCount)
+            {
+                user.LockoutEnd = DateTimeOffset.UtcNow.AddMinutes(_globalSettings.Configurations.AccessFailedCount);
+                user.AccessFailedCount = 0;
+            }
+            else
+            {
+                user.AccessFailedCount = ++user.AccessFailedCount;
+            }
+            
+            _userRepository.Put(user);
+
+            await _unitOfWorks.CommitAsync();
         }
     }
 }
