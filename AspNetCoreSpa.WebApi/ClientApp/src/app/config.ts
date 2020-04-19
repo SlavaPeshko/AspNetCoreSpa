@@ -4,6 +4,7 @@ export const config = {
         user: 'user',
         country: 'countries',
         login: 'user/login',
-        post: 'posts'
+        uploadProfileImage: (id: string) => `user/${id}/upload-photo`,
+        post: 'posts',
     }
 };

@@ -49,7 +49,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> PostAsync([FromBody] CreatePostInputModel post)
+        public async Task<IActionResult> PostAsync([FromForm]CreatePostInputModel post)
         {
             var result = await _postService.CreatePostAsync(post);
 
@@ -57,17 +57,6 @@ namespace AspNetCoreSpa.WebApi.Controllers
                 return BadRequest(result.Errors);
 
             return Ok(result.Data);
-        }
-        [HttpPost("{postId}/images")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> PostAsync([FromRoute]Guid id, List<IFormFile> images)
-        {
-            var result = await _postService.UploadImagesPostAsync(id, images);
-
-            if (result.IsFailure)
-                return BadRequest(result.Errors);
-
-            return Ok();
         }
         
         [HttpPut("{id}")]

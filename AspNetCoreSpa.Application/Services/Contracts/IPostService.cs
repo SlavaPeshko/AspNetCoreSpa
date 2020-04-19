@@ -12,7 +12,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
     {
         Task<IEnumerable<PostViewModel>> GetPostsAsync(PostPageFilters filters);
         Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post);
-        Task<Result> UploadImagesPostAsync(Guid id, List<IFormFile> images);
         Task<Result<PostViewModel>> GetPostByIdAsync(Guid id);
         Task<Result> DeletePostByIdAsync(Guid id);
         Task<Result> UpdatePostAsync(Guid id, UpdatePostInputModel post);

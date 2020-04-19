@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +37,82 @@ namespace AspNetCoreSpa.Application.Services
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _settings = settings;
             _unitOfWorks = unitOfWorks;
+        }
+
+        public async Task<Result<List<string>>> UploadImagesAsync(Guid id, Guid postId, List<IFormFile> files)
+        {
+            if(files == null)
+                return Result.Fail<List<string>>(EC.ImageInvalid, ET.ImageInvalid);
+
+            if (files.Any(file => file.Length > 2_101_156L))
+            {
+                return Result.Fail<List<string>>(EC.LengthImageInvalid, ET.LengthImageInvalid);
+            }
+
+            var paths = new List<string>();
+            foreach (var file in files)
+            {
+                using (var stream = file.OpenReadStream())
+                {
+                    using (var image = new Bitmap(stream))
+                    {
+                        int width, height;
+                        const int size = 200;
+                        const int quality = 4;
+                        if (image.Width > image.Height)
+                        {
+                            width = size;
+                            height = Convert.ToInt32(image.Height * size / (double) image.Width);
+                        }
+                        else
+                        {
+                            width = Convert.ToInt32(image.Width * size / (double) image.Height);
+                            height = size;
+                        }
+
+                        var resized = new Bitmap(width, height);
+                        using (var graphics = Graphics.FromImage(resized))
+                        {
+                            graphics.CompositingQuality = CompositingQuality.HighSpeed;
+                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                            graphics.CompositingMode = CompositingMode.SourceCopy;
+                            graphics.DrawImage(image, 0, 0, width, height);
+
+                            var folderPaths = Path.Combine(_environment.WebRootPath, _settings.Paths.ImagesPostPath, id.ToString());
+
+                            if (!Directory.Exists(folderPaths))
+                                Directory.CreateDirectory(folderPaths);
+
+                            var allPath = Path.Combine(folderPaths, file.FileName);
+
+                            using (var output = File.Open(allPath, FileMode.Create))
+                            {
+                                var qualityParamId = Encoder.Quality;
+                                var encoderParameters = new EncoderParameters(1);
+                                encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
+                                var codec = ImageCodecInfo.GetImageDecoders()
+                                    .FirstOrDefault(x => x.FormatID == ImageFormat.Png.Guid);
+                                resized.Save(output, codec, encoderParameters);
+                            }
+
+                            var resultPath = Path.Combine(_settings.Paths.ImagesPostPath, id.ToString(), file.FileName);
+                            
+                            paths.Add(resultPath);
+                            
+                            await _imageRepository.PostAsync(new Image
+                            {
+                                Name = file.FileName,
+                                Path = resultPath,
+                                PostId = postId,
+                            });
+                        }
+                    }
+                }
+            }
+
+            await _unitOfWorks.CommitAsync();
+            
+            return Result.OK(paths);
         }
         public async Task<Result<string>> UploadPhotoAsync(Guid id, IFormFile file)
         {

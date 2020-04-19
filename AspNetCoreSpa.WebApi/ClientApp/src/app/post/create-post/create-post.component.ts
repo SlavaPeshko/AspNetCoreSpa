@@ -70,22 +70,16 @@ export class CreatePostComponent implements OnInit {
   }
 
   post() {
-    const post: Post = new Post();
-    post.description = this.message;
+    const url = `${config.apiUrl}/${config.endpoint.post}`;
+    
+    let formData: FormData = new FormData();
+    formData.append('description', this.message);
+    for (let i = 0; i < this.files.length; i++) {
+      const item = this.files[i];
+      formData.append('images', item, item.name);
+    }
 
-    this.postService.create(post).subscribe(data=> {
-      if(!this.files && this.files.length === 0)
-        return;
-      
-      let formData: FormData = new FormData();
-      for (let i = 0; i < this.files.length; i++) {
-        const item = this.files[i];
-        formData.append('images', item, item.name);
-      }
-
-      const url = `${config.apiUrl}/${config.endpoint.post}/${data.id}/images`;
-      this.fileService.uploadImages(formData, url).subscribe(data => {});
-    });
+    this.fileService.uploadImages(formData, url).subscribe(data => {})
   }
 
   canPost() {

@@ -1,5 +1,5 @@
 export class Post {
     id: string;
     description: string;
-    images: FormData;
+    images: any;
 }

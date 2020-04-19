@@ -7,7 +7,7 @@ import { Post } from '../models/post';
 @Injectable({
   providedIn: 'root'
 })
-export class PostService extends BaseService<Post> {
+export class PostService extends BaseService<any> {
   
   constructor(httpClient: HttpClient) {
     super(

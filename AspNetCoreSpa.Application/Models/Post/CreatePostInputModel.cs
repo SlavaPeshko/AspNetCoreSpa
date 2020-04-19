@@ -6,6 +6,7 @@ namespace AspNetCoreSpa.Application.Models.Post
     public class CreatePostInputModel
     {
         public string Description { get; set; }
+        public List<IFormFile> Images { get; set; }
     }
 
     public static class CreatePostInputModelExtensionMethods

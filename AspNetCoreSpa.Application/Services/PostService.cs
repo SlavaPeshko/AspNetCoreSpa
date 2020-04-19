@@ -27,13 +27,15 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IMapper _mapper;
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
+        private readonly IFileService _fileService;
 
         public PostService(IPostRepository postRepository,
             IPostQueryRepository postQueryRepository,
             IUnitOfWorks unitOfWorks,
             IMapper mapper,
             IUserContext userContext,
-            IUserRepository userRepository)
+            IUserRepository userRepository, 
+            IFileService fileService)
         {
             _postRepository = postRepository;
             _postQueryRepository = postQueryRepository;
@@ -41,6 +43,7 @@ namespace AspNetCoreSpa.Application.Services
             _mapper = mapper;
             _userContext = userContext;
             _userRepository = userRepository;
+            _fileService = fileService;
         }
 
         public async Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post)
@@ -55,14 +58,12 @@ namespace AspNetCoreSpa.Application.Services
             entity.User = user;
 
             await _postRepository.PostAsync(entity);
+            
+            await _fileService.UploadImagesAsync(user.Id, entity.Id, post.Images);
+            
             await _unitOfWorks.CommitAsync();
 
             return Result.OK(entity.ToViewModel());
-        }
-
-        public async Task<Result> UploadImagesPostAsync(Guid id, List<IFormFile> images)
-        {
-            return Result.Ok();
         }
 
         public async Task<Result> DeletePostByIdAsync(Guid id)
