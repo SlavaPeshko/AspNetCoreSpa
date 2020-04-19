@@ -5,6 +5,7 @@ footer {
     padding: 12px;
     font-size: 12px;
     margin-top: 40px;
+    z-index: 2;
 }
 
 .footer-list {

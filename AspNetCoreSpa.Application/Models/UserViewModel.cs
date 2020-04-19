@@ -28,8 +28,8 @@ namespace AspNetCoreSpa.Application.Models
 
             return new UserViewModel
             {
-                Email = user.Email ?? string.Empty,
-                Phone = user.PhoneNumber ?? string.Empty,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
@@ -44,8 +44,8 @@ namespace AspNetCoreSpa.Application.Models
             var userViewModel = new UserViewModel
             {
                 Id = user.Id,
-                Email = user.Email ?? string.Empty,
-                Phone = user.PhoneNumber ?? string.Empty,
+                Email = user.Email,
+                Phone = user.PhoneNumber,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,

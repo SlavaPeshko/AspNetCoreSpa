@@ -5,6 +5,7 @@ import { ForgotComponent } from "./auth/forgot/forgot.component";
 import { SignUpComponent } from "./auth/sign-up/sign-up.component";
 import { AuthGuard } from './guards/CanActivate';
 import { ProfileComponent } from './user/profile/profile.component';
+import { CreatePostComponent } from './post/create-post/create-post.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -12,7 +13,8 @@ const routes: Routes = [
   // { path: 'restore', component: ForgotComponent, canActivate: [AuthGuard] },
   { path: 'restore', component: ForgotComponent },
   { path: 'register', component: SignUpComponent },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] }
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'create-post', component: CreatePostComponent }
 ];
 
 @NgModule({

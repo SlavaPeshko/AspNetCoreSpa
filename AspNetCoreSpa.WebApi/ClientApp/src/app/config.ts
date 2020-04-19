@@ -3,6 +3,7 @@ export const config = {
     endpoint: {
         user: 'user',
         country: 'countries',
-        login: 'user/login'
+        login: 'user/login',
+        post: 'posts'
     }
 };

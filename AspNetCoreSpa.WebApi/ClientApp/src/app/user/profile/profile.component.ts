@@ -63,14 +63,13 @@ export class ProfileComponent implements OnInit {
     this.userService.update(this.user).subscribe(data=> {
     })
 
-    if(this.fileUploaded) {
-      const url = `${config.apiUrl}/${config.endpoint.user}/${this.user.id}/upload-photo`;
-      let formData: FormData = new FormData();
-      formData.append('file', this.fileUploaded, this.fileUploaded.name);
+    if(!this.fileUploaded)
+      return;
 
-      this.fileService.uploadUserImage(formData, url).subscribe(data=> {
-      });
-    }
+    const url = `${config.apiUrl}/${config.endpoint.user}/${this.user.id}/upload-photo`;
+    let formData: FormData = new FormData();
+    formData.append('file', this.fileUploaded, this.fileUploaded.name);
+    this.fileService.uploadImages(formData, url).subscribe(data=> {});
   }
 
   handleFileInput(files: FileList){

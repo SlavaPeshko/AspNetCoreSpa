@@ -1,0 +1,79 @@
+.create-post-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+textarea {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow-wrap: break-word;
+    width: 100%;
+    resize: none;
+    border: none;
+    padding: 10px 80px 10px 10px;
+}
+
+.letter-count {
+    letter-spacing: .5px;
+    line-height: 12px;
+    text-transform: uppercase;
+    bottom: 12px;
+    pointer-events: none;
+    position: absolute;
+    right: 12px;
+}
+
+.group-btn {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.progress {
+    height: 0.5rem;
+}
+
+.name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #353f4a;
+    margin: 0;
+}
+
+.size {
+    font-size: 12px;
+    font-weight: 500;
+    color: #a4a4a4;
+    margin: 0;
+    margin-bottom: 0.25rem;
+}
+
+.single-file {
+    display: flex;
+    padding: 0.5rem 0;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+}
+
+.file-icon {
+    width: 50px;
+}
+
+.info {
+    width: 100%;
+}
+
+.delete {
+    display: flex;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.files-list {
+    margin-top: 0.8rem;
+}

@@ -30,3 +30,16 @@
   width: 18px;
   height: 18px;
 }
+
+.far {
+  color: #777;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.dropdown-menu {
+  right: 0;
+  left: auto;
+}

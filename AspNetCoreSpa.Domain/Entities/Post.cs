@@ -8,7 +8,7 @@ namespace AspNetCoreSpa.Domain.Entities
     {
         public string Description { get; set; }
         public DateTime CreateAt { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
 
         public User User { get; set; }
         public ICollection<Image> Images { get; set; }

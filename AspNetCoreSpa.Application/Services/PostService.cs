@@ -14,6 +14,7 @@ using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
+using Microsoft.AspNetCore.Http;
 using PostPageFilters = AspNetCoreSpa.Application.Models.Post.PostPageFilters;
 
 namespace AspNetCoreSpa.Application.Services
@@ -57,6 +58,11 @@ namespace AspNetCoreSpa.Application.Services
             await _unitOfWorks.CommitAsync();
 
             return Result.OK(entity.ToViewModel());
+        }
+
+        public async Task<Result> UploadImagesPostAsync(Guid id, List<IFormFile> images)
+        {
+            return Result.Ok();
         }
 
         public async Task<Result> DeletePostByIdAsync(Guid id)

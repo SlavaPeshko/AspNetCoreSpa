@@ -11,7 +11,7 @@ namespace AspNetCoreSpa.Application.Models
         public Guid Id { get; set; }
         public string Description { get; set; }
         public DateTime CreateAt { get; set; }
-        public DateTime UpdateAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
         public List<CommentViewModel> Comments { get; set; }
     }
 
@@ -23,6 +23,7 @@ namespace AspNetCoreSpa.Application.Models
 
             return new PostViewModel
             {
+                Id = post.Id,
                 Description = post.Description,
                 CreateAt = post.CreateAt,
                 UpdateAt = post.UpdateAt,

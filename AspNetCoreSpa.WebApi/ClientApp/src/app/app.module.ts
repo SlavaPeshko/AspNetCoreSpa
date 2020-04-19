@@ -9,6 +9,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS  } from '@angular/common/http';
 import { AuthGuard } from './guards/CanActivate';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 import { UserModule } from './user/user.module';
+import { PostModule } from './post/post.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ErrorIntercept } from './helpers/error.interceptor';
@@ -23,7 +24,7 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +34,7 @@ export function tokenGetter() {
     ComponentModule,
     HttpClientModule,
     UserModule,
+    PostModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 5000,
