@@ -1,0 +1,44 @@
+<div class="posts-wrapper">
+    <div class="col-md-6">
+        <div *ngFor="let post of posts; let postIndex = index" class="list-post">
+                <article class="post-single">
+                    <div class="post-left"></div>
+                    <div class="post-main">
+                        <header class="post-header">
+                            <h2>{{ post.title }}</h2>
+                        </header>
+                        <div class="post-content">
+                            <p>{{ post.description }}</p>
+                        </div>
+                        <div class="container">
+                            <div class="row">
+                                <img *ngFor="let image of post.images; let imageIndex = index" [src]="imagePost(postIndex, imageIndex)" [alt]="image.name">
+                            </div>
+                          </div>
+                        <!-- <div class="post-image">
+                            <figure>
+                                <img *ngFor="let image of post.images; let imageIndex = index" [src]="imagePost(postIndex, imageIndex)" alt="" class="img-responsive">
+                            </figure>
+                        </div> -->
+                        <div class="post-footer">
+                            <div class="post-tools">
+                                <div class="mr-3 post-comments">
+                                    <i class="far fa-comments">
+                                        <span class="post-comments-count">{{ post.comments.length }}</span>
+                                    </i>
+                                </div>
+                                <div class="post-likes">
+                                    <i class="far fa-thumbs-up"></i>
+                                    <span class="mr-1 ml-1">8</span>
+                                    <i class="far fa-thumbs-up fa-rotate-180"></i>
+                                </div>
+                            </div>
+                            <div class="post-user">
+
+                            </div>
+                        </div>
+                    </div>
+                </article>
+        </div>
+    </div>
+</div>

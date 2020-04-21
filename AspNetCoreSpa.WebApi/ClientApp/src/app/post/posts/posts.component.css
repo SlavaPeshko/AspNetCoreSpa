@@ -1,0 +1,94 @@
+.posts-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vw;
+}
+
+.post-main {
+    border: 1px solid #e9e9e9;
+    border-radius: 2px;
+    background-color: #ffffff;
+}
+
+.post-single {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.post-header {
+    padding: 17px 25px 0;
+    margin-bottom: 15px;
+}
+
+.post-header h2 {
+    overflow: hidden;
+    display: inline-block;
+    max-width: 100%;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.post-content {
+    padding: 0 25px;
+}
+
+.post-content p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+.post-footer {
+    font-size: 13px;
+    line-height: 36px;
+    overflow: hidden;
+    padding: 8px 25px;
+    border-top: 1px solid #e9e9e9;
+    background-color: #f9f9fb;
+    display: flex;
+    justify-content: space-between;
+}
+
+.post-tools {
+    font-size: 15px;
+    line-height: 30px;
+    display: flex;
+}
+
+.post-tools .fa-comments{
+    color: #bdbdbf;
+}
+
+.post-comments-count {
+    margin-left: 10px;
+    line-height: 15px;
+    color: #757575;
+}
+
+.fa-rotate-180 {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.post-likes .fa-thumbs-up {
+    cursor: pointer;
+    color: #bdbdbf;
+}
+
+.post-likes span {
+    line-height: 15px;
+    color: #757575;
+}
+
+figure {
+    margin: 0 0 0 0rem;
+}

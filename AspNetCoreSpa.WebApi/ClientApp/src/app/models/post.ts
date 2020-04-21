@@ -1,5 +1,12 @@
+import { User } from './user';
+import { Image } from './image';
+
 export class Post {
     id: string;
+    title: string;
     description: string;
-    images: any;
+    createAt: string;
+    updateAt: string;
+    images: Image[];
+    user: User;
 }

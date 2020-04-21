@@ -1,6 +1,11 @@
 <div class="create-post-wrapper">
     <div class="col-md-6 pt-3">
-        <div style="position: relative; border: 1px solid #ced4da; border-radius: 4px;">
+        <div class="mb-2 single-input-text">
+            <textarea [(ngModel)]="title" placeholder="Title" class="form-control" 
+                rows="1" maxlength="100" #msgInput (keydown.enter)="confirmText(msgInput.value);false"></textarea>
+            <div class="letter-count">{{title.length}}/100</div>
+        </div>
+        <div class="single-input-text">
             <textarea [(ngModel)]="message" placeholder="Text" class="form-control" 
                 rows="5" maxlength="500" #msgInput (keydown.enter)="confirmText(msgInput.value);false"></textarea>
             <div class="letter-count">{{message.length}}/500</div>

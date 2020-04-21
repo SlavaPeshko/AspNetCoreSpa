@@ -82,6 +82,9 @@ namespace AspNetCoreSpa.Data.Context
 
                 e.HasOne(p => p.User)
                 .WithMany(u => u.Posts);
+
+                e.Property(p => p.Title).HasMaxLength(100);
+                e.Property(p => p.Description).HasMaxLength(500);
             });
 
             modelBuilder.Entity<Comment>(e =>

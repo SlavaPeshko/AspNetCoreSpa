@@ -66,7 +66,7 @@ export class ProfileComponent implements OnInit {
     if(!this.fileUploaded)
       return;
 
-    const url = `${config.apiUrl}/${config.endpoint.uploadProfileImage(this.user.id)}`;
+    const url = `${config.apiUrl}/${config.endpoint.user.uploadProfileImage(this.user.id)}`;
     
     let formData: FormData = new FormData();
     formData.append('file', this.fileUploaded, this.fileUploaded.name);

@@ -13,7 +13,7 @@ export class UserService extends BaseService<User> {
     super(
       httpClient,
       config.apiUrl,
-      config.endpoint.user);
+      config.endpoint.user.route);
   }
 
   // getUser(id: string) {

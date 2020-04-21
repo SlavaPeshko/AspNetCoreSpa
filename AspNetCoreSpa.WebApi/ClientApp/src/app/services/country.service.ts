@@ -12,6 +12,6 @@ export class CountryService extends BaseService<Country> {
   constructor(httpClient: HttpClient) {
     super(httpClient,
       config.apiUrl,
-      config.endpoint.country);
+      config.endpoint.countries.route);
   }
 }

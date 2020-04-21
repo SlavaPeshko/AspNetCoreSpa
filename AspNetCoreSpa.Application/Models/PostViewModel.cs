@@ -9,10 +9,14 @@ namespace AspNetCoreSpa.Application.Models
     public class PostViewModel
     {
         public Guid Id { get; set; }
+        public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime? UpdateAt { get; set; }
+        public UserViewModel User { get; set; }
+        public List<ImageViewModel> Images { get; set; }
         public List<CommentViewModel> Comments { get; set; }
+        
     }
 
     public static class PostViewModelExtensionMethods
@@ -37,9 +41,12 @@ namespace AspNetCoreSpa.Application.Models
             return new PostViewModel
             {
                 Id = post.PostId,
+                Title = post.Title,
                 Description = post.PostDescription,
                 CreateAt = post.PostCreateAt,
                 UpdateAt = post.PostUpdateAt,
+                User = post.User.ToViewModel(),
+                Images = post.Images.Select(x=>x.ToViewModel()).ToList(),
                 Comments = post.Comments.Select(x => x.ToViewModel()).ToList()
             };
         }

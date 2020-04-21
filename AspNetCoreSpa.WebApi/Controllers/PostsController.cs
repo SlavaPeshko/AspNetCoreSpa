@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Models.Comment;
 using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
-using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.WebApi.Controllers

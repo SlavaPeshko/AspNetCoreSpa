@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { FileService } from '../../services/file.service';
-import { Post } from 'src/app/models/post';
 import { config } from '../../config';
 
 @Component({
@@ -10,6 +9,7 @@ import { config } from '../../config';
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent implements OnInit {
+  title: string = '';
   message: string = '';
   files: any[] = [];
 
@@ -66,13 +66,13 @@ export class CreatePostComponent implements OnInit {
   }
 
   cancel(){
-    debugger;
   }
 
   post() {
-    const url = `${config.apiUrl}/${config.endpoint.post}`;
+    const url = `${config.apiUrl}/${config.endpoint.posts.route}`;
     
     let formData: FormData = new FormData();
+    formData.append('title', this.title);
     formData.append('description', this.message);
     for (let i = 0; i < this.files.length; i++) {
       const item = this.files[i];
@@ -83,6 +83,6 @@ export class CreatePostComponent implements OnInit {
   }
 
   canPost() {
-    return this.message.length > 0 ? true : false;
+    return this.message.length > 0 && this.title.length > 0 ? true : false;
   }
 }

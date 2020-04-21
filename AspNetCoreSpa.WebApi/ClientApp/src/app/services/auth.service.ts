@@ -17,7 +17,7 @@ export class AuthService extends BaseService<any> {
     private router: Router) {
     super(httpClient,
       config.apiUrl,
-      config.endpoint.login,);
+      config.endpoint.user.login);
   }
 
   login(body: any) {

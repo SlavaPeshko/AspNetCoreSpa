@@ -4,6 +4,7 @@ using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
@@ -28,6 +29,7 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
         private readonly IFileService _fileService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public PostService(IPostRepository postRepository,
             IPostQueryRepository postQueryRepository,
@@ -35,7 +37,8 @@ namespace AspNetCoreSpa.Application.Services
             IMapper mapper,
             IUserContext userContext,
             IUserRepository userRepository, 
-            IFileService fileService)
+            IFileService fileService, 
+            IHttpContextAccessor httpContextAccessor)
         {
             _postRepository = postRepository;
             _postQueryRepository = postQueryRepository;
@@ -44,6 +47,7 @@ namespace AspNetCoreSpa.Application.Services
             _userContext = userContext;
             _userRepository = userRepository;
             _fileService = fileService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post)
@@ -101,7 +105,20 @@ namespace AspNetCoreSpa.Application.Services
                 ItemsPerPage = filters.ItemsPerPage
             });
 
-            return posts.Select(x => x.ToViewModel());
+            var viewModels = posts.Select(x => x.ToViewModel()).ToList(); 
+            
+            var url = new StringBuilder();
+            url.Append(_httpContextAccessor.HttpContext?.Request?.Scheme);
+            url.Append("://");
+            url.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
+            url.Append("/");
+
+            foreach (var image in viewModels.SelectMany(model => model.Images))
+            {
+                image.Url = $"{url}{image.Path.Replace(@"\", "/")}";
+            }
+            
+            return viewModels;
         }
 
         public async Task<Result> UpdatePostAsync(Guid id, UpdatePostInputModel post)
