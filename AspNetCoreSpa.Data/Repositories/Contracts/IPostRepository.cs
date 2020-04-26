@@ -10,7 +10,7 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         Task PostAsync(Post post);
         void Put(Post post);
         void Delete(Post post);
-        Task<Post> GetPostByIdAsync(Guid id);
-        Task<Post> GetPostByIdAndUserIdAsync(Guid id, Guid userId);
+        Task<Post> GetPostByIdAsync(int id);
+        Task<Post> GetPostByIdAndUserIdAsync(int id, int userId);
     }
 }

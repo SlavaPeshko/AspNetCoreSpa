@@ -8,7 +8,7 @@ using AspNetCoreSpa.Domain.Entities;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class PostRepository : BaseRepository<Post, Guid>, IPostRepository
+    public class PostRepository : BaseRepository<Post, int>, IPostRepository
     {
         public PostRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
@@ -28,14 +28,14 @@ namespace AspNetCoreSpa.Data.Repositories
         //         .ToListAsync();
         // }
 
-        public async Task<Post> GetPostByIdAndUserIdAsync(Guid id, Guid userId)
+        public async Task<Post> GetPostByIdAndUserIdAsync(int id, int userId)
         {
             return await GetSet()
                 .Include(p=>p.User)
                 .SingleOrDefaultAsync(p => p.Id == id && p.User.Id == userId);
         }
         
-        public async Task<Post> GetPostByIdAsync(Guid id)
+        public async Task<Post> GetPostByIdAsync(int id)
         {
             return await GetSet().SingleOrDefaultAsync(p => p.Id == id);
         }

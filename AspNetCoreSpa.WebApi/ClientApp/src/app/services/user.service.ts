@@ -16,16 +16,12 @@ export class UserService extends BaseService<User> {
       config.endpoint.user.route);
   }
 
-  // getUser(id: string) {
-  //   return this.http.get<User>(`${config.apiUrl}user/${id}`);
-  // }
+  changeEmail(id: number, oldEmail: string, newEmail: string) {
+    const body = JSON.stringify({oldEmail, newEmail});
+    return this._httpClient.put(`${config.apiUrl}/${config.endpoint.user.changeEmail(id)}`, body, this.httpOptions);
+  }
 
-  // postUser(user: User, id: string) {
-
-  //   const headers = new HttpHeaders()
-  //     .set('Content-Type', 'application/json')
-  //     .set('Accept', 'application/json');
-
-  //   return this.http.post<any>(`${config.apiUrl}user/${id}`, user, { headers });
-  // }
+  getUser(id: string) {
+    return this._httpClient.get<User>(`${config.apiUrl}user/${id}`);
+  }
 }

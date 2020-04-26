@@ -13,13 +13,14 @@ namespace AspNetCoreSpa.Data.Context
 
         public DbSet<Country> Countries { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<SecurityCode> SecurityCodes { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,13 +37,6 @@ namespace AspNetCoreSpa.Data.Context
                 e.Property(u => u.PasswordHash).HasColumnType("nvarchar(450)");
             });
 
-            modelBuilder.Entity<Role>(e =>
-            {
-                e.ToTable("Roles");
-
-                e.Property(r => r.RoleName).HasColumnType("nvarchar(100)");
-            });
-
             modelBuilder.Entity<Country>(e =>
             {
                 e.ToTable("Countries");
@@ -51,22 +45,40 @@ namespace AspNetCoreSpa.Data.Context
                 e.Property(c => c.RegionCode).HasColumnType("nvarchar(3)");
                 e.Property(u => u.Name).HasColumnType("nvarchar(60)");
 
-                e.HasMany(c => c.Users)
+                e.HasMany(c => c.Addresses)
                     .WithOne(ur => ur.Country)
                     .HasForeignKey(u => u.CountryId);
+            });
+
+            modelBuilder.Entity<UserAddress>(e =>
+            {
+                e.ToTable("XreUserAddress");
+                e.HasKey(ua => new {ua.UserId, ua.AddressId});
+                
+                e.HasOne(ua => ua.User)
+                    .WithMany(u => u.UserAddresses)
+                    .HasForeignKey(ua => ua.UserId);
+                
+                e.HasOne(ua => ua.Address)
+                    .WithMany(u => u.UserAddresses)
+                    .HasForeignKey(ua => ua.AddressId);
+                
+                e.HasOne(ua => ua.AddressType)
+                    .WithMany(u => u.UserAddresses)
+                    .HasForeignKey(ua => ua.AddressTypeId);
             });
 
             modelBuilder.Entity<UserRole>(e =>
             {
                 e.ToTable("XrefUserRole");
-                e.HasKey(ur => new { ur.UserId, ur.RoleId });
+                e.HasKey(ur => new { ur.UserId, RoleId = ur.RoleId });
 
                 e.HasOne(ur => ur.User)
-                .WithMany(u => u.Roles)
+                .WithMany(u => u.UserRoles)
                 .HasForeignKey(ur => ur.UserId);
 
                 e.HasOne(ur => ur.Role)
-                .WithMany(r => r.Users)
+                .WithMany(r => r.UsersRoles)
                 .HasForeignKey(ur => ur.RoleId);
             });
 

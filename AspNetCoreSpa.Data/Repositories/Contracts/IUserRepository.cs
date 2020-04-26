@@ -10,7 +10,7 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
         Task<IEnumerable<User>> GetUsersAsync();
         Task PostAsync(User user);
         void Put(User user);
-        Task<User> GetUserByIdAsync(Guid id);
+        Task<User> GetUserByIdAsync(int id);
         Task<User> GetUserByEmailAsync(string email);
         Task<User> GetUserByPhoneAsync(string phone);
     }

@@ -4,16 +4,16 @@ using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Domain.Entities
 {
-    public class Country : BaseEntity<Guid>
+    public class Country : BaseEntity<int>
     {
         public Country()
         {
-            Users = new HashSet<User>();
+            Addresses = new HashSet<Address>();
         }
 
         public string Name { get; set; }
         public string RegionCode { get; set; }
 
-        public ICollection<User> Users { get; set; }
+        public ICollection<Address> Addresses { get; set; }
     }
 }

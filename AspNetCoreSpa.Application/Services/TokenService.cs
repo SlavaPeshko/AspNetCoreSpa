@@ -7,46 +7,50 @@ using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using System.Linq;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using System;
+using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
+using AspNetCoreSpa.Infrastructure.Options;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class TokenService : ITokenService
     {
         private readonly IJwtTokenHelper _jwtTokenHelper;
-        private readonly IUserService _userService;
         private readonly IUserRepository _userRepository; 
+        private readonly GlobalSettings _globalSettings;
+        private readonly IUnitOfWorks _unitOfWorks;
 
         public TokenService(
             IJwtTokenHelper jwtTokenHelper, 
-            IUserService userService,
-            IUserRepository userRepository)
+            IUserRepository userRepository, 
+            GlobalSettings globalSettings, 
+            IUnitOfWorks unitOfWorks)
         {
             _jwtTokenHelper = jwtTokenHelper;
-            _userService = userService;
             _userRepository = userRepository;
+            _globalSettings = globalSettings;
+            _unitOfWorks = unitOfWorks;
         }
 
-        public async Task<Result<UserViewModel>> RefreshToken(string authenticationToken, string refreshToken)
+        public async Task<Result<TokenViewModel>> RefreshToken(TokenInputModel model)
         {
-            var principal = _jwtTokenHelper.GetPrincipalFromExpiredToken(authenticationToken);
-            var username = principal.Identity.Name;
+            // TODO check on null
+            
+            var principal = _jwtTokenHelper.GetPrincipalFromExpiredToken(model.AccessToken);
 
             var userId = principal.Claims.FirstOrDefault(x => x.Type == nameof(User.Id))?.Value;
 
-            var isParse = Guid.TryParse(userId, out Guid result);
-
-            if(!isParse)
+            if(!int.TryParse(userId, out int result))
             {
-                return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
+                return Result.Fail<TokenViewModel>(EC.UserNotFound, ET.UserNotFound);
             }
 
             var user = await _userRepository.GetUserByIdAsync(result);
 
-            if (user == null || user.RefreshToken != refreshToken)
+            if (user == null || user.RefreshToken != model.RefreshToken)
             {
-                return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
+                return Result.Fail<TokenViewModel>(EC.UserNotFound, ET.UserNotFound);
             }
 
             var newJwtToken = _jwtTokenHelper.GenerateToken(user);
@@ -54,8 +58,19 @@ namespace AspNetCoreSpa.Application.Services
 
             user.RefreshToken = newRefreshToken;
             _userRepository.Put(user);
+            await _unitOfWorks.CommitAsync();
 
-            return Result.OK(user.ToViewModel());
+            var tokenViewModel = new TokenViewModel
+            {
+                RefreshToken = newRefreshToken,
+                AccessToken = new AccessToken
+                {
+                    Token = newJwtToken,
+                    ExpiresIn = _globalSettings.Jwt.Expiration
+                }
+            };
+
+            return Result.OK(tokenViewModel);
         }
     }
 }

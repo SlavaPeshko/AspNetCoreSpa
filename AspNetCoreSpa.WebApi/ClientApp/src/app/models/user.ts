@@ -1,9 +1,9 @@
-import { Country } from '../models/country';
 import { Gender } from '../models/gender';
 import { Image } from '../models/image';
+import { Address } from '../models/address';
 
 export class User {
-    id: string;
+    id: number;
     email: string;
     phone: string;
     password: string;
@@ -11,7 +11,6 @@ export class User {
     lastName: string;
     dateOfBirth: string;
     gender: Gender;
-    countryId: string;
-    country: Country;
+    address: Address;
     image: Image;
 }

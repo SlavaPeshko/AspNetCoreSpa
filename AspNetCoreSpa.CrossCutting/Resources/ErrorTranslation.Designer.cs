@@ -19,7 +19,7 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ErrorTranslation {
@@ -66,6 +66,15 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string AccessFailedCount {
             get {
                 return ResourceManager.GetString("AccessFailedCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address not found.
+        /// </summary>
+        public static string AddressNotFound {
+            get {
+                return ResourceManager.GetString("AddressNotFound", resourceCulture);
             }
         }
         
@@ -192,6 +201,24 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string LengthImageInvalid {
             get {
                 return ResourceManager.GetString("LengthImageInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title should be less 200 symbol.
+        /// </summary>
+        public static string LengthTitlePostInvalid {
+            get {
+                return ResourceManager.GetString("LengthTitlePostInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Like not found.
+        /// </summary>
+        public static string LikeNotFound {
+            get {
+                return ResourceManager.GetString("LikeNotFound", resourceCulture);
             }
         }
         

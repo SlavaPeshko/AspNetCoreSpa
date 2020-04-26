@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class CommentRepository : BaseRepository<Comment, Guid>, ICommentRepository
+    public class CommentRepository : BaseRepository<Comment, int>, ICommentRepository
     {
         public CommentRepository(ApplicationDbContext dbContext) : base(dbContext)
         {

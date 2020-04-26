@@ -9,7 +9,7 @@ using AspNetCoreSpa.Domain.Entities.Security;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class SecurityCodesRepository : BaseRepository<SecurityCode, Guid>, ISecurityCodesRepository
+    public class SecurityCodesRepository : BaseRepository<SecurityCode, int>, ISecurityCodesRepository
     {
         public SecurityCodesRepository(ApplicationDbContext dbContext) : base(dbContext)
         {

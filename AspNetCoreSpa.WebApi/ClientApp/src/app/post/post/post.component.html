@@ -1,0 +1,45 @@
+<article class="post-single">
+    <div class="post-main">
+        <header class="post-header">
+            <h2>{{ post.title }}</h2>
+        </header>
+        <div class="post-content">
+            <p>{{ post.description }}</p>
+        </div>
+        <div class="container">
+            <div class="row">
+                <img *ngFor="let image of post.images; let imageIndex = index" [src]="image.url"
+                    [alt]="image.name">
+            </div>
+        </div>
+        <div class="post-footer">
+            <div class="post-tools">
+                <div class="mr-3 post-comments">
+                    <i class="far fa-comments">
+                        <span class="post-comments-count">{{ post.comments.length }}</span>
+                    </i>
+                </div>
+                <div class="post-likes">
+                    <i class="far fa-thumbs-up" (click)="like(post.id, true)" [ngClass]="{'like-active': belongLikeUser(true) || isActiveLike }" ></i>
+                    <span class="mr-1 ml-1">{{ post.countLike }}</span>
+                    <i class="far fa-thumbs-up fa-rotate-180" (click)="like(post.id, false)" [ngClass]="{'dislike-active': belongLikeUser(false) || isActiveDislike }" ></i>
+                </div>
+            </div>
+            <div class="post-user">
+                <div class="user-info">
+                    <div class="user-item">
+                        <a href="">
+                            {{ post.user.email }}
+                        </a>
+                    </div>
+                    <div class="user-item">{{ timeSince(post.createAt) }}</div>
+                </div>
+                <a href="">
+                    <div class="user-avatar">
+                        <img [src]="post.user.image.url" [alt]="post.user.image.name">
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</article>

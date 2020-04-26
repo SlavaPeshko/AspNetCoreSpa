@@ -7,6 +7,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface ICommentService : IBaseService
     {
-        Task<Result> CreateComment(CreateCommentInputModel model, Guid id);
+        Task<Result> CreateComment(CreateCommentInputModel model, int id);
     }
 }

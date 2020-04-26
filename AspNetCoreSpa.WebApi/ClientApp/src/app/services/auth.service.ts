@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { config } from '../config';
-import { Tokens } from '../models/tokens';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -24,13 +23,21 @@ export class AuthService extends BaseService<any> {
 
     return this.create(body)
       .subscribe(response => {
-        let accessToken = (<any>response).accessToken;
-        let token = accessToken.token;
-        let refreshToken = (<any>response).rerfreshToken;
-        this.storeTokens({ jwt: token, refreshToken: refreshToken });
+        this.storeTokens(response);
 
         this.router.navigate(['/profile']);
       });
+  }
+
+  refreshToke() {
+    const body = { accessToken: this.getJwtToken(), refreshToken: this.getRefreshToken() };
+
+    return this._httpClient.post(`${config.apiUrl}/${config.endpoint.tokens.refreshToken}`, JSON.stringify(body), this.httpOptions)
+    .subscribe(response => {
+      this.storeTokens(response);
+
+      this.router.navigate(['/profile']);
+    });
   }
 
   logout(){
@@ -53,9 +60,12 @@ export class AuthService extends BaseService<any> {
     localStorage.setItem(this.JWT_TOKEN, jwt);
   }
 
-  private storeTokens(tokens: Tokens) {
-    localStorage.setItem(this.JWT_TOKEN, tokens.jwt);
-    localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
+  private storeTokens(response: any) {
+    let accessToken = (<any>response).accessToken;
+    let token = accessToken.token;
+    let refreshToken = (<any>response).refreshToken;
+    localStorage.setItem(this.JWT_TOKEN, token);
+    localStorage.setItem(this.REFRESH_TOKEN, refreshToken);
   }
 
   private removeTokens() {

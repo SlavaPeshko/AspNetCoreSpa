@@ -8,14 +8,14 @@ namespace AspNetCoreSpa.Application.Models
 {
     public class UserViewModel : ClaimsPrincipal
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string Gender { get; set; }
-        public CountryViewModel Country { get; set; }
+        public AddressViewModel Address { get; set; }
         public ImageViewModel Image { get; set; }
         public IEnumerable<string> Roles { get; set; }
     }
@@ -52,13 +52,17 @@ namespace AspNetCoreSpa.Application.Models
                 Gender = user.Gender.ToString("G"),
             };
 
-            if (user.CountryDto != null)
+            if (user.Address != null)
             {
-                userViewModel.Country = new CountryViewModel
+                userViewModel.Address = new AddressViewModel
                 {
-                    Id = user.CountryDto.Id,
-                    Name = user.CountryDto.Name,
-                    RegioneCode = user.CountryDto.RegionCode
+                    Id = user.Address.Id,
+                    Address1 = user.Address.Address1,
+                    Address2 = user.Address.Address2,
+                    City = user.Address.City,
+                    Postcode = user.Address.Postcode,
+                    CountryId = user.Address.CountryId,
+                    CountryName = user.Address.CountryName
                 };
             }
 

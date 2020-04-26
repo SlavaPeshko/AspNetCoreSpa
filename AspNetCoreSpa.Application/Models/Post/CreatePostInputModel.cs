@@ -5,6 +5,7 @@ namespace AspNetCoreSpa.Application.Models.Post
 {
     public class CreatePostInputModel
     {
+        public string Title { get; set; }
         public string Description { get; set; }
         public List<IFormFile> Images { get; set; }
     }
@@ -17,6 +18,7 @@ namespace AspNetCoreSpa.Application.Models.Post
     
             return new Domain.Entities.Post
             {
+                Title = post.Title,
                 Description = post.Description,
             };
         }

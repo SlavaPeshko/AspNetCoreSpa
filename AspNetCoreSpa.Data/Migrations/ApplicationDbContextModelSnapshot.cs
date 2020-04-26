@@ -19,11 +19,54 @@ namespace AspNetCoreSpa.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Address2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CountryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Postcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryId");
+
+                    b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.AddressType", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AddressType");
+                });
+
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Comment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -31,14 +74,14 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -51,9 +94,10 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Country", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(60)");
@@ -68,9 +112,10 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Image", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -78,11 +123,11 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<string>("Path")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -97,21 +142,22 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Like", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("CommentId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsLike")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -126,9 +172,10 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Post", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
@@ -144,8 +191,8 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -156,15 +203,11 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Role", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("RoleEnum")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("RoleName")
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -173,12 +216,13 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.RoleClaim", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
@@ -195,9 +239,10 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Security.SecurityCode", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .HasColumnType("nvarchar(6)");
@@ -218,15 +263,13 @@ namespace AspNetCoreSpa.Data.Migrations
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("CountryId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -266,8 +309,6 @@ namespace AspNetCoreSpa.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CountryId");
-
                     b.HasIndex("Email")
                         .IsUnique()
                         .HasFilter("[Email] IS NOT NULL");
@@ -279,19 +320,46 @@ namespace AspNetCoreSpa.Data.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserAddress", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AddressId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AddressTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "AddressId");
+
+                    b.HasIndex("AddressId");
+
+                    b.HasIndex("AddressTypeId");
+
+                    b.ToTable("XreUserAddress");
+                });
+
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserRole", b =>
                 {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
 
                     b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
                     b.ToTable("XrefUserRole");
+                });
+
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Address", b =>
+                {
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Country", "Country")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.Comment", b =>
@@ -347,23 +415,37 @@ namespace AspNetCoreSpa.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.User", b =>
+            modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserAddress", b =>
                 {
-                    b.HasOne("AspNetCoreSpa.Domain.Entities.Country", "Country")
-                        .WithMany("Users")
-                        .HasForeignKey("CountryId");
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.Address", "Address")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.AddressType", "AddressType")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AddressTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("AspNetCoreSpa.Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("AspNetCoreSpa.Domain.Entities.Role", "Role")
-                        .WithMany("Users")
+                        .WithMany("UsersRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AspNetCoreSpa.Domain.Entities.User", "User")
-                        .WithMany("Roles")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

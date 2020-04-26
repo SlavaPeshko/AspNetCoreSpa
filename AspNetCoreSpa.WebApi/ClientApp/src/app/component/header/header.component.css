@@ -33,6 +33,7 @@
 
 .far {
   color: #777;
+  cursor: pointer;
 }
 
 .dropdown-toggle::after {
@@ -42,4 +43,16 @@
 .dropdown-menu {
   right: 0;
   left: auto;
+}
+
+@media (max-width: 992px) {
+  .navbar-brand {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .icon-input-search {
+    margin-top: -40px;
+  }
 }

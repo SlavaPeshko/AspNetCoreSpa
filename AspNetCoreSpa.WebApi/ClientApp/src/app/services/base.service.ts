@@ -22,7 +22,7 @@ export class BaseService<T extends Base> {
     this._endpoint = endpoint;
   }
 
-  httpOptions = {
+  protected httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
   
@@ -30,7 +30,7 @@ export class BaseService<T extends Base> {
     return this._httpClient.get<T[]>(`${this._url}/${this._endpoint}`);
   }
 
-  getById(id: string): Observable<T> {
+  getById(id: number): Observable<T> {
     return this._httpClient.get<T>(`${this._url}/${this._endpoint}/${id}`);
   }
 

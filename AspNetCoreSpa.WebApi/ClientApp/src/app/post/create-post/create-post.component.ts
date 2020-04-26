@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PostService } from '../../services/post.service';
 import { FileService } from '../../services/file.service';
 import { config } from '../../config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-post',
@@ -13,8 +13,8 @@ export class CreatePostComponent implements OnInit {
   message: string = '';
   files: any[] = [];
 
-  constructor(private postService: PostService,
-    private fileService: FileService,) { }
+  constructor(private fileService: FileService,
+    private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -66,6 +66,7 @@ export class CreatePostComponent implements OnInit {
   }
 
   cancel(){
+    this.navigatePosts();
   }
 
   post() {
@@ -79,7 +80,13 @@ export class CreatePostComponent implements OnInit {
       formData.append('images', item, item.name);
     }
 
-    this.fileService.uploadImages(formData, url).subscribe(data => {})
+    this.fileService.uploadImages(formData, url).subscribe(data => {
+      this.navigatePosts();
+    })
+  }
+
+  private navigatePosts(){
+    this.router.navigate(['/posts']);
   }
 
   canPost() {

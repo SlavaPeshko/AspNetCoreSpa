@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class ImageRepository : BaseRepository<Image, Guid>, IImageRepository
+    public class ImageRepository : BaseRepository<Image, int>, IImageRepository
     {
         public ImageRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
@@ -18,7 +18,7 @@ namespace AspNetCoreSpa.Data.Repositories
             await GetSet().AddAsync(image);
         }
 
-        public async Task<Image> GetProfilePhotoByUserId(Guid id)
+        public async Task<Image> GetProfilePhotoByUserId(int id)
         {
             return await GetSet()
                 .FirstOrDefaultAsync(x => x.UserId == id && x.PostId == null);

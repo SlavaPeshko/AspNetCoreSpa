@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Models.Comment;
+using AspNetCoreSpa.Application.Models.Like;
 using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
@@ -36,7 +37,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> GetPostByIdAsync(Guid id)
+        public async Task<IActionResult> GetPostByIdAsync(int id)
         {
             var vm = await _postService.GetPostByIdAsync(id);
 
@@ -56,7 +57,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(Guid id, UpdatePostInputModel post)
+        public async Task<IActionResult> PutAsync(int id, UpdatePostInputModel post)
         {
             var result = await _postService.UpdatePostAsync(id, post);
 
@@ -67,7 +68,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             var result = await _postService.DeletePostByIdAsync(id);
             
@@ -79,7 +80,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost("{postId}/comment")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> PostAsync([FromBody]CreateCommentInputModel comment, Guid postId)
+        public async Task<IActionResult> PostAsync([FromBody]CreateCommentInputModel comment, int postId)
         {
             var result = await _commentService.CreateComment(comment, postId);
 
@@ -87,6 +88,30 @@ namespace AspNetCoreSpa.WebApi.Controllers
                 return BadRequest(result.Errors);
 
             return Ok();
+        }
+
+        [HttpPost("{postId}/like")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> PostAsync(int postId, [FromBody] LikeInputModel model)
+        {
+            var result = await _postService.CreatLikePostAsync(postId, model.IsLike);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+            
+            return Ok(result.Data);
+        }
+        
+        [HttpDelete("{postId}/like/{likeId}")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> DeleteLikePostAsync(int postId, int likeId)
+        {
+            var result = await _postService.DeleteLikePostAsync(postId, likeId);
+            
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+            
+            return Ok(result.Data);
         }
     }
 }

@@ -1,0 +1,43 @@
+<div class="profile-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="profile-form">
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="inputCurrentEmail">Current Email</label>
+                            <input [ngModel]="currentEmail" type="email" class="form-control" id="inputCurrentEmail"
+                                name="currentEmail" readonly="readonly">
+                        </div>
+                        <div class="form-group col-12" [formGroup]="formGroup">
+                            <label for="inputEmail">New Email</label>
+                            <input formControlName="email" [(ngModel)]="formGroup.email" type="email"
+                                class="form-control" id="inputEmail" aria-describedby="emailHelp"
+                                placeholder="New email"
+                                [ngClass]="{'is-invalid': newEmail.invalid && (newEmail.dirty || newEmail.touched) || isSameEmail() }">
+                            <div *ngIf="newEmail.invalid && (newEmail.dirty || newEmail.touched) || isSameEmail()"
+                                class="invalid-feedback d-block">
+                                <div *ngIf="newEmail.errors?.required">
+                                    New email is required.
+                                </div>
+                                <div *ngIf="newEmail.errors?.email">
+                                    New email is incorrect.
+                                </div>
+                                <div *ngIf="isSameEmail()">
+                                    New email the same as current email
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mt-3">
+                        <div class="form-group col-md-12">
+                            <button type="button" class="btn btn-outline-primary btn-block"
+                                (click)="change()">Change</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

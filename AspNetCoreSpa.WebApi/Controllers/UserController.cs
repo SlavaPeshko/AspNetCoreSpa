@@ -16,14 +16,12 @@ namespace AspNetCoreSpa.WebApi.Controllers
     {
         private readonly IUserService _userService;
         private readonly IFileService _fileService;
-        private readonly IWebHostEnvironment  _environment;
 
         public UserController(IUserService userService,
-            IFileService fileService, IWebHostEnvironment environment)
+            IFileService fileService)
         {
             _userService = userService;
             _fileService = fileService;
-            _environment = environment;
         }
 
         [HttpPost("login")]
@@ -63,7 +61,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetUser(Guid userId)
+        public async Task<IActionResult> GetUser(int userId)
         {
             var result = await _userService.GetUserAsync(userId);
 
@@ -79,7 +77,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SendEmailConfirmEmailAsync(Guid userId)
+        public async Task<IActionResult> SendEmailConfirmEmailAsync(int userId)
         {
             var result = await _userService.SendEmailConfirmEmailAsync(userId);
 
@@ -97,7 +95,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ConfirmEmailAsync([FromBody]TokenInputModel model)
         {
-            var result = await _userService.ConfirmEmailAsync(model.Token);
+            var result = await _userService.ConfirmEmailAsync(model.AccessToken);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
@@ -105,9 +103,9 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPost("{id:guid}/upload-photo")]
+        [HttpPost("{id:int}/upload-photo")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> UploadUserPhotoAsync([FromRoute]Guid id, IFormFile file)
+        public async Task<IActionResult> UploadUserPhotoAsync([FromRoute]int id, IFormFile file)
         {
             var result = await _fileService.UploadPhotoAsync(id, file);
 
@@ -117,9 +115,9 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id:guid}")]
+        [HttpPut("{id:int}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> UpdateUserAsync(Guid id, UpdateUserInputModel model)
+        public async Task<IActionResult> UpdateUserAsync(int id, UpdateUserInputModel model)
         {
             var result = await _userService.UpdateUserAsync(id, model);
 
@@ -129,11 +127,23 @@ namespace AspNetCoreSpa.WebApi.Controllers
             return Ok();
         }
         
-        [HttpPut("{id:guid}/password")]
+        [HttpPut("{id:int}/password")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> UpdatePasswordAsync(Guid id, UpdatePasswordInputModel model)
+        public async Task<IActionResult> UpdatePasswordAsync(int id, UpdatePasswordInputModel model)
         {
             var result = await _userService.UpdatePasswordAsync(id, model);
+
+            if (result.IsFailure)
+                return BadRequest(result.Errors);
+
+            return Ok();
+        }
+
+        [HttpPut("{id:int}/email")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> ChangeEmailAsync(int id, ChangeEmailInputModel model)
+        {
+            var result = await _userService.ChangeEmailAsync(id, model);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);

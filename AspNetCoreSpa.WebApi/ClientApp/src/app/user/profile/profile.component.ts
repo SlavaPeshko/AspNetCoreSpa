@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
   public countries: Country[];
   public selectedCountry: Country = null;
   public user: User;
-  public userId: string;
+  public userId: number;
   public genderNames = Object.values(Gender).filter(e => typeof(e) == "string");
   public model: NgbDateStruct;
 
@@ -55,7 +55,8 @@ export class ProfileComponent implements OnInit {
 
   public update() {
     if(this.selectedCountry){
-      this.user.countryId = this.selectedCountry.id;
+      this.user.address.countryId = this.selectedCountry.id;
+      this.user.address.countryname = this.selectedCountry.name;
     }
 
     this.user.dateOfBirth = new Date(`${this.model.month}/${this.model.day}/${this.model.year}Z`).toISOString();

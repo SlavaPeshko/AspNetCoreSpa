@@ -34,7 +34,7 @@ namespace AspNetCoreSpa.Application.Services
             _postRepository = postRepository;
         }
 
-        public async Task<Result> CreateComment(CreateCommentInputModel model, Guid id)
+        public async Task<Result> CreateComment(CreateCommentInputModel model, int id)
         {
             var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if (user == null)

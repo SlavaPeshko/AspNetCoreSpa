@@ -8,23 +8,22 @@ using AspNetCoreSpa.Domain.Entities;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class UserRepository : BaseRepository<User, Guid>, IUserRepository
+    public class UserRepository : BaseRepository<User, int>, IUserRepository
     {
         public UserRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             return await GetSet()
-                .Include(x => x.Country)
+                .Include(x => x.UserRoles)
                 .SingleOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<IEnumerable<User>> GetUsersAsync()
         {
             return await GetSet()
-                .Include(c => c.Country)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -43,9 +42,7 @@ namespace AspNetCoreSpa.Data.Repositories
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await GetSet()
-                .Include(u => u.Roles)
-                    .ThenInclude(u => u.Role)
-                .Include(u => u.Country)
+                .Include(u => u.UserRoles)
                 .SingleOrDefaultAsync(u => u.Email == email);
         }
 

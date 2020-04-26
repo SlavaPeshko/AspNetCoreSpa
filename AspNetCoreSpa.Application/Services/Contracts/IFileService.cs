@@ -8,7 +8,7 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface IFileService : IBaseService
     {
-        Task<Result<string>> UploadPhotoAsync(Guid id, IFormFile file);
-        Task<Result<List<string>>> UploadImagesAsync(Guid id, Guid postId, List<IFormFile> files);
+        Task<Result<string>> UploadPhotoAsync(int id, IFormFile file);
+        Task<Result<List<string>>> UploadImagesAsync(int id, int postId, List<IFormFile> files);
     }
 }

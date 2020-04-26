@@ -19,21 +19,21 @@ namespace AspNetCoreSpa.Application.Services
         {
             return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
         }
-        public bool IsInRole(RoleEnum role)
+        public bool IsInRole(UserRoleEnum userRoleEnum)
         {
-            return _httpContextAccessor.HttpContext.User.IsInRole(role.ToString("G"));
+            return _httpContextAccessor.HttpContext.User.IsInRole(userRoleEnum.ToString("G"));
         }
 
-        public Guid UserId
+        public int UserId
         {
             get
             {
-                if (Guid.TryParse(_httpContextAccessor.HttpContext.User.FindFirstValue("Id"), out var value))
+                if (int.TryParse(_httpContextAccessor.HttpContext.User.FindFirstValue("Id"), out var value))
                 {
                     return value;
                 }
 
-                return Guid.Empty;
+                return -1;
             }
         }
     }

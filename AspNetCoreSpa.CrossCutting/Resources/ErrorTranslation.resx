@@ -183,6 +183,9 @@
   <data name="PostNotFound" xml:space="preserve">
     <value>Post not found</value>
   </data>
+  <data name="LikeNotFound" xml:space="preserve">
+    <value>Like not found</value>
+  </data>
   <data name="TokenInvalid" xml:space="preserve">
     <value>Token is invalid</value>
   </data>
@@ -198,7 +201,13 @@
   <data name="UserNotFound" xml:space="preserve">
     <value>User not found</value>
   </data>
+  <data name="AddressNotFound" xml:space="preserve">
+    <value>Address not found</value>
+  </data>
   <data name="AccessFailedCount" xml:space="preserve">
     <value>Exceeded the number of login attempts</value>
+  </data>
+  <data name="LengthTitlePostInvalid" xml:space="preserve">
+    <value>Title should be less 200 symbol</value>
   </data>
 </root>

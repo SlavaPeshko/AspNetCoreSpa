@@ -10,13 +10,15 @@ namespace AspNetCoreSpa.Application.Services.Contracts
     {
         Task<IEnumerable<UserViewModel>> GetUsersAsync();
         Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel userModel);
-        Task<Result> UpdateUserAsync(Guid id, UpdateUserInputModel model);
-        Task<Result> UpdatePasswordAsync(Guid id, UpdatePasswordInputModel model);
+        Task<Result> UpdateUserAsync(int id, UpdateUserInputModel model);
+        Task<Result> UpdatePasswordAsync(int id, UpdatePasswordInputModel model);
 
         // TODO SQRS
-        Task<Result<LogInViewModel>> LogInAsync(LogInInputModel model);
-        Task<Result<bool>> SendEmailConfirmEmailAsync(Guid userId);
+        Task<Result<TokenViewModel>> LogInAsync(LogInInputModel model);
+        Task<Result<bool>> SendEmailConfirmEmailAsync(int userId);
         Task<Result> ConfirmEmailAsync(string token);
-        Task<Result<UserViewModel>> GetUserAsync(Guid id);
+        Task<Result<UserViewModel>> GetUserAsync(int id);
+
+        Task<Result> ChangeEmailAsync(int id, ChangeEmailInputModel model);
     }
 }

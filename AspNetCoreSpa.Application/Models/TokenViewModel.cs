@@ -1,9 +1,9 @@
 ﻿namespace AspNetCoreSpa.Application.Models
 {
-    public class LogInViewModel
+    public class TokenViewModel
     {
         public AccessToken AccessToken { get; set; }
-        public string RerfreshToken { get; set; }
+        public string RefreshToken { get; set; }
     }
 
     public class AccessToken

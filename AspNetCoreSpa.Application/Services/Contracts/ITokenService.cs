@@ -6,6 +6,6 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface ITokenService : IBaseService
     {
-        Task<Result<UserViewModel>> RefreshToken(string authenticationToken, string refreshToken);
+        Task<Result<TokenViewModel>> RefreshToken(TokenInputModel model);
     }
 }

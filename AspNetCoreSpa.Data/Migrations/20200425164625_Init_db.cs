@@ -3,15 +3,28 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspNetCoreSpa.Data.Migrations
 {
-    public partial class Init_Db : Migration
+    public partial class Init_db : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AddressType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AddressType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(60)", nullable: true),
                     RegionCode = table.Column<string>(type: "nvarchar(3)", nullable: true)
                 },
@@ -24,9 +37,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    RoleEnum = table.Column<int>(nullable: false),
-                    RoleName = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    Id = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,7 +49,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "SecurityCodes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProviderType = table.Column<int>(nullable: false),
                     Provider = table.Column<string>(nullable: true),
                     Code = table.Column<string>(type: "nvarchar(6)", nullable: true),
@@ -52,7 +65,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
@@ -61,16 +75,34 @@ namespace AspNetCoreSpa.Data.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     AccessFailedCount = table.Column<int>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
                     RefreshToken = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
-                    Gender = table.Column<int>(nullable: false),
-                    CountryId = table.Column<Guid>(nullable: true)
+                    Gender = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Addresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address1 = table.Column<string>(nullable: true),
+                    Address2 = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    Postcode = table.Column<string>(nullable: true),
+                    CountryId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Countries_CountryId",
+                        name: "FK_Addresses_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
@@ -81,10 +113,11 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "RoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(nullable: true),
                     Value = table.Column<string>(nullable: true),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,11 +134,13 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(maxLength: 100, nullable: true),
+                    Description = table.Column<string>(maxLength: 500, nullable: true),
                     CreateAt = table.Column<DateTime>(nullable: false),
-                    UpdateAt = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true)
+                    UpdateAt = table.Column<DateTime>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -122,8 +157,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "XrefUserRole",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    RoleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,15 +178,47 @@ namespace AspNetCoreSpa.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "XreUserAddress",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(nullable: false),
+                    AddressId = table.Column<int>(nullable: false),
+                    AddressTypeId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_XreUserAddress", x => new { x.UserId, x.AddressId });
+                    table.ForeignKey(
+                        name: "FK_XreUserAddress_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_XreUserAddress_AddressType_AddressTypeId",
+                        column: x => x.AddressTypeId,
+                        principalTable: "AddressType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_XreUserAddress_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(nullable: true),
                     CreateAt = table.Column<DateTime>(nullable: false),
                     UpdateAt = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true),
-                    PostId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    PostId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -174,11 +241,12 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "Images",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Path = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false),
-                    PostId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    PostId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,18 +262,19 @@ namespace AspNetCoreSpa.Data.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Likes",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     IsLike = table.Column<bool>(nullable: false),
-                    CommentId = table.Column<Guid>(nullable: true),
-                    PostId = table.Column<Guid>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: true)
+                    CommentId = table.Column<int>(nullable: true),
+                    PostId = table.Column<int>(nullable: true),
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -231,6 +300,11 @@ namespace AspNetCoreSpa.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Addresses_CountryId",
+                table: "Addresses",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_PostId",
                 table: "Comments",
                 column: "PostId");
@@ -249,7 +323,8 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "IX_Images_UserId",
                 table: "Images",
                 column: "UserId",
-                unique: true);
+                unique: true,
+                filter: "[UserId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Likes_CommentId",
@@ -277,11 +352,6 @@ namespace AspNetCoreSpa.Data.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CountryId",
-                table: "Users",
-                column: "CountryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
                 table: "Users",
                 column: "Email",
@@ -299,6 +369,16 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "IX_XrefUserRole_RoleId",
                 table: "XrefUserRole",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_XreUserAddress_AddressId",
+                table: "XreUserAddress",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_XreUserAddress_AddressTypeId",
+                table: "XreUserAddress",
+                column: "AddressTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -319,19 +399,28 @@ namespace AspNetCoreSpa.Data.Migrations
                 name: "XrefUserRole");
 
             migrationBuilder.DropTable(
+                name: "XreUserAddress");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
+                name: "Addresses");
+
+            migrationBuilder.DropTable(
+                name: "AddressType");
+
+            migrationBuilder.DropTable(
                 name: "Posts");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Countries");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "Users");
         }
     }
 }

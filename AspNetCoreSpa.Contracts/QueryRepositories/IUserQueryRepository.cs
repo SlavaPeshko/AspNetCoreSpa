@@ -6,7 +6,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories
 {
     public interface IUserQueryRepository
     {
-        Task<UserDto> GetUserByIdAsync(Guid id);
+        Task<UserDto> GetUserByIdAsync(int id);
         Task<bool> IsExistEmailAsync(string email);
     }
 }

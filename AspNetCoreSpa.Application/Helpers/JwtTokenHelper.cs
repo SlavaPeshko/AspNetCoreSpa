@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Enum;
+using UserRole = AspNetCoreSpa.Domain.Entities.UserRole;
 
 namespace AspNetCoreSpa.Application.Helpers
 {
@@ -141,7 +142,7 @@ namespace AspNetCoreSpa.Application.Helpers
                 claims.Add(new Claim(ClaimTypes.Name, user.PhoneNumber));
             }
 
-            claims.AddRange(user.Roles.Select(r => new Claim(ClaimTypes.Role, r.Role.RoleEnum.ToString())));
+            claims.AddRange(user.UserRoles.Select(r => new Claim(ClaimTypes.Role, ((UserRoleEnum)r.RoleId).ToString())));
 
             return claims;
         }

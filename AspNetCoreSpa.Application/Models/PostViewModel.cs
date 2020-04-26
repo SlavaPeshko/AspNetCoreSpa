@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using AspNetCoreSpa.Application.Models.Comment;
+using AspNetCoreSpa.Application.Models.Like;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 
 namespace AspNetCoreSpa.Application.Models
 {
     public class PostViewModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime CreateAt { get; set; }
@@ -16,7 +17,9 @@ namespace AspNetCoreSpa.Application.Models
         public UserViewModel User { get; set; }
         public List<ImageViewModel> Images { get; set; }
         public List<CommentViewModel> Comments { get; set; }
+        public List<LikeViewModel> Likes { get; set; }
         
+        public int CountLike { get; set; }
     }
 
     public static class PostViewModelExtensionMethods
@@ -47,7 +50,8 @@ namespace AspNetCoreSpa.Application.Models
                 UpdateAt = post.PostUpdateAt,
                 User = post.User.ToViewModel(),
                 Images = post.Images.Select(x=>x.ToViewModel()).ToList(),
-                Comments = post.Comments.Select(x => x.ToViewModel()).ToList()
+                Comments = post.Comments.Select(x => x.ToViewModel()).ToList(),
+                Likes = post.Likes.Select(x=>x.ToViewModel()).ToList()
             };
         }
     }

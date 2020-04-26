@@ -13,6 +13,7 @@ using AspNetCoreSpa.Application.Models.Post;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
+using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,8 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IUserRepository _userRepository;
         private readonly IFileService _fileService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILikeRepository _likeRepository;
+        private readonly ILikeQueryRepository _likeQueryRepository;
 
         public PostService(IPostRepository postRepository,
             IPostQueryRepository postQueryRepository,
@@ -38,7 +41,9 @@ namespace AspNetCoreSpa.Application.Services
             IUserContext userContext,
             IUserRepository userRepository, 
             IFileService fileService, 
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor, 
+            ILikeRepository likeRepository, 
+            ILikeQueryRepository likeQueryRepository)
         {
             _postRepository = postRepository;
             _postQueryRepository = postQueryRepository;
@@ -48,6 +53,8 @@ namespace AspNetCoreSpa.Application.Services
             _userRepository = userRepository;
             _fileService = fileService;
             _httpContextAccessor = httpContextAccessor;
+            _likeRepository = likeRepository;
+            _likeQueryRepository = likeQueryRepository;
         }
 
         public async Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post)
@@ -70,9 +77,9 @@ namespace AspNetCoreSpa.Application.Services
             return Result.OK(entity.ToViewModel());
         }
 
-        public async Task<Result> DeletePostByIdAsync(Guid id)
+        public async Task<Result> DeletePostByIdAsync(int id)
         {
-            var post = _userContext.IsInRole(RoleEnum.Admin)
+            var post = _userContext.IsInRole(UserRoleEnum.Admin)
                 ? await _postRepository.GetPostByIdAsync(id)
                 : await _postRepository.GetPostByIdAndUserIdAsync(id, _userContext.UserId);
             
@@ -85,10 +92,9 @@ namespace AspNetCoreSpa.Application.Services
             return Result.Ok();
         }
 
-        public async Task<Result<PostViewModel>> GetPostByIdAsync(Guid id)
+        public async Task<Result<PostViewModel>> GetPostByIdAsync(int id)
         {
             var post = await _postQueryRepository.GetPostByIdAsync(id);
-
             if(post == null)
                 return Result.Fail<PostViewModel>(EC.PostNotFound, ET.PostNotFound);
 
@@ -113,27 +119,85 @@ namespace AspNetCoreSpa.Application.Services
             url.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
             url.Append("/");
 
-            foreach (var image in viewModels.SelectMany(model => model.Images))
+            foreach (var post in viewModels)
             {
-                image.Url = $"{url}{image.Path.Replace(@"\", "/")}";
+                post.CountLike = post.Likes.Count(x => x.IsLike) - post.Likes.Count(x => !x.IsLike); 
+                post.User.Image.Url = $"{url}{post.User.Image.Path.Replace(@"\", "/")}";
+                
+                SetImagesUrl(post.Images, url);
             }
             
             return viewModels;
         }
 
-        public async Task<Result> UpdatePostAsync(Guid id, UpdatePostInputModel post)
+        public async Task<Result> UpdatePostAsync(int id, UpdatePostInputModel model)
         {
             var entity = await _postRepository.GetPostByIdAndUserIdAsync(id, _userContext.UserId);
             if(entity == null)
                 return Result.Fail(EC.PostNotFound, ET.PostNotFound);
 
-            entity.Description = post.Description;
+            entity.Description = model.Description;
             entity.UpdateAt = DateTime.UtcNow;
 
             _postRepository.Put(entity);
             await _unitOfWorks.CommitAsync();
 
             return Result.Ok();
+        }
+
+        public async Task<Result<int>> CreatLikePostAsync(int postId, bool isLike)
+        {
+            var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
+            if(user == null)
+                return Result.Fail<int>(EC.UserNotFound, ET.UserNotFound);
+
+            var post = await _postRepository.GetPostByIdAsync(postId);
+            if (post == null)
+                return Result.Fail<int>(EC.PostNotFound, ET.PostNotFound);
+
+            var like = new Like
+            {
+                Post = post,
+                User = user,
+                IsLike = isLike
+            };
+
+            await _likeRepository.PostAsync(like);
+            await _unitOfWorks.CommitAsync();
+
+            var count = await _likeQueryRepository.GetCountLikePostAsync(postId);
+            
+            return Result.OK(count);
+        }
+
+        public async Task<Result<int>> DeleteLikePostAsync(int postId, int likeId)
+        {
+            var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
+            if(user == null)
+                return Result.Fail<int>(EC.UserNotFound, ET.UserNotFound);
+
+            var post = await _postRepository.GetPostByIdAsync(postId);
+            if (post == null)
+                return Result.Fail<int>(EC.PostNotFound, ET.PostNotFound);
+
+            var like = await _likeRepository.GetLikeByIdAsync(likeId);
+            if(like == null)
+                return Result.Fail<int>(EC.LikeNotFound, ET.LikeNotFound);
+            
+            _likeRepository.Delete(like);
+            await _unitOfWorks.CommitAsync();
+
+            var count = await _likeQueryRepository.GetCountLikePostAsync(postId);
+            
+            return Result.OK<int>(count);
+        }
+
+        private static void SetImagesUrl(IEnumerable<ImageViewModel> images, StringBuilder url)
+        {
+            foreach (var image in images)
+            {
+                image.Url = $"{url}{image.Path.Replace(@"\", "/")}";
+            }
         }
     }
 }

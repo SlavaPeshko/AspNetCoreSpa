@@ -8,6 +8,6 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories
     public interface IPostQueryRepository
     {
         Task<IEnumerable<PostDto>> GetPagePostsAsync(PostPageFiltersDto filtersDto);
-        Task<PostDto> GetPostByIdAsync(Guid id);
+        Task<PostDto> GetPostByIdAsync(int id);
     }
 }

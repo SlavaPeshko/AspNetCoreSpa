@@ -5,7 +5,7 @@ namespace AspNetCoreSpa.Application.Models
 {
     public class CountryViewModel
     {
-        public Guid? Id { get; set; }
+        public int? Id { get; set; }
         public string Name { get; set; }
         public string RegioneCode { get; set; }
     }

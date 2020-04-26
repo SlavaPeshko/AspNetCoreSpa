@@ -6,7 +6,7 @@ namespace AspNetCoreSpa.Application.Services.Contracts
     public interface IUserContext
     {
         // bool IsAuthorized();
-        bool IsInRole(RoleEnum role);
-        Guid UserId { get; }
+        bool IsInRole(UserRoleEnum userRoleEnum);
+        int UserId { get; }
     }
 }

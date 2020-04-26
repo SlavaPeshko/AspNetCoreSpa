@@ -4,12 +4,12 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
 {
     public class ImageDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
         
-        public Guid? UserId { get; set; }
+        public int? UserId { get; set; }
         
-        public Guid? PostId { get; set; }
+        public int? PostId { get; set; }
     }
 }

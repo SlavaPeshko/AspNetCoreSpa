@@ -23,17 +23,18 @@ namespace AspNetCoreSpa.Data.QueryRepository
             {
                 string query = @"SELECT ps.[Id] PostId, ps.[Title], ps.[Description] PostDescription, ps.[CreateAt] PostCreateAt, ps.[UpdateAt] PostUpdateAt,
                                     cm.[Id] CommentId, cm.[Description] CommentDescription, cm.[CreateAt] CommentCreateAt, cm.[UpdateAt] CommentUpdateAt,
-                                    u.[Email], i.[Path], i.[Name], i.[UserId], i.[PostId]
+                                    u.[Email], i.[Path], i.[Id], i.[Name], i.[UserId], i.[PostId], l.[Id], l.[IsLike], l.[UserId], l.[PostId]
                                     FROM (SELECT * FROM [AspNetCoreSpa].[dbo].[Posts] ORDER BY [CreateAt] DESC OFFSET @Limit * (@Offset - 1)  ROWS FETCH NEXT @Limit ROWS ONLY) ps
                                     LEFT JOIN [AspNetCoreSpa].[dbo].[Comments] AS cm ON cm.[PostId] = ps.[Id]
 									LEFT JOIN [AspNetCoreSpa].[dbo].[Images] AS i ON i.[PostId] = ps.[Id] OR i.[UserId] = ps.[UserId]
+									LEFT JOIN [AspNetCoreSpa].[dbo].[Likes] AS l ON l.[PostId] = ps.[Id]
 									JOIN [AspNetCoreSpa].[dbo].[Users] AS u ON u.[Id] = ps.[UserId]";
 
-                var postDtoDictionary = new Dictionary<Guid, PostDto>();
+                var postDtoDictionary = new Dictionary<int, PostDto>();
 
-                var list = await connection.QueryAsync<PostDto, CommentDto, UserDto, ImageDto, PostDto>(
+                var list = await connection.QueryAsync<PostDto, CommentDto, UserDto, ImageDto, LikeDto, PostDto>(
                     query,
-                    (postDto, commentDto, userDto, imageDto) =>
+                    (postDto, commentDto, userDto, imageDto, likeDto) =>
                     {
                         PostDto postDtoEntry;
                         if (!postDtoDictionary.TryGetValue(postDto.PostId, out postDtoEntry))
@@ -41,15 +42,19 @@ namespace AspNetCoreSpa.Data.QueryRepository
                             postDtoEntry = postDto;
                             postDtoEntry.Comments = new List<CommentDto>();
                             postDtoEntry.Images = new List<ImageDto>();
+                            postDtoEntry.Likes = new List<LikeDto>();
                             postDtoEntry.User = new UserDto();
                             postDtoDictionary.Add(postDtoEntry.PostId, postDtoEntry);
                         }
 
                         if(commentDto != null)
                             postDtoEntry.Comments.Add(commentDto);
+
+                        if (likeDto != null && postDtoEntry.Likes.All(x => x.Id != likeDto.Id))
+                            postDtoEntry.Likes.Add(likeDto);
                         
                         // Images of posts
-                        if(imageDto?.PostId != null)
+                        if (imageDto?.PostId != null && postDtoEntry.Images.All(x => x.Id != imageDto.Id))
                             postDtoEntry.Images.Add(imageDto);
 
                         if (userDto == null) return postDtoEntry;
@@ -62,13 +67,13 @@ namespace AspNetCoreSpa.Data.QueryRepository
                         return postDtoEntry;
                     },
                     new { Limit = filtersDto.ItemsPerPage, Offset = filtersDto.PageNumber },
-                    splitOn: "PostUpdateAt, CommentId, Email, Path");
+                    splitOn: "PostUpdateAt, CommentId, Email, Path, Id");
 
                 return list.Distinct();
             }
         }
 
-        public async Task<PostDto> GetPostByIdAsync(Guid id)
+        public async Task<PostDto> GetPostByIdAsync(int id)
         {
             using (IDbConnection connection = Connection)
             {

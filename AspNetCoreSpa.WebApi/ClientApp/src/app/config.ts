@@ -4,14 +4,20 @@ export const config = {
         posts: {
             route: 'posts',
             get: (page: number, items: number) => `posts/${page}/${items}`,
+            createLike: (postId: number) => `posts/${postId}/like`,
+            deleteLike: (postId: number, likeId: number) => `posts/${postId}/like/${likeId}`
         },
         user: {
             route: 'user',
             login: 'user/login',
-            uploadProfileImage: (id: string) => `user/${id}/upload-photo`,
+            uploadProfileImage: (id: number) => `user/${id}/upload-photo`,
+            changeEmail: (id: number) => `user/${id}/email`,
         },
         countries: {
             route: 'countries',
         },
+        tokens: {
+            refreshToken: 'token'
+        }
     }
 };

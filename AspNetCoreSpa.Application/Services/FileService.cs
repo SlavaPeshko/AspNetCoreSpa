@@ -39,7 +39,7 @@ namespace AspNetCoreSpa.Application.Services
             _unitOfWorks = unitOfWorks;
         }
 
-        public async Task<Result<List<string>>> UploadImagesAsync(Guid id, Guid postId, List<IFormFile> files)
+        public async Task<Result<List<string>>> UploadImagesAsync(int id, int postId, List<IFormFile> files)
         {
             if(files == null)
                 return Result.Fail<List<string>>(EC.ImageInvalid, ET.ImageInvalid);
@@ -114,7 +114,7 @@ namespace AspNetCoreSpa.Application.Services
             
             return Result.OK(paths);
         }
-        public async Task<Result<string>> UploadPhotoAsync(Guid id, IFormFile file)
+        public async Task<Result<string>> UploadPhotoAsync(int id, IFormFile file)
         {
             if (file == null)
                 return Result.Fail<string>(EC.ImageInvalid, ET.ImageInvalid);

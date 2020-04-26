@@ -3,7 +3,7 @@ using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Domain.Entities.Security
 {
-    public class SecurityCode : BaseEntity<Guid>
+    public class SecurityCode : BaseEntity<int>
     {
         public ProviderType ProviderType { get; set; }
         public string Provider { get; set; }

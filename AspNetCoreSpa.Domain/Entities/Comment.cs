@@ -4,7 +4,7 @@ using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Domain.Entities
 {
-    public class Comment : BaseEntity<Guid>
+    public class Comment : BaseEntity<int>
     {
         public string Description { get; set; }
         public DateTime CreateAt { get; set; }

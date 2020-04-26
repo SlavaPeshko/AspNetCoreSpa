@@ -38,7 +38,6 @@ namespace AspNetCoreSpa.Data.Context
             {
                 countries.Add(new Country
                 {
-                    Id = Guid.NewGuid(),
                     Name = country.Value<string>("name"),
                     RegionCode = country.Value<string>("alpha3code"),
                 });

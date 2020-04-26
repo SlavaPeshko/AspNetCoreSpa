@@ -11,8 +11,10 @@
         ImageInvalid = 105,
         LengthImageInvalid = 106,
         AccessFailedCount = 107,
+        AddressNotFound = 108,
 
         //Post error
         PostNotFound = 200,
+        LikeNotFound = 201,
     }
 }
