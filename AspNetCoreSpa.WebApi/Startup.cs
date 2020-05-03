@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,24 +11,13 @@ using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.IoC;
 using AspNetCoreSpa.WebApi.Filters;
 using AspNetCoreSpa.Application.Validators;
-using Newtonsoft.Json.Serialization;
-using AspNetCoreSpa.WebApi.Misc;
-using System.Net;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Threading.Tasks;
-using Swashbuckle.AspNetCore.Swagger;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO;
-using AutoMapper;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using AspNetCoreSpa.WebApi.Controllers;
 using AspNetCoreSpa.Infrastructure.Options;
-using FluentValidation;
-using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json.Serialization;
 
 namespace AspNetCoreSpa.WebApi
 {

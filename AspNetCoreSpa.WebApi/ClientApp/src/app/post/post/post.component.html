@@ -20,9 +20,9 @@
                     </i>
                 </div>
                 <div class="post-likes">
-                    <i class="far fa-thumbs-up" (click)="like(post.id, true)" [ngClass]="{'like-active': belongLikeUser(true) || isActiveLike }" ></i>
+                    <i class="far fa-thumbs-up" (click)="like(true)" [ngClass]="{'like-active': hasLike() }"></i>
                     <span class="mr-1 ml-1">{{ post.countLike }}</span>
-                    <i class="far fa-thumbs-up fa-rotate-180" (click)="like(post.id, false)" [ngClass]="{'dislike-active': belongLikeUser(false) || isActiveDislike }" ></i>
+                    <i class="far fa-thumbs-up fa-rotate-180" (click)="like(false)" [ngClass]="{'dislike-active': hasDislike() }" ></i>
                 </div>
             </div>
             <div class="post-user">

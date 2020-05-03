@@ -88,10 +88,7 @@ namespace AspNetCoreSpa.Application.Services
             var userRole = new UserRole
             {
                 User = user,
-                Role = new Role
-                {
-                    Id = UserRoleEnum.User
-                },
+                RoleId = UserRoleEnum.User,
             };
 
             user.UserRoles.Add(userRole);
@@ -111,15 +108,20 @@ namespace AspNetCoreSpa.Application.Services
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.DateOfBirth = model.DateOfBirth;
-
-            bool success = Enum.TryParse(model.Gender, out Gender gender);
-            if (success)
-                user.Gender = gender;
+            user.Gender = (Gender)model.Gender;
 
             if (user.PhoneNumber != null && user.PhoneNumber != model.Phone)
             {
                 user.PhoneNumber = model.Phone;
                 user.PhoneNumberConfirmed = false;
+            }
+
+            if (model.Address == null)
+            {
+                _userRepository.Put(user);
+                await _unitOfWorks.CommitAsync();
+            
+                return  Result.Ok();
             }
             
             if (model.Address.Id > 0)
@@ -285,6 +287,8 @@ namespace AspNetCoreSpa.Application.Services
                 return Result.Fail<UserViewModel>(EC.UserNotFound, ET.UserNotFound);
 
             var viewModel = user.ToViewModel();
+
+            // viewModel.Address ??= new AddressViewModel();
 
             if (viewModel.Image == null) 
                 return Result.OK(viewModel);

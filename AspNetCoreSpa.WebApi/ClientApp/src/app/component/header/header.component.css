@@ -56,3 +56,30 @@
     margin-top: -40px;
   }
 }
+
+.dropdown-item {
+  font-size: 15px;
+  line-height: 25px;
+  padding: 5px 24px !important;
+}
+
+.dropdown-item:active {
+  color: #212529;
+  text-decoration: none;
+  background-color: #00000000;
+}
+
+.dropdown-item:hover {
+  color: #007bfc;
+  transition: background-color .3s;
+  background-color: #eef4ff;
+}
+
+.dropdown-menu {
+  min-width: 230px;
+}
+
+hr {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}

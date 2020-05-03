@@ -8,6 +8,7 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { CreatePostComponent } from './post/create-post/create-post.component';
 import { PostsComponent } from './post/posts/posts.component';
 import { ChangeEmailComponent } from './user/change-email/change-email.component';
+import { SettingsComponent } from './user/settings/settings.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'create-post', component: CreatePostComponent, canActivate: [AuthGuard] },
   { path: 'posts', component: PostsComponent },
   { path: 'emailchange', component: ChangeEmailComponent },
+  { path: 'settings', component: SettingsComponent },
 ];
 
 @NgModule({

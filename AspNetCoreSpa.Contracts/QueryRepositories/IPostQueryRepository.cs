@@ -9,5 +9,6 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories
     {
         Task<IEnumerable<PostDto>> GetPagePostsAsync(PostPageFiltersDto filtersDto);
         Task<PostDto> GetPostByIdAsync(int id);
+        Task<bool> IsExistPostAsync(int id);
     }
 }

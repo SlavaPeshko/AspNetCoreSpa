@@ -8,5 +8,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories
     {
         Task<UserDto> GetUserByIdAsync(int id);
         Task<bool> IsExistEmailAsync(string email);
+        Task<UserDto> GetUserWithRolesByIdAsync(int id);
+        Task<bool> IsExistUserAsync(int id);
     }
 }

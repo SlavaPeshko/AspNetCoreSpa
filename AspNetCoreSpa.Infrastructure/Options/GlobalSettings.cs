@@ -31,6 +31,7 @@ namespace AspNetCoreSpa.Infrastructure.Options
     {
         public string PhotoProfilePath { get; set; }
         public string DefaultPhotoProfilePath { get; set; }
+        public string DefaultPhotoName { get; set; }
         public string ImagesPostPath { get; set; }
     }
 

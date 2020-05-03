@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using AspNetCoreSpa.Application.Models.Like;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using AspNetCoreSpa.Data.UoW;
@@ -16,8 +18,8 @@ using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
+using AspNetCoreSpa.Infrastructure.Options;
 using Microsoft.AspNetCore.Http;
-using PostPageFilters = AspNetCoreSpa.Application.Models.Post.PostPageFilters;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -33,6 +35,8 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILikeRepository _likeRepository;
         private readonly ILikeQueryRepository _likeQueryRepository;
+        private readonly GlobalSettings _globalSettings;
+        private readonly IUserQueryRepository _userQueryRepository;
 
         public PostService(IPostRepository postRepository,
             IPostQueryRepository postQueryRepository,
@@ -43,7 +47,9 @@ namespace AspNetCoreSpa.Application.Services
             IFileService fileService, 
             IHttpContextAccessor httpContextAccessor, 
             ILikeRepository likeRepository, 
-            ILikeQueryRepository likeQueryRepository)
+            ILikeQueryRepository likeQueryRepository, 
+            GlobalSettings globalSettings, 
+            IUserQueryRepository userQueryRepository)
         {
             _postRepository = postRepository;
             _postQueryRepository = postQueryRepository;
@@ -55,26 +61,42 @@ namespace AspNetCoreSpa.Application.Services
             _httpContextAccessor = httpContextAccessor;
             _likeRepository = likeRepository;
             _likeQueryRepository = likeQueryRepository;
+            _globalSettings = globalSettings;
+            _userQueryRepository = userQueryRepository;
         }
 
-        public async Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel post)
+        public async Task<Result<PostViewModel>> CreatePostAsync(CreatePostInputModel model)
         {
+            if(_userContext.UserId == -1)
+                return Result.Fail<PostViewModel>(EC.UserNotFound, ET.UserNotFound);
+            
             var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if(user == null)
                 return Result.Fail<PostViewModel>(EC.UserNotFound, ET.UserNotFound);
             
-            var entity = post.ToEntity();
+            var post = model.ToEntity();
 
-            entity.CreateAt = DateTime.UtcNow;
-            entity.User = user;
-
-            await _postRepository.PostAsync(entity);
+            post.CreateAt = DateTime.UtcNow;
+            post.User = user;
             
-            await _fileService.UploadImagesAsync(user.Id, entity.Id, post.Images);
+            var transactionOptions = new TransactionOptions
+            {
+                IsolationLevel = IsolationLevel.ReadCommitted,
+                Timeout = TransactionManager.MaximumTimeout
+            };
             
-            await _unitOfWorks.CommitAsync();
+            using (var transaction = Helpers.Transaction.CreateAsyncTransactionScope())
+            {
+                await _postRepository.PostAsync(post);
+                
+                await _unitOfWorks.CommitAsync();
+            
+                await _fileService.UploadImagesAsync(user.Id, post.Id, model.Images);
+            
+                transaction.Complete();
+            }
 
-            return Result.OK(entity.ToViewModel());
+            return Result.OK(post.ToViewModel());
         }
 
         public async Task<Result> DeletePostByIdAsync(int id)
@@ -108,7 +130,8 @@ namespace AspNetCoreSpa.Application.Services
             var posts = await _postQueryRepository.GetPagePostsAsync(new PostPageFiltersDto
             {
                 PageNumber = filters.PageNumber,
-                ItemsPerPage = filters.ItemsPerPage
+                ItemsPerPage = filters.ItemsPerPage,
+
             });
 
             var viewModels = posts.Select(x => x.ToViewModel()).ToList(); 
@@ -121,10 +144,22 @@ namespace AspNetCoreSpa.Application.Services
 
             foreach (var post in viewModels)
             {
-                post.CountLike = post.Likes.Count(x => x.IsLike) - post.Likes.Count(x => !x.IsLike); 
-                post.User.Image.Url = $"{url}{post.User.Image.Path.Replace(@"\", "/")}";
-                
                 SetImagesUrl(post.Images, url);
+                post.CountLike = post.Likes.Count(x => x.IsLike) - post.Likes.Count(x => !x.IsLike);
+
+                if (post.User.Image != null)
+                {
+                    post.User.Image.Url = $"{url}{post.User.Image.Path.Replace(@"\", "/")}";
+                    continue;                    
+                }
+                
+                post.User.Image ??= new ImageViewModel
+                {
+                    Url = $"{url}{_globalSettings.Paths.DefaultPhotoProfilePath.Replace(@"\", "/")}",
+                    Name = _globalSettings.Paths.DefaultPhotoName
+                };
+
+                post.Likes = post.Likes.Where(x => x.UserId == _userContext.UserId).ToList();
             }
             
             return viewModels;
@@ -132,6 +167,9 @@ namespace AspNetCoreSpa.Application.Services
 
         public async Task<Result> UpdatePostAsync(int id, UpdatePostInputModel model)
         {
+            if(_userContext.UserId == -1)
+                return Result.Fail(EC.UserNotFound, ET.UserNotFound);
+            
             var entity = await _postRepository.GetPostByIdAndUserIdAsync(id, _userContext.UserId);
             if(entity == null)
                 return Result.Fail(EC.PostNotFound, ET.PostNotFound);
@@ -145,15 +183,18 @@ namespace AspNetCoreSpa.Application.Services
             return Result.Ok();
         }
 
-        public async Task<Result<int>> CreatLikePostAsync(int postId, bool isLike)
+        public async Task<Result<PostViewModel>> CreateLikePostAsync(int postId, bool isLike)
         {
+            if(_userContext.UserId == -1)
+                return Result.Fail<PostViewModel>(EC.UserNotFound, ET.UserNotFound);
+            
             var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if(user == null)
-                return Result.Fail<int>(EC.UserNotFound, ET.UserNotFound);
+                return Result.Fail<PostViewModel>(EC.UserNotFound, ET.UserNotFound);
 
             var post = await _postRepository.GetPostByIdAsync(postId);
             if (post == null)
-                return Result.Fail<int>(EC.PostNotFound, ET.PostNotFound);
+                return Result.Fail<PostViewModel>(EC.PostNotFound, ET.PostNotFound);
 
             var like = new Like
             {
@@ -165,31 +206,33 @@ namespace AspNetCoreSpa.Application.Services
             await _likeRepository.PostAsync(like);
             await _unitOfWorks.CommitAsync();
 
-            var count = await _likeQueryRepository.GetCountLikePostAsync(postId);
+            var countLike = await _likeQueryRepository.GetRatingByPostIdAsync(postId);
+            var model = new PostViewModel
+            {
+                CountLike = countLike,
+                Likes = new List<LikeViewModel>
+                {
+                    new LikeViewModel
+                    {
+                        Id = like.Id,
+                        IsLike = like.IsLike,
+                        PostId = like.Post.Id,
+                        UserId = like.User.Id
+                    }
+                }
+            };
             
-            return Result.OK(count);
+            return Result.OK(model);
         }
 
-        public async Task<Result<int>> DeleteLikePostAsync(int postId, int likeId)
+        public async Task<Result<IEnumerable<LikeViewModel>>> GetLikesByPostIdAsync(int postId)
         {
-            var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
-            if(user == null)
-                return Result.Fail<int>(EC.UserNotFound, ET.UserNotFound);
-
-            var post = await _postRepository.GetPostByIdAsync(postId);
-            if (post == null)
-                return Result.Fail<int>(EC.PostNotFound, ET.PostNotFound);
-
-            var like = await _likeRepository.GetLikeByIdAsync(likeId);
-            if(like == null)
-                return Result.Fail<int>(EC.LikeNotFound, ET.LikeNotFound);
+            if(_userContext.UserId == -1 || !await _userQueryRepository.IsExistUserAsync(_userContext.UserId))
+                return Result.Fail<IEnumerable<LikeViewModel>>(EC.UserNotFound, ET.UserNotFound);
             
-            _likeRepository.Delete(like);
-            await _unitOfWorks.CommitAsync();
-
-            var count = await _likeQueryRepository.GetCountLikePostAsync(postId);
+            var likes = await _likeQueryRepository.GetLikesByPostIdAsync(postId, _userContext.UserId);
             
-            return Result.OK<int>(count);
+            return Result.OK(likes.Select(x=>x.ToViewModel()));
         }
 
         private static void SetImagesUrl(IEnumerable<ImageViewModel> images, StringBuilder url)

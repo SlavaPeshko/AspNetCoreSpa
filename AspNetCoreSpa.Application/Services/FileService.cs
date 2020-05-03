@@ -98,6 +98,8 @@ namespace AspNetCoreSpa.Application.Services
                             var resultPath = Path.Combine(_settings.Paths.ImagesPostPath, id.ToString(), file.FileName);
                             
                             paths.Add(resultPath);
+
+                            postId = 0;
                             
                             await _imageRepository.PostAsync(new Image
                             {

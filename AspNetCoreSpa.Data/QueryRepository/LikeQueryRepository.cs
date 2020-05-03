@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Contracts.QueryRepositories;
@@ -15,7 +16,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
         {
         }
 
-        public async Task<int> GetCountLikePostAsync(int postId)
+        public async Task<int> GetRatingByPostIdAsync(int postId)
         {
             using (IDbConnection connection = Connection)
             {
@@ -43,6 +44,18 @@ namespace AspNetCoreSpa.Data.QueryRepository
                                       WHERE [Id] = @id";
 
                 return await connection.QueryFirstOrDefaultAsync<LikeDto>(query, new { Id = id });
+            }
+        }
+
+        public async Task<IEnumerable<LikeDto>> GetLikesByPostIdAsync(int postId, int userId)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT TOP (1000) [Id], [IsLike], [CommentId], [PostId], [UserId]
+                                  FROM [AspNetCoreSpa].[dbo].[Likes]
+                                  WHERE [Likes].[PostId] = @postId AND [Likes].[UserId] = @userId";
+
+                return await connection.QueryAsync<LikeDto>(query, new { postId, userId });
             }
         }
     }

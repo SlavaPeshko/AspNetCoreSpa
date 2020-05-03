@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { config } from '../config';
 import { Observable } from 'rxjs';
@@ -19,8 +19,15 @@ export class LikeService extends BaseService<Like> {
 
   public createLike(postId: number, isLike: boolean): Observable<number> {
 
-    const url = `${this._url}/${config.endpoint.posts.createLike(postId)}`;
+    const url = `${this._url}/${config.endpoint.likes.create}`;
 
-    return this._httpClient.post<number>(url, { isLike }, this.httpOptions);
+    return this._httpClient.post<number>(url, { postId, isLike }, this.httpOptions);
+  }
+
+  public deleteLike(id: number) {
+    
+    const url = `${this._url}/${config.endpoint.likes.delete(id)}`;
+    
+    return this._httpClient.delete(url);
   }
 }

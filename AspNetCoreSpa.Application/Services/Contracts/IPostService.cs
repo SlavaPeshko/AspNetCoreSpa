@@ -1,6 +1,5 @@
 ﻿using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Models.Post;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Domain.Entities.Base;
@@ -14,7 +13,5 @@ namespace AspNetCoreSpa.Application.Services.Contracts
         Task<Result<PostViewModel>> GetPostByIdAsync(int id);
         Task<Result> DeletePostByIdAsync(int id);
         Task<Result> UpdatePostAsync(int id, UpdatePostInputModel post);
-        Task<Result<int>> CreatLikePostAsync(int postId, bool isLike);
-        Task<Result<int>> DeleteLikePostAsync(int postId, int likeId);
     }
 }

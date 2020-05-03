@@ -4,6 +4,7 @@ using AspNetCoreSpa.Data.QueryRepository.Base;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
                         return userDtoEntry;
                     },
                     new {Id = id},
-                    splitOn: "Name, Id, Id, Name");
+                    splitOn: "Id, Id, Id");
 
                 return user.FirstOrDefault();
             }
@@ -67,6 +68,44 @@ namespace AspNetCoreSpa.Data.QueryRepository
                 string query = @"SELECT COUNT(1) FROM [AspNetCoreSpa].[dbo].[Users] WHERE [Email] = @email";
                 
                 return await connection.ExecuteScalarAsync<bool>(query, new { Email = email });
+            }
+        }
+
+        public async Task<bool> IsExistUserAsync(int id)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT COUNT(1) FROM [AspNetCoreSpa].[dbo].[Users] WHERE [Id] = @id";
+                
+                return await connection.ExecuteScalarAsync<bool>(query, new { id });
+            }
+        }
+
+        public async Task<UserDto> GetUserWithRolesByIdAsync(int id)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT TOP (1) [Users].[Id], [FirstName], [LastName] ,[Email], [PhoneNumber]
+                                      , [DateOfBirth], [Gender], [Roles].[Id] AS RolesId
+                                  FROM [AspNetCoreSpa].[dbo].[Users]
+                                  LEFT JOIN [AspNetCoreSpa].[dbo].[XrefUserRole] ON [XrefUserRole].[UserId] = [Users].[Id]
+                                  LEFT JOIN [AspNetCoreSpa].[dbo].[Roles] ON [Roles].[Id] = [XrefUserRole].[RoleId]
+                                  WHERE [Users].[Id] = @id";
+                
+                var user = await connection.QueryAsync<UserDto, int?, UserDto>(query,
+                    (userDto, role) =>
+                    {
+                        UserDto userDtoEntry = userDto;
+
+                        if (role.HasValue)
+                            userDtoEntry.Roles.Add(role.Value);
+
+                        return userDtoEntry;
+                    },
+                    new {Id = id},
+                    splitOn: "Name, Id, Id, Name");
+
+                return user.FirstOrDefault();
             }
         }
     }

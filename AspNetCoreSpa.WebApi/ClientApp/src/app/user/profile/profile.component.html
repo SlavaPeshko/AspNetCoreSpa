@@ -101,7 +101,7 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="inputZipCode">Zip Code</label>
-                            <input [ngModel]="user?.address.postcode" (ngModelChange)="user.address.postcode=$event" type="text" class="form-control" id="inputZipCode"
+                            <input [ngModel]="user?.address?.postcode" (ngModelChange)="user.address.postcode=$event" type="text" class="form-control" id="inputZipCode"
                                 placeholder="Zip Code" name="zip code">
                         </div>
                     </div>
@@ -122,8 +122,8 @@
                         <div class="form-group col-md-6">
                             <label for="genderFormControlBtnGroupToggle">Gender</label>
                             <div  class="btn-group btn-group-toggle" data-toggle="buttons" id="genderFormControlBtnGroupToggle">
-                                <label *ngFor="let name of genderNames;" class="btn btn-primary" [ngClass]="{'active': user?.gender === name }" (click)="onRadioChange(name)">
-                                    <input type="radio" name="{{name}}" [value]="name"> {{name}}<br>
+                                <label *ngFor="let item of genders;" class="btn btn-primary" [ngClass]="{'active': user?.gender === item.id }" (click)="onRadioChange(item.id)">
+                                    <input type="radio" name="{{item.name}}" [value]="item.name"> {{ item.name }}<br>
                                 </label>
                             </div>
                         </div>

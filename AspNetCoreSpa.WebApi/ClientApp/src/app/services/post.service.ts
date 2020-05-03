@@ -18,6 +18,12 @@ export class PostService extends BaseService<any> {
   }
 
   public getByPageItems(page: number, items: number): Observable<Post[]> {
+    
     return this._httpClient.get<Post[]>(`${this._url}/${this._endpoint}/${page}/${items}`);
+  }
+
+  public getRating(postId: number): Observable<number> {
+
+    return this._httpClient.get<number>(`${this._url}/${config.endpoint.posts.getRating(postId)}`);
   }
 }

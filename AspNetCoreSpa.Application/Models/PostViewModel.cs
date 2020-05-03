@@ -18,7 +18,6 @@ namespace AspNetCoreSpa.Application.Models
         public List<ImageViewModel> Images { get; set; }
         public List<CommentViewModel> Comments { get; set; }
         public List<LikeViewModel> Likes { get; set; }
-        
         public int CountLike { get; set; }
     }
 

@@ -20,6 +20,7 @@ namespace AspNetCoreSpa.Application.Services
         private readonly IUserRepository _userRepository; 
         private readonly GlobalSettings _globalSettings;
         private readonly IUnitOfWorks _unitOfWorks;
+        
 
         public TokenService(
             IJwtTokenHelper jwtTokenHelper, 

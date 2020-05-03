@@ -1,5 +1,4 @@
-﻿using System;
-using AspNetCoreSpa.Domain.Entities.Enum;
+﻿using AspNetCoreSpa.Domain.Entities.Enum;
 
 namespace AspNetCoreSpa.Application.Services.Contracts
 {

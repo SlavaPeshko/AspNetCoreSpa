@@ -1,6 +1,7 @@
 import { Input, Component, OnInit } from '@angular/core';
 import { Post } from 'src/app/models/post';
 import { LikeService } from '../../services/like.service';
+import { PostService } from '../../services/post.service';
 import { Jwt } from '../../helpers/jwt';
 
 import * as moment from 'moment';
@@ -12,11 +13,13 @@ import * as moment from 'moment';
 })
 export class PostComponent implements OnInit {
   @Input() post: Post;
-  isActiveLike: boolean = false;
-  isActiveDislike: boolean = false;
+  userId: number;
 
   constructor(private likeService: LikeService,
-    private jwt: Jwt) { }
+    private postService: PostService,
+    private jwt: Jwt) {
+      this.userId = this.jwt.getUserId();
+    }
 
   ngOnInit(): void {
   }
@@ -25,17 +28,46 @@ export class PostComponent implements OnInit {
     return moment(date).fromNow();
   }
 
-  like(postId: number, isLike: boolean) {
-    this.likeService.createLike(postId, isLike).subscribe(data => {
-      this.post.countLike = data;
+  like(like: boolean) {
+    // if has like or dislike of user
+    if((this.hasLike() && like) || (this.hasDislike() && !like)) {
+      this.deleteLike(() => this.getRating())
+      return;
+    }
+
+    if(this.post.likes.length == 1) {
+      this.deleteLike(() => this.creteLike(like));
+      return;
+    }
+
+    this.creteLike(like);
+  }
+
+  hasLike() {
+    return this.post.likes.some(x => x.isLike)
+  }
+
+  hasDislike() {
+    return this.post.likes.some(x => !x.isLike)
+  }
+
+  private creteLike(like: boolean) {
+    this.likeService.createLike(this.post.id, like).subscribe((data: any) => {
+      this.post.likes.push(data);
+      this.getRating();
     });
   }
 
-  belongLikeUser(isLike: boolean) {
-    const currentUserId = this.jwt.getUserId();
-    if(!currentUserId)
-      return false;
+  private deleteLike(func: () => void) {
+    return this.likeService.deleteLike(this.post.likes[0].id).subscribe(data => {
+      this.post.likes = [];
+      func();
+    });
+  }
 
-    return this.post.likes.some(x => x.isLike == isLike && x.userId == currentUserId);
+  private getRating() {
+    this.postService.getRating(this.post.id).subscribe((data: number) => {
+      this.post.countLike = data;
+    });
   }
 }

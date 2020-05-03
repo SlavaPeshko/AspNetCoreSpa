@@ -21,13 +21,15 @@ export class ProfileComponent implements OnInit {
   public selectedCountry: Country = null;
   public user: User;
   public userId: number;
-  public genderNames = Object.values(Gender).filter(e => typeof(e) == "string");
+  public genders: any = [];
   public model: NgbDateStruct;
 
   constructor(private userService: UserService,
      private jwt: Jwt,
      private countryService: CountryService,
      private fileService: FileService) {
+
+      this.fillArrayFromEnum(Gender, this.genders);
    }
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.user.dateOfBirth = new Date(`${this.model.month}/${this.model.day}/${this.model.year}Z`).toISOString();
-
+debugger;
     this.userService.update(this.user).subscribe(data=> {
     })
 
@@ -75,6 +77,10 @@ export class ProfileComponent implements OnInit {
     this.fileService.uploadImages(formData, url).subscribe(data=> {});
   }
 
+  dataChanged(value, propName) {
+    debugger;
+  }
+
   handleFileInput(files: FileList){
     if(!files && !files[0])
       return;
@@ -84,7 +90,7 @@ export class ProfileComponent implements OnInit {
     this.setUrl(this.fileUploaded);
   }
 
-  onRadioChange(item: Gender){
+  onRadioChange(item: number){
     this.user.gender = item;
   }
 
@@ -98,7 +104,7 @@ export class ProfileComponent implements OnInit {
     return this.user.image.url;
   }
 
-  private setUrl(file: File){
+  private setUrl(file: File) {
     let reader = new FileReader();
     reader.readAsDataURL(file);
 
@@ -106,4 +112,14 @@ export class ProfileComponent implements OnInit {
       this.url = reader.result;
     }
   }
+
+  private fillArrayFromEnum<Enum>(item: Enum, array: [{}]) {
+    for(const key in item) {
+      if(isNaN(Number(key)))
+        continue;
+
+        const object = { id: key, name: item[key] };
+        array.push(object);
+     }
+   }
 }

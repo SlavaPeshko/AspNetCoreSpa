@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.Json.Serialization;
+using AspNetCoreSpa.Application.Helpers;
 
 namespace AspNetCoreSpa.Application.Models
 {
@@ -9,7 +11,9 @@ namespace AspNetCoreSpa.Application.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
+        
+        [JsonConverter(typeof(IntegerConverter))]
+        public int Gender { get; set; }
         public UpdateAddressInputModel Address { get; set; }
     }
 }

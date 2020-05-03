@@ -5,9 +5,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeEmailComponent } from './change-email/change-email.component';
+import { SettingsComponent } from './settings/settings.component';
 
 @NgModule({
-  declarations: [ProfileComponent, ChangeEmailComponent],
+  declarations: [ProfileComponent, ChangeEmailComponent, SettingsComponent],
   imports: [
     CommonModule,
     RouterModule,

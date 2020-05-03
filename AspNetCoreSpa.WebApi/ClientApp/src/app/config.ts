@@ -4,8 +4,7 @@ export const config = {
         posts: {
             route: 'posts',
             get: (page: number, items: number) => `posts/${page}/${items}`,
-            createLike: (postId: number) => `posts/${postId}/like`,
-            deleteLike: (postId: number, likeId: number) => `posts/${postId}/like/${likeId}`
+            getRating: (postId: number) => `posts/${postId}/like`,
         },
         user: {
             route: 'user',
@@ -18,6 +17,10 @@ export const config = {
         },
         tokens: {
             refreshToken: 'token'
+        },
+        likes: {
+            delete: (id: number) => `likes/${id}`,
+            create: `likes`
         }
     }
 };

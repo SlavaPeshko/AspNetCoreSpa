@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using Microsoft.AspNetCore.Http;

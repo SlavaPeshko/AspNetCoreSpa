@@ -10,7 +10,7 @@ export class User {
     firstName: string;
     lastName: string;
     dateOfBirth: string;
-    gender: Gender;
+    gender: number;
     address: Address;
     image: Image;
 }

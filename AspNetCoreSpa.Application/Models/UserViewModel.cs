@@ -14,7 +14,7 @@ namespace AspNetCoreSpa.Application.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
         public AddressViewModel Address { get; set; }
         public ImageViewModel Image { get; set; }
         public IEnumerable<string> Roles { get; set; }
@@ -33,7 +33,7 @@ namespace AspNetCoreSpa.Application.Models
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
-                Gender = user.Gender.ToString("G"),
+                Gender = (int)user.Gender,
             };
         }
 
@@ -49,7 +49,7 @@ namespace AspNetCoreSpa.Application.Models
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 DateOfBirth = user.DateOfBirth,
-                Gender = user.Gender.ToString("G"),
+                Gender = user.Gender,
             };
 
             if (user.Address != null)

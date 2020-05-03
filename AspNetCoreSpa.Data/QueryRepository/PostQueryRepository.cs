@@ -36,8 +36,7 @@ namespace AspNetCoreSpa.Data.QueryRepository
                     query,
                     (postDto, commentDto, userDto, imageDto, likeDto) =>
                     {
-                        PostDto postDtoEntry;
-                        if (!postDtoDictionary.TryGetValue(postDto.PostId, out postDtoEntry))
+                        if (!postDtoDictionary.TryGetValue(postDto.PostId, out var postDtoEntry))
                         {
                             postDtoEntry = postDto;
                             postDtoEntry.Comments = new List<CommentDto>();
@@ -81,6 +80,16 @@ namespace AspNetCoreSpa.Data.QueryRepository
                                    FROM [AspNetCoreSpa].[dbo].[Posts]  WHERE [Id] = @Id";
 
                 return await connection.QueryFirstOrDefaultAsync<PostDto>(query, new { Id = id });
+            }
+        }
+
+        public async Task<bool> IsExistPostAsync(int id)
+        {
+            using (IDbConnection connection = Connection)
+            {
+                string query = @"SELECT COUNT(1) FROM [AspNetCoreSpa].[dbo].[Posts] WHERE [Id] = @id";
+                
+                return await connection.ExecuteScalarAsync<bool>(query, new { id });
             }
         }
     }
