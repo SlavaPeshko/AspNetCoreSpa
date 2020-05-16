@@ -9,6 +9,7 @@ import { CreatePostComponent } from './post/create-post/create-post.component';
 import { PostsComponent } from './post/posts/posts.component';
 import { ChangeEmailComponent } from './user/change-email/change-email.component';
 import { SettingsComponent } from './user/settings/settings.component';
+import { EditPictureComponent } from './user/edit-picture/edit-picture.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -17,6 +18,9 @@ const routes: Routes = [
   { path: 'restore', component: ForgotComponent },
   { path: 'register', component: SignUpComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
+  { path: 'profile/edit-picture', component: EditPictureComponent, canActivate: [AuthGuard] },
+
   { path: 'create-post', component: CreatePostComponent, canActivate: [AuthGuard] },
   { path: 'posts', component: PostsComponent },
   { path: 'emailchange', component: ChangeEmailComponent },

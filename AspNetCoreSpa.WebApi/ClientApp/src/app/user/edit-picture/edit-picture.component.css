@@ -1,0 +1,32 @@
+.edit-picture-wrapper {
+    margin-top: 150px;
+}
+
+.picture-editor {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    width: 75%;
+    margin: auto;
+}
+
+image-cropper {
+    height: 50vh;
+}
+
+.default-picture, .image-cropp {
+    text-align: center;
+}
+
+.image-cropp>img {
+    display: none;
+    visibility: hidden;
+}
+
+.topleft {
+    display: none;
+    visibility: hidden;
+}
+
+.btn-add-picture {
+    cursor: pointer;
+}

@@ -1,0 +1,36 @@
+<div class="edit-picture-wrapper">
+    <div class="picture-editor">
+        <div *ngIf="!isDownloadImage" class="default-picture">
+            <img src="assets/img/avatar_2x.png" class="rounded-circle img-thumbnail img-fluid" alt="avatar"
+                style="width: 202px; height: 202px;">
+        </div>
+
+        <div *ngIf="isDownloadImage" class="image-cropp">
+            <image-cropper 
+                [imageChangedEvent]="imageChangedEvent" 
+                [maintainAspectRatio]="true" 
+                [aspectRatio]="4 / 4"
+                [resizeToWidth] ="200"
+                [resizeToHeight]="200"
+                format="png" 
+                roundCropper = true
+                (imageCropped)="imageCropped($event)" 
+                (imageLoaded)="imageLoaded()"
+                (cropperReady)="cropperReady()" 
+                (loadImageFailed)="loadImageFailed()">
+            </image-cropper>
+
+            <img [src]="croppedImage" />
+        </div>
+        <div *ngIf="!isDownloadImage"  class="edit-picture-button col-12">
+            <label class="btn btn-primary mb-0 mr-3 btn-add-picture" (change)="fileChangeEvent($event)">
+                Add picture <input type="file" hidden>
+            </label>
+            <button class="btn btn-outline-primary" [routerLink]="['/profile']">Cancel</button>
+        </div>
+        <div *ngIf="isDownloadImage"  class="edit-picture-button col-12">
+            <button class="btn btn-primary mb-0 mr-3" (click)="save()">Save</button>
+            <button class="btn btn-outline-primary" (click)="isDownloadImage=!isDownloadImage">Cancel</button>
+        </div>
+    </div>
+</div>

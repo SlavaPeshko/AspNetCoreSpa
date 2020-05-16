@@ -21,6 +21,9 @@ export const config = {
         likes: {
             delete: (id: number) => `likes/${id}`,
             create: `likes`
+        },
+        images: {
+            uploadUserImage: 'images/upload-image'
         }
     }
 };

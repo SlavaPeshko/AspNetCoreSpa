@@ -7,27 +7,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
-    public class ImageRepository : BaseRepository<Image, int>, IImageRepository
+    public class ImageRepository : BaseRepository<PostImage, int>, IImageRepository
     {
         public ImageRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
         
-        public async Task PostAsync(Image image)
+        public async Task PostAsync(PostImage userImage)
         {
-            await GetSet().AddAsync(image);
+            await GetSet().AddAsync(userImage);
         }
 
-        public async Task<Image> GetProfilePhotoByUserId(int id)
+        public async Task<PostImage> GetProfilePhotoByUserId(int id)
         {
             return await GetSet()
-                .FirstOrDefaultAsync(x => x.UserId == id && x.PostId == null);
+                .FirstOrDefaultAsync(x => x.PostId == null);
         }
         
-        public void Put(Image image)
+        public void Put(PostImage userImage)
         {
-            GetSet().Attach(image);
-            DbContext.Entry(image).State = EntityState.Modified;
+            GetSet().Attach(userImage);
+            DbContext.Entry(userImage).State = EntityState.Modified;
         }
     }
 }

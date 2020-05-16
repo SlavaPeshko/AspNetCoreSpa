@@ -43,7 +43,8 @@ namespace AspNetCoreSpa.WebApi
             services.AddSingleton(config);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(config.ConnectionStrings.DefaultConnection, 
+                x => x.UseNetTopologySuite()));
 
             services.AddControllers();
 

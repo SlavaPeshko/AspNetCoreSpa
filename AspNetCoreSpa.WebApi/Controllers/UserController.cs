@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Models;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {
@@ -96,18 +93,6 @@ namespace AspNetCoreSpa.WebApi.Controllers
         public async Task<IActionResult> ConfirmEmailAsync([FromBody]TokenInputModel model)
         {
             var result = await _userService.ConfirmEmailAsync(model.AccessToken);
-
-            if (result.IsFailure)
-                return BadRequest(result.Errors);
-
-            return Ok(result);
-        }
-
-        [HttpPost("{id:int}/upload-photo")]
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> UploadUserPhotoAsync([FromRoute]int id, IFormFile file)
-        {
-            var result = await _fileService.UploadPhotoAsync(id, file);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);

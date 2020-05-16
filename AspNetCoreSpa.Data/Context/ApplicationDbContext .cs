@@ -18,7 +18,7 @@ namespace AspNetCoreSpa.Data.Context
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<PostImage> Images { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
@@ -124,7 +124,7 @@ namespace AspNetCoreSpa.Data.Context
                 .WithMany(p => p.Likes);
             });
 
-            modelBuilder.Entity<Image>(e =>
+            modelBuilder.Entity<PostImage>(e =>
             {
                 e.ToTable("Images");
 
@@ -133,10 +133,6 @@ namespace AspNetCoreSpa.Data.Context
 
                 e.HasOne(i => i.Post)
                 .WithMany(p => p.Images);
-
-                e.HasOne(i => i.User)
-                .WithOne(u => u.Image)
-                .HasForeignKey<Image>(i => i.UserId);
             });
 
             modelBuilder.Entity<RoleClaim>(e =>

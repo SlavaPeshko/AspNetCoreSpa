@@ -6,8 +6,8 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
 {
     public interface IImageRepository
     {
-        Task PostAsync(Image image);
-        Task<Image> GetProfilePhotoByUserId(int id);
-        void Put(Image image);
+        Task PostAsync(PostImage userImage);
+        Task<PostImage> GetProfilePhotoByUserId(int id);
+        void Put(PostImage userImage);
     }
 }

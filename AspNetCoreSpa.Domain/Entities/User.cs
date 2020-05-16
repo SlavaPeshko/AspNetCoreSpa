@@ -10,7 +10,10 @@ namespace AspNetCoreSpa.Domain.Entities
         public User()
         {
             UserRoles = new HashSet<UserRole>();
-            UserAddresses = new List<UserAddress>();
+            UserAddresses = new HashSet<UserAddress>();
+            Posts = new HashSet<Post>();
+            Comments = new HashSet<Comment>();
+            Likes = new HashSet<Like>();
         }
 
         public string FirstName { get; set; }
@@ -26,7 +29,7 @@ namespace AspNetCoreSpa.Domain.Entities
         public string RefreshToken { get; set; }
         public DateTime DateOfBirth { get; set; }
         public Gender Gender { get; set; }
-        public Image Image { get; set; }
+        public UserImage UserImage { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Comment> Comments { get; set; }

@@ -6,15 +6,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangeEmailComponent } from './change-email/change-email.component';
 import { SettingsComponent } from './settings/settings.component';
+import { EditPictureComponent } from './edit-picture/edit-picture.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
-  declarations: [ProfileComponent, ChangeEmailComponent, SettingsComponent],
+  declarations: [ProfileComponent, ChangeEmailComponent, SettingsComponent, EditPictureComponent],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ImageCropperModule
   ],
   exports: [
     ProfileComponent
