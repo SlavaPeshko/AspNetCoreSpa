@@ -11,8 +11,9 @@ namespace AspNetCoreSpa.WebApi
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .ConfigureLogging((context, logging) =>
                 {
                     logging.ClearProviders();
@@ -21,5 +22,6 @@ namespace AspNetCoreSpa.WebApi
                     logging.AddDebug();
                 })
                 .UseStartup<Startup>();
+        }
     }
 }

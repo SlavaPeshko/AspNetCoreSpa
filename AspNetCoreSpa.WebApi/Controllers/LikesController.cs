@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models.Like;
+using AspNetCoreSpa.Application.Models.Likes;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +10,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
     public class LikesController : ApiController
     {
         private readonly ILikeService _likeService;
-        
+
         public LikesController(ILikeService likeService)
         {
             _likeService = likeService;
@@ -18,16 +18,16 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> PostAsync(LikeInputModel model)
+        public async Task<IActionResult> PostAsync(CreateLikeModel model)
         {
             var result = await _likeService.CreateLikePostAsync(model.PostId, model.IsLike);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
-            
+
             return Ok(result.Data);
         }
-        
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> DeleteAsync(int id)
@@ -36,7 +36,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
-            
+
             return Ok();
         }
     }

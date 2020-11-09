@@ -13,11 +13,7 @@ namespace AspNetCoreSpa.Application.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        
-        public bool IsAuthorized()
-        {
-            return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
-        }
+
         public bool IsInRole(UserRoleEnum userRoleEnum)
         {
             return _httpContextAccessor.HttpContext.User.IsInRole(userRoleEnum.ToString("G"));
@@ -28,12 +24,15 @@ namespace AspNetCoreSpa.Application.Services
             get
             {
                 if (int.TryParse(_httpContextAccessor.HttpContext.User.FindFirstValue("Id"), out var value))
-                {
                     return value;
-                }
 
                 return -1;
             }
+        }
+
+        public bool IsAuthorized()
+        {
+            return _httpContextAccessor.HttpContext.User.Identity.IsAuthenticated;
         }
     }
 }

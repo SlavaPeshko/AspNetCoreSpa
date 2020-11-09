@@ -1,71 +1,104 @@
 <div class="profile-wrapper">
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="text-center">
-                    <img *ngIf="user?.image == null && url == null; else templateUrl" 
-                        src="assets/img/avatar_2x.png"
-                        class="rounded-circle img-thumbnail img-fluid"
-                        alt="avatar"
-                        style="width: 202px; height: 202px;">
+                    <img *ngIf="user?.image == null && url == null; else templateUrl"
+                         src="assets/img/avatar_2x.png"
+                         class="rounded-circle img-thumbnail img-fluid"
+                         alt="avatar"
+                         style="width: 202px; height: 202px;">
 
                     <ng-template #templateUrl>
-                        <img [src]="profileImageUrl()" class="rounded-circle img-thumbnail" alt="avatar" style="width: 202px; height: 202px;">
+                        <img [src]="profileImageUrl()"
+                             class="rounded-circle img-thumbnail"
+                             alt="avatar"
+                             style="width: 202px; height: 202px;">
                     </ng-template>
 
-                    <h6>Upload a different photo...</h6>
+                    <!-- <h6>Upload a different photo...</h6>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile" (change)="handleFileInput($event.target.files)">
+                        <input type="file"
+                               class="custom-file-input"
+                               id="customFile"
+                               (change)="handleFileInput($event.target.files)">
 
-                        <label *ngIf="fileUploaded != null; else templateName" class="custom-file-label text-left" for="customFile">
+                        <label *ngIf="fileUploaded != null; else templateName"
+                               class="custom-file-label text-left"
+                               for="customFile">
                             {{ fileUploaded.name }}
                         </label>
 
                         <ng-template #templateName>
-                            <label class="custom-file-label text-left" for="customFile">Choose file</label>
+                            <label class="custom-file-label text-left"
+                                   for="customFile">Choose file</label>
                         </ng-template>
 
-                    </div>
-                    <button class="btn btn-primary mt-2" [routerLink]="['/profile/edit-picture']">edit picture</button>
+                    </div> -->
+                    <div class="mt-2"><button class="btn btn-primary"
+                                [routerLink]="['/profile/edit-picture']">edit picture</button></div>
+
                     <ul class="list-group mt-3">
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            Activity 
+                            Activity
                             <i class="fa fa-dashboard fa-1x"></i>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"><span><strong>Shares</strong></span> 
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Shares</strong></span>
                             <span class="badge badge-primary badge-pill">125</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"><span><strong>Likes</strong></span> 
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Likes</strong></span>
                             <span class="badge badge-primary badge-pill">125</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"><span><strong>Posts</strong></span> 
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Posts</strong></span>
                             <span class="badge badge-primary badge-pill">125</span></li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center"><span><strong>Followers</strong></span> 
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><strong>Followers</strong></span>
                             <span class="badge badge-primary badge-pill">125</span></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <form class="profile-form">
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="inputFirstName">First Name</label>
-                            <input [ngModel]="user?.firstName" (ngModelChange)="user.firstName=$event" type="text" class="form-control" id="inputFirstName"
-                                placeholder="First Name" name="firstName">
+                            <input [ngModel]="user?.firstName"
+                                   (ngModelChange)="user.firstName=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputFirstName"
+                                   placeholder="First Name"
+                                   name="firstName">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="inputLastName">Last Name</label>
-                            <input [ngModel]="user?.lastName" (ngModelChange)="user.lastName=$event" type="text" class="form-control" id="inputLastName"
-                                placeholder="Last Name" name="lastName">
+                            <input [ngModel]="user?.lastName"
+                                   (ngModelChange)="user.lastName=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputLastName"
+                                   placeholder="Last Name"
+                                   name="lastName">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-12">
                             <label for="inputEmail">Email</label>
-                            <input [ngModel]="user?.email" (ngModelChange)="user.email=$event" type="text" class="form-control" id="inputEmail"
-                                placeholder="Email" name="email" pattern="email" readonly="readonly">
+                            <input [ngModel]="user?.email"
+                                   (ngModelChange)="user.email=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputEmail"
+                                   placeholder="Email"
+                                   name="email"
+                                   pattern="email"
+                                   readonly="readonly">
                         </div>
                         <div class="flexwidth100">
                             <div>
-                                <a href="" routerLink="/emailchange">Change email address</a>
+                                <a href=""
+                                   routerLink="/emailchange">Change email address</a>
                             </div>
                         </div>
                     </div>
@@ -73,37 +106,62 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="inputPhone">Phone</label>
-                            <input [ngModel]="user?.phone" (ngModelChange)="user.phone=$event" type="text" class="form-control" id="inputPhone"
-                                placeholder="Phone" name="phone">
+                            <input [ngModel]="user?.phone"
+                                   (ngModelChange)="user.phone=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputPhone"
+                                   placeholder="Phone"
+                                   name="phone">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="inputAddress">Address</label>
-                            <input [ngModel]="user?.address?.address1" (ngModelChange)="user.address.address1=$event" type="text" class="form-control" id="inputAddress"
-                                placeholder="Address" name="address1">
+                            <input [ngModel]="address?.address1"
+                                   (ngModelChange)="address.address1=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputAddress"
+                                   placeholder="Address"
+                                   name="address1">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col">
                             <label for="inputAddress2">Address (line 2)</label>
-                            <input [ngModel]="user?.address?.address2" (ngModelChange)="user.address.address2=$event" type="text" class="form-control" id="inputAddress2"
-                                placeholder="Address (line 2)" name="address2">
+                            <input [ngModel]="address?.address2"
+                                   (ngModelChange)="address.address2=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputAddress2"
+                                   placeholder="Address (line 2)"
+                                   name="address2">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-9">
                             <label for="inputCity">City</label>
-                            <input [ngModel]="user?.address?.city" (ngModelChange)="user.address.city=$event" type="text" class="form-control" id="inputCity"
-                                placeholder="City" name="city">
+                            <input [ngModel]="address?.city"
+                                   (ngModelChange)="address.city=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputCity"
+                                   placeholder="City"
+                                   name="city">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="inputZipCode">Zip Code</label>
-                            <input [ngModel]="user?.address?.postcode" (ngModelChange)="user.address.postcode=$event" type="text" class="form-control" id="inputZipCode"
-                                placeholder="Zip Code" name="zip code">
+                            <input [ngModel]="address?.postcode"
+                                   (ngModelChange)="address.postcode=$event"
+                                   type="text"
+                                   class="form-control"
+                                   id="inputZipCode"
+                                   placeholder="Zip Code"
+                                   name="zip code">
                         </div>
                     </div>
 
@@ -111,38 +169,61 @@
                         <div class="form-group col">
                             <div class="form-group">
                                 <label for="countryFormControlSelect">Countries</label>
-                                <select [(ngModel)]="selectedCountry" [ngModelOptions]="{standalone: true}" class="form-control" id="countryFormControlSelect">
-                                    <option [ngValue]="null" [selected]="selectedCountry === null" [disabled]="true">Select</option>>
-                                    <option *ngFor="let country of countries;" [ngValue]="country" [selected]="country.name === user?.address?.countryName">{{ country.name }}</option>
-                                  </select>
-                              </div>
+                                <select [(ngModel)]="selectedCountry"
+                                        [ngModelOptions]="{standalone: true}"
+                                        class="form-control"
+                                        id="countryFormControlSelect">
+                                    <option [ngValue]="null"
+                                            [selected]="selectedCountry === null"
+                                            [disabled]="true">Select</option>>
+                                    <option *ngFor="let country of countries;"
+                                            [ngValue]="country"
+                                            [selected]="country.name === address?.countryName">{{ country.name }}
+                                    </option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label for="genderFormControlBtnGroupToggle">Gender</label>
-                            <div  class="btn-group btn-group-toggle" data-toggle="buttons" id="genderFormControlBtnGroupToggle">
-                                <label *ngFor="let item of genders;" class="btn btn-primary" [ngClass]="{'active': user?.gender === item.id }" (click)="onRadioChange(item.id)">
-                                    <input type="radio" name="{{item.name}}" [value]="item.name"> {{ item.name }}<br>
+                            <div class="btn-group btn-group-toggle"
+                                 data-toggle="buttons"
+                                 id="genderFormControlBtnGroupToggle">
+                                <label *ngFor="let item of genders;"
+                                       class="btn btn-primary"
+                                       [ngClass]="{'active': user?.gender == item.id }"
+                                       (click)="onRadioChange(item.id)">
+                                    <input type="radio"
+                                           name="{{item.name}}"
+                                           [value]="item.name"> {{ item.name }}<br>
                                 </label>
                             </div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="countryFormControlSelect">Birthday</label>
                             <div class="input-group">
-                                <input class="form-control" placeholder="yyyy-mm-dd"
-                                       name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                                <input class="form-control"
+                                       placeholder="yyyy-mm-dd"
+                                       name="dp"
+                                       [(ngModel)]="model"
+                                       ngbDatepicker
+                                       #d="ngbDatepicker">
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                                    <button class="btn btn-outline-secondary calendar"
+                                            (click)="d.toggle()"
+                                            type="button"></button>
                                 </div>
-                              </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-row mt-3">
                         <div class="form-group col-md-12">
-                            <button type="button" class="btn btn-outline-primary btn-block" (click)="update()">Update Profile</button>
+                            <button type="button"
+                                    class="btn btn-outline-primary btn-block"
+                                    (click)="update()">Update Profile</button>
                         </div>
                     </div>
                 </form>

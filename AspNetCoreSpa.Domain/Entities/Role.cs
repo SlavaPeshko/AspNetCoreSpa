@@ -12,7 +12,7 @@ namespace AspNetCoreSpa.Domain.Entities
         }
 
         public string Name { get; set; }
-        
+
         public ICollection<UserRole> UsersRoles { get; set; }
 
         public ICollection<RoleClaim> RoleClaims { get; set; }

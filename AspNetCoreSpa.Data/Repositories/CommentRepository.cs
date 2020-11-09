@@ -1,11 +1,8 @@
-﻿using AspNetCoreSpa.Data.Context;
+﻿using System.Threading.Tasks;
+using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AspNetCoreSpa.Data.Repositories
 {

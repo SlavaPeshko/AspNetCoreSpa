@@ -10,12 +10,14 @@ import { PostsComponent } from './post/posts/posts.component';
 import { ChangeEmailComponent } from './user/change-email/change-email.component';
 import { SettingsComponent } from './user/settings/settings.component';
 import { EditPictureComponent } from './user/edit-picture/edit-picture.component';
+import { PhoneForgotComponent } from './auth/phone-forgot/phone-forgot.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   // { path: 'restore', component: ForgotComponent, canActivate: [AuthGuard] },
-  { path: 'restore', component: ForgotComponent },
+  { path: 'resetpassword', component: ForgotComponent },
+  { path: 'phoneresetpassword', component: PhoneForgotComponent },
   { path: 'register', component: SignUpComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 

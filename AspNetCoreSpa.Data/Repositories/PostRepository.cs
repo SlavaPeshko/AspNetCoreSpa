@@ -1,10 +1,8 @@
-﻿using AspNetCoreSpa.Data.Context;
+﻿using System.Threading.Tasks;
+using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using AspNetCoreSpa.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
@@ -31,10 +29,10 @@ namespace AspNetCoreSpa.Data.Repositories
         public async Task<Post> GetPostByIdAndUserIdAsync(int id, int userId)
         {
             return await GetSet()
-                .Include(p=>p.User)
+                .Include(p => p.User)
                 .SingleOrDefaultAsync(p => p.Id == id && p.User.Id == userId);
         }
-        
+
         public async Task<Post> GetPostByIdAsync(int id)
         {
             return await GetSet().SingleOrDefaultAsync(p => p.Id == id);

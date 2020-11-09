@@ -16,3 +16,17 @@ app-header {
     color: #fff;
     box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
 }
+
+.intl-tel-input {
+    display: block !important;
+}
+
+.intl-tel-input .country-list {
+	box-shadow: none;
+	font-size: 14px;
+	margin-left: 0;
+}
+
+#country-search-box:focus {
+    outline: none;
+}

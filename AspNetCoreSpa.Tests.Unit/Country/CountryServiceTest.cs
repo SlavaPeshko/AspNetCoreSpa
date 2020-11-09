@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Services;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Contracts.QueryRepositories;
@@ -18,13 +16,6 @@ namespace AspNetCoreSpa.Tests.Unit.Country
     [Parallelizable(ParallelScope.Fixtures)]
     public class CountryServiceTest
     {
-        private ICountryService _countryService;
-        private Mock<ICountryQueryRepository> _countryQueryRepository;
-        private Mock<IMemoryCache> _cache;
-        private GlobalSettings _globalSettings;
-
-        delegate void OutDelegate<TIn, TOut>(TIn input, out TOut output);
-
         [SetUp]
         public void Setup()
         {
@@ -49,12 +40,19 @@ namespace AspNetCoreSpa.Tests.Unit.Country
             });
         }
 
+        private ICountryService _countryService;
+        private Mock<ICountryQueryRepository> _countryQueryRepository;
+        private Mock<IMemoryCache> _cache;
+        private GlobalSettings _globalSettings;
+
+        private delegate void OutDelegate<TIn, TOut>(TIn input, out TOut output);
+
         //[Test]
         //public async Task CheckCountCountyList()
         //{
         //    // Act 
         //    var result = await _countryService.GetCountriesAsync();
-            
+
         //    // Assert 
         //    Assert.IsTrue(result.Any());
         //}

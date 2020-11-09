@@ -133,11 +133,29 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error sending email.
+        /// </summary>
+        public static string EmailFailedSend {
+            get {
+                return ResourceManager.GetString("EmailFailedSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email invalid format.
         /// </summary>
         public static string EmailInvalid {
             get {
                 return ResourceManager.GetString("EmailInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No such email address was found..
+        /// </summary>
+        public static string EmailNotFound {
+            get {
+                return ResourceManager.GetString("EmailNotFound", resourceCulture);
             }
         }
         
@@ -286,6 +304,24 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phone is invalid.
+        /// </summary>
+        public static string PhoneInvalid {
+            get {
+                return ResourceManager.GetString("PhoneInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone not found.
+        /// </summary>
+        public static string PhoneNotFound {
+            get {
+                return ResourceManager.GetString("PhoneNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone is required.
         /// </summary>
         public static string PhoneRequired {
@@ -300,6 +336,42 @@ namespace AspNetCoreSpa.CrossCutting.Resources {
         public static string PostNotFound {
             get {
                 return ResourceManager.GetString("PostNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SecurityCode is invalid.
+        /// </summary>
+        public static string SecurityCodeInvalid {
+            get {
+                return ResourceManager.GetString("SecurityCodeInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SecurityCode must be 4 symbols.
+        /// </summary>
+        public static string SecurityCodeInvalidLength {
+            get {
+                return ResourceManager.GetString("SecurityCodeInvalidLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SecurityCode is required.
+        /// </summary>
+        public static string SecurityCodeRequired {
+            get {
+                return ResourceManager.GetString("SecurityCodeRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to sms service doesn&apos;t work temporary.
+        /// </summary>
+        public static string SmsServiceFailed {
+            get {
+                return ResourceManager.GetString("SmsServiceFailed", resourceCulture);
             }
         }
         

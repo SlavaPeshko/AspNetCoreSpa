@@ -12,7 +12,7 @@ namespace AspNetCoreSpa.Application.Validators
                 .Length(1, 200)
                 .Must(c => !string.IsNullOrEmpty(c))
                 .WithMessage(ET.LengthTitlePostInvalid);
-            
+
             RuleFor(c => c.Description)
                 .Length(1, 500)
                 .Must(c => !string.IsNullOrEmpty(c))

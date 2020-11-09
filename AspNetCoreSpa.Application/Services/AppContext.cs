@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using AspNetCoreSpa.Application.Services.Contracts;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 
 namespace AspNetCoreSpa.Application.Services
 {
@@ -20,7 +19,7 @@ namespace AspNetCoreSpa.Application.Services
             result.Append(_httpContextAccessor.HttpContext?.Request?.Scheme);
             result.Append("://");
             result.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
-            
+
             return result.ToString();
         }
     }

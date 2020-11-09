@@ -6,6 +6,5 @@ namespace AspNetCoreSpa.WebApi.Controllers.Base
     [ApiController]
     public abstract class ApiController : ControllerBase
     {
-
     }
 }

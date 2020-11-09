@@ -1,11 +1,10 @@
-﻿using AspNetCoreSpa.Data.Context;
-using AspNetCoreSpa.Data.Repositories.Contracts;
-using System;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using AspNetCoreSpa.Data.Context;
+using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Entities.Security;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
@@ -30,10 +29,17 @@ namespace AspNetCoreSpa.Data.Repositories
             GetSet().RemoveRange(securityCodes);
         }
 
-        public async Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType, CodeActionType codeActionType)
+        public void Delete(IEnumerable<int> ids)
+        {
+            GetSet().RemoveRange(GetSet().Where(x => ids.Contains(x.Id)));
+        }
+
+        public async Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType,
+            CodeActionType codeActionType)
         {
             return await GetSet()
-                .Where(s => s.Provider == provider && s.ProviderType == providerType && s.CodeActionType == codeActionType)
+                .Where(s => s.Provider == provider && s.ProviderType == providerType &&
+                            s.CodeActionType == codeActionType)
                 .ToListAsync();
         }
     }

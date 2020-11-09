@@ -1,17 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AspNetCoreSpa.Application.Helpers;
+using AspNetCoreSpa.Application.Services;
+using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Data.Context;
+using AspNetCoreSpa.Data.QueryRepository.Base;
 using AspNetCoreSpa.Data.Repositories;
 using AspNetCoreSpa.Data.UoW;
-using AspNetCoreSpa.Data.Context;
-using AspNetCoreSpa.Application.Helpers;
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using AspNetCoreSpa.Application.Services;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using AspNetCoreSpa.Application.Services.Contracts;
-using AspNetCoreSpa.Data.QueryRepository.Base;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.DependencyInjection;
 using AppContext = AspNetCoreSpa.Application.Services.AppContext;
 
 namespace AspNetCoreSpa.IoC
@@ -36,7 +36,7 @@ namespace AspNetCoreSpa.IoC
             RegisterServices(service, typeof(IBaseService));
             RegisterRepositories(service, typeof(BaseRepository<,>));
             RegisterQueryRepositories(service, typeof(QueryRepositoryBase));
-            
+
             // Mapper
             var configuration = new MapperConfiguration(cfg =>
             {
@@ -53,7 +53,7 @@ namespace AspNetCoreSpa.IoC
         {
             var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
                 .Where(x => !x.IsAbstract && !x.IsInterface
-                    && x.BaseType != null && x.BaseType == baseTypeOf);
+                                          && x.BaseType != null && x.BaseType == baseTypeOf);
 
             AddScoped(types, service);
         }
@@ -63,7 +63,7 @@ namespace AspNetCoreSpa.IoC
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => !x.IsAbstract && !x.IsInterface && x.BaseType != null
-                    && x.BaseType.IsGenericType && x.BaseType.GetGenericTypeDefinition() == baseTypeOf);
+                            && x.BaseType.IsGenericType && x.BaseType.GetGenericTypeDefinition() == baseTypeOf);
 
             AddScoped(types, service);
         }
@@ -81,21 +81,17 @@ namespace AspNetCoreSpa.IoC
         {
             var allInterfaces = type.GetInterfaces();
 
-            var implementedlInterfaces = allInterfaces.Except
-                    (allInterfaces.SelectMany(t => t.GetInterfaces()));
+            var implementedInterfaces = allInterfaces.Except
+                (allInterfaces.SelectMany(t => t.GetInterfaces()));
 
-            return implementedlInterfaces;
+            return implementedInterfaces;
         }
 
         private static void AddScoped(IEnumerable<Type> types, IServiceCollection service)
         {
             foreach (var type in types)
-            {
-                foreach (var @interface in GetImplementedInterfaces(type))
-                {
-                    service.AddScoped(@interface, type);
-                }
-            }
+            foreach (var @interface in GetImplementedInterfaces(type))
+                service.AddScoped(@interface, type);
         }
     }
 }

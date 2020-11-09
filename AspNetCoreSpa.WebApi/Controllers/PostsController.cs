@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models.Post;
+using AspNetCoreSpa.Application.Models.Posts;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -9,8 +9,8 @@ namespace AspNetCoreSpa.WebApi.Controllers
 {
     public class PostsController : ApiController
     {
-        private readonly IPostService _postService;
         private readonly ILikeService _likeService;
+        private readonly IPostService _postService;
 
         public PostsController(IPostService postService,
             ILikeService likeService)
@@ -43,7 +43,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> PostAsync([FromForm]CreatePostInputModel post)
+        public async Task<IActionResult> PostAsync([FromForm] CreatePostModel post)
         {
             var result = await _postService.CreatePostAsync(post);
 
@@ -52,15 +52,15 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
             return Ok(result.Data);
         }
-        
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, UpdatePostInputModel post)
+        public async Task<IActionResult> PutAsync(int id, UpdatePostModel post)
         {
             var result = await _postService.UpdatePostAsync(id, post);
 
             if (result.IsFailure)
                 return BadRequest(result.Errors);
-            
+
             return Ok();
         }
 
@@ -68,13 +68,13 @@ namespace AspNetCoreSpa.WebApi.Controllers
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var result = await _postService.DeletePostByIdAsync(id);
-            
-            if(result.IsFailure)
+
+            if (result.IsFailure)
                 return BadRequest(result.Errors);
-            
+
             return Ok();
         }
-        
+
         [HttpGet("{id}/like")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> GetRatingAsync(int id)

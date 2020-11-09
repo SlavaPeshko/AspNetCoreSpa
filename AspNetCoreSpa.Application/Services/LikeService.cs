@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models.Like;
+using AspNetCoreSpa.Application.Models.Likes;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Data.Repositories.Contracts;
@@ -13,13 +13,13 @@ namespace AspNetCoreSpa.Application.Services
 {
     public class LikeService : ILikeService
     {
-        private readonly ILikeRepository _likeRepository;
         private readonly ILikeQueryRepository _likeQueryRepository;
-        private readonly IUserContext _userContext;
-        private readonly IUserQueryRepository _userQueryRepository;
+        private readonly ILikeRepository _likeRepository;
         private readonly IPostQueryRepository _postQueryRepository;
         private readonly IUnitOfWorks _unitOfWorks;
-        
+        private readonly IUserContext _userContext;
+        private readonly IUserQueryRepository _userQueryRepository;
+
 
         public LikeService(ILikeRepository likeRepository,
             ILikeQueryRepository likeQueryRepository,
@@ -39,12 +39,12 @@ namespace AspNetCoreSpa.Application.Services
         public async Task<Result> DeleteLikeByIdAsync(int id)
         {
             var like = await _likeRepository.GetLikeByIdAsync(id);
-            if(like == null)
+            if (like == null)
                 return Result.Fail(EC.LikeNotFound, ET.LikeNotFound);
-            
+
             _likeRepository.Delete(like);
             await _unitOfWorks.CommitAsync();
-            
+
             return Result.Ok();
         }
 
@@ -55,17 +55,17 @@ namespace AspNetCoreSpa.Application.Services
 
         public async Task<Result<LikeViewModel>> CreateLikePostAsync(int? postId, bool isLike)
         {
-            if(_userContext.UserId == -1 || !await _userQueryRepository.IsExistUserAsync(_userContext.UserId))
+            if (_userContext.UserId == -1 || !await _userQueryRepository.IsExistUserAsync(_userContext.UserId))
                 return Result.Fail<LikeViewModel>(EC.UserNotFound, ET.UserNotFound);
-            
-            if (!postId.HasValue || !await  _postQueryRepository.IsExistPostAsync(postId.Value))
+
+            if (!postId.HasValue || !await _postQueryRepository.IsExistPostAsync(postId.Value))
                 return Result.Fail<LikeViewModel>(EC.PostNotFound, ET.PostNotFound);
 
             var like = new Like
             {
                 IsLike = isLike,
                 UserId = _userContext.UserId,
-                PostId = postId,
+                PostId = postId
             };
 
             await _likeRepository.PostAsync(like);
@@ -78,7 +78,7 @@ namespace AspNetCoreSpa.Application.Services
                 PostId = postId,
                 UserId = _userContext.UserId
             };
-            
+
             return Result.OK(model);
         }
     }

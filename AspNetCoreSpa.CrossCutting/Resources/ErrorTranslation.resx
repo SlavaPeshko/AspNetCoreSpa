@@ -141,6 +141,9 @@
   <data name="EmailRequired" xml:space="preserve">
     <value>Email is required</value>
   </data>
+  <data name="EmailNotFound" xml:space="preserve">
+    <value>No such email address was found.</value>
+  </data>
   <data name="FirstNameRequired" xml:space="preserve">
     <value>FirstName is required</value>
   </data>
@@ -180,6 +183,12 @@
   <data name="PhoneRequired" xml:space="preserve">
     <value>Phone is required</value>
   </data>
+  <data name="PhoneInvalid" xml:space="preserve">
+    <value>Phone is invalid</value>
+  </data>
+  <data name="PhoneNotFound" xml:space="preserve">
+    <value>Phone not found</value>
+  </data>
   <data name="PostNotFound" xml:space="preserve">
     <value>Post not found</value>
   </data>
@@ -209,5 +218,20 @@
   </data>
   <data name="LengthTitlePostInvalid" xml:space="preserve">
     <value>Title should be less 200 symbol</value>
+  </data>
+  <data name="SmsServiceFailed" xml:space="preserve">
+    <value>sms service doesn't work temporary</value>
+  </data>
+  <data name="SecurityCodeRequired" xml:space="preserve">
+    <value>SecurityCode is required</value>
+  </data>
+  <data name="SecurityCodeInvalidLength" xml:space="preserve">
+    <value>SecurityCode must be 4 symbols</value>
+  </data>
+  <data name="SecurityCodeInvalid" xml:space="preserve">
+    <value>SecurityCode is invalid</value>
+  </data>
+  <data name="EmailFailedSend" xml:space="preserve">
+    <value>Error sending email</value>
   </data>
 </root>

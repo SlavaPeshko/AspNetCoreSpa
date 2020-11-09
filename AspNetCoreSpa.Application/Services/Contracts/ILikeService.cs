@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models.Like;
+using AspNetCoreSpa.Application.Models.Likes;
 using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Application.Services.Contracts

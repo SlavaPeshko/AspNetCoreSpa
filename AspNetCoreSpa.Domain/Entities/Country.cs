@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Domain.Entities

@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using AspNetCoreSpa.Domain.Entities;
+﻿using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Security;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Context
 {
@@ -8,7 +8,6 @@ namespace AspNetCoreSpa.Data.Context
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-
         }
 
         public DbSet<Country> Countries { get; set; }
@@ -16,9 +15,10 @@ namespace AspNetCoreSpa.Data.Context
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<SecurityCode> SecurityCodes { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<PostImage> PostImages { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Like> Likes { get; set; }
-        public DbSet<PostImage> Images { get; set; }
+        public DbSet<UserPhoto> UserPhotos { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Address> Addresses { get; set; }
 
@@ -54,15 +54,15 @@ namespace AspNetCoreSpa.Data.Context
             {
                 e.ToTable("XreUserAddress");
                 e.HasKey(ua => new {ua.UserId, ua.AddressId});
-                
+
                 e.HasOne(ua => ua.User)
                     .WithMany(u => u.UserAddresses)
                     .HasForeignKey(ua => ua.UserId);
-                
+
                 e.HasOne(ua => ua.Address)
                     .WithMany(u => u.UserAddresses)
                     .HasForeignKey(ua => ua.AddressId);
-                
+
                 e.HasOne(ua => ua.AddressType)
                     .WithMany(u => u.UserAddresses)
                     .HasForeignKey(ua => ua.AddressTypeId);
@@ -71,21 +71,22 @@ namespace AspNetCoreSpa.Data.Context
             modelBuilder.Entity<UserRole>(e =>
             {
                 e.ToTable("XrefUserRole");
-                e.HasKey(ur => new { ur.UserId, RoleId = ur.RoleId });
+                e.HasKey(ur => new {ur.UserId, ur.RoleId});
 
                 e.HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(ur => ur.UserId);
 
                 e.HasOne(ur => ur.Role)
-                .WithMany(r => r.UsersRoles)
-                .HasForeignKey(ur => ur.RoleId);
+                    .WithMany(r => r.UsersRoles)
+                    .HasForeignKey(ur => ur.RoleId);
             });
 
             modelBuilder.Entity<SecurityCode>(e =>
             {
                 e.ToTable("SecurityCodes");
-                e.Property(s => s.Code).HasColumnType("nvarchar(6)");
+                e.Property(s => s.Code).IsRequired().HasColumnType("nvarchar(4)");
+                e.Property(s => s.Provider).IsRequired();
             });
 
             modelBuilder.Entity<Post>(e =>
@@ -93,7 +94,7 @@ namespace AspNetCoreSpa.Data.Context
                 e.ToTable("Posts");
 
                 e.HasOne(p => p.User)
-                .WithMany(u => u.Posts);
+                    .WithMany(u => u.Posts);
 
                 e.Property(p => p.Title).HasMaxLength(100);
                 e.Property(p => p.Description).HasMaxLength(500);
@@ -104,10 +105,10 @@ namespace AspNetCoreSpa.Data.Context
                 e.ToTable("Comments");
 
                 e.HasOne(c => c.User)
-                .WithMany(u => u.Comments);
+                    .WithMany(u => u.Comments);
 
                 e.HasOne(c => c.Post)
-                .WithMany(p => p.Comments);
+                    .WithMany(p => p.Comments);
             });
 
             modelBuilder.Entity<Like>(e =>
@@ -115,24 +116,29 @@ namespace AspNetCoreSpa.Data.Context
                 e.ToTable("Likes");
 
                 e.HasOne(l => l.Post)
-                .WithMany(p => p.Likes);
+                    .WithMany(p => p.Likes);
 
                 e.HasOne(l => l.Comment)
-                .WithMany(p => p.Likes);
+                    .WithMany(p => p.Likes);
 
                 e.HasOne(l => l.User)
-                .WithMany(p => p.Likes);
+                    .WithMany(p => p.Likes);
+            });
+
+            modelBuilder.Entity<UserPhoto>(e =>
+            {
+                e.ToTable("UserPhotos");
+
+                e.HasOne(i => i.User)
+                    .WithMany(p => p.UserPhoto);
             });
 
             modelBuilder.Entity<PostImage>(e =>
             {
-                e.ToTable("Images");
+                e.ToTable("PostImages");
 
                 e.HasOne(i => i.Post)
-                .WithMany(p => p.Images);
-
-                e.HasOne(i => i.Post)
-                .WithMany(p => p.Images);
+                    .WithMany(p => p.Images);
             });
 
             modelBuilder.Entity<RoleClaim>(e =>
@@ -140,8 +146,8 @@ namespace AspNetCoreSpa.Data.Context
                 e.ToTable("RoleClaims");
 
                 e.HasOne(r => r.Role)
-                .WithMany(r => r.RoleClaims)
-                .HasForeignKey(r => r.RoleId);
+                    .WithMany(r => r.RoleClaims)
+                    .HasForeignKey(r => r.RoleId);
             });
 
             // modelBuilder.Seed();

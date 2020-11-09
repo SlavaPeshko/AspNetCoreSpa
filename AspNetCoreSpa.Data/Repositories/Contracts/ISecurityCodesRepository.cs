@@ -6,10 +6,12 @@ namespace AspNetCoreSpa.Data.Repositories.Contracts
 {
     public interface ISecurityCodesRepository
     {
-        Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType, CodeActionType codeActionType);
+        Task<IEnumerable<SecurityCode>> GetSecurityCodesAsync(string provider, ProviderType providerType,
+            CodeActionType codeActionType);
 
         void Delete(SecurityCode securityCode);
         void Delete(IEnumerable<SecurityCode> securityCodes);
+        void Delete(IEnumerable<int> ids);
         Task CreateAsync(SecurityCode securityCode);
     }
 }

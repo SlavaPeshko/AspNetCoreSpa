@@ -1,5 +1,4 @@
-﻿using System;
-using AspNetCoreSpa.Domain.Entities.Base;
+﻿using AspNetCoreSpa.Domain.Entities.Base;
 
 namespace AspNetCoreSpa.Domain.Entities
 {

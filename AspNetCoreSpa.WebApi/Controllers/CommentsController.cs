@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models.Comment;
-using AspNetCoreSpa.Application.Services.Contracts;
+﻿using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {

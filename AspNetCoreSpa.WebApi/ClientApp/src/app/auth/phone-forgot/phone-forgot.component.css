@@ -1,0 +1,81 @@
+.forgot-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(94vh);
+}
+
+.forgot-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.forgot-full-width {
+  width: 100%;
+}
+
+.forgot-wrapper-btn {
+  text-align: center;
+}
+
+.forgot-title {
+  position: relative;
+  width: 600px;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #ddd;
+  font-size: 23px;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.forgot-form {
+  width: 400px;
+}
+
+.phone-number-title {
+  margin-bottom: 5px;
+  font-size: 14px;
+  color: #777;
+}
+
+.phone-number-captcha {
+  display: flex;
+  margin: 0 -4px;
+}
+
+.phone-number-captcha-input {
+  margin: 0 4px;
+}
+
+.phone-number-verification {
+  margin-top: 10px;
+}
+
+.phone-number-captcha-resend,
+.phone-number-captcha-time {
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0px;
+}
+
+.phone-number-captcha-resend {
+  cursor: pointer;
+  color: #0071b9;
+}
+
+.phone-number-captcha-time {
+  color: #ccc;
+  cursor: default;
+}
+
+.btn-primary:disabled {
+  cursor: not-allowed !important;
+}

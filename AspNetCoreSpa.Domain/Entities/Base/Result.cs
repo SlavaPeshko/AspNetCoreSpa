@@ -5,28 +5,16 @@ namespace AspNetCoreSpa.Domain.Entities.Base
 {
     public class Result
     {
-        public IList<Error> Errors { get; set; }
-
         public Result()
         {
             Errors = new List<Error>();
         }
 
-        public bool IsFailure
-        {
-            get
-            {
-                return Errors.Any();
-            }
-        }
+        public IList<Error> Errors { get; set; }
 
-        public bool IsSucceed
-        {
-            get
-            {
-                return !Errors.Any();
-            }
-        }
+        public bool IsFailure => Errors.Any();
+
+        public bool IsSucceed => !Errors.Any();
 
         public static Result<T> OK<T>(T data)
         {

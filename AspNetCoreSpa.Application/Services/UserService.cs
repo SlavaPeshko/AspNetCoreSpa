@@ -1,40 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Helpers;
+using AspNetCoreSpa.Application.Models.Users;
 using AspNetCoreSpa.Application.Services.Contracts;
-using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
-using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
+using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
-using AspNetCoreSpa.Application.Models;
-using AspNetCoreSpa.Application.Helpers;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Text.Encodings.Web;
-using Microsoft.Extensions.Configuration;
-using AspNetCoreSpa.Infrastructure.Options;
-using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Domain.Entities.Enum;
 using AspNetCoreSpa.Domain.Entities.Security;
+using AspNetCoreSpa.Infrastructure.Options;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Configuration;
+using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
+using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUnitOfWorks _unitOfWorks;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserQueryRepository _userQueryRepository;
-        private readonly IJwtTokenHelper _jwtTokenHelper;
-        private readonly IEmailSender _emailSender;
-        private readonly ISecurityCodesRepository _securityCodesRepository;
+        private readonly IAddressRepository _addressRepository;
         private readonly IConfiguration _configuration;
+        private readonly IEmailSender _emailSender;
         private readonly GlobalSettings _globalSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAddressRepository _addressRepository;
+        private readonly IJwtTokenHelper _jwtTokenHelper;
+        private readonly ISecurityCodeQueryRepository _securityCodeQueryRepository;
+        private readonly ISecurityCodesRepository _securityCodesRepository;
+        private readonly ISmsService _smsService;
+        private readonly IUnitOfWorks _unitOfWorks;
+        private readonly IUserContext _userContext;
+        private readonly IUserQueryRepository _userQueryRepository;
+        private readonly IUserRepository _userRepository;
 
         public UserService(IUnitOfWorks unitOfWorks,
             IUserRepository userRepository,
@@ -43,9 +45,12 @@ namespace AspNetCoreSpa.Application.Services
             IEmailSender emailSender,
             ISecurityCodesRepository securityCodesRepository,
             IConfiguration configuration,
-            GlobalSettings globalSettings, 
-            IHttpContextAccessor httpContextAccessor, 
-            IAddressRepository addressRepository)
+            GlobalSettings globalSettings,
+            IHttpContextAccessor httpContextAccessor,
+            IAddressRepository addressRepository,
+            ISecurityCodeQueryRepository securityCodeQueryRepository,
+            ISmsService smsService,
+            IUserContext userContext)
         {
             _unitOfWorks = unitOfWorks;
             _userRepository = userRepository;
@@ -57,6 +62,9 @@ namespace AspNetCoreSpa.Application.Services
             _globalSettings = globalSettings;
             _httpContextAccessor = httpContextAccessor;
             _addressRepository = addressRepository;
+            _securityCodeQueryRepository = securityCodeQueryRepository;
+            _smsService = smsService;
+            _userContext = userContext;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersAsync()
@@ -66,11 +74,11 @@ namespace AspNetCoreSpa.Application.Services
             return users.Select(c => c.ToViewModel());
         }
 
-        public async Task<Result<UserViewModel>> CreateUserAsync(CreateUserInputModel model)
+        public async Task<Result<UserViewModel>> CreateUserAsync(CreateUserModel model)
         {
-            User user = new User();
+            var user = new User();
 
-            if(model.Email.IndexOf("@", StringComparison.Ordinal) > -1)
+            if (model.Email.IndexOf("@", StringComparison.Ordinal) > -1)
             {
                 var isExistEmail = await _userQueryRepository.IsExistEmailAsync(model.Email);
                 if (isExistEmail)
@@ -80,7 +88,15 @@ namespace AspNetCoreSpa.Application.Services
             }
             else
             {
-                user.PhoneNumber = model.Email;
+                var code = await _securityCodeQueryRepository.GetSecurityCodeAsync((int) ProviderType.Phone,
+                    (int) CodeActionType.CreateUserByPhone,
+                    model.InternationalPhoneNumber,
+                    DateTimeOffset.UtcNow.AddMinutes(-1));
+
+                if (code != model.SecurityCode)
+                    return Result.Fail<UserViewModel>(EC.SecurityCodeInvalid, ET.SecurityCodeInvalid);
+
+                user.PhoneNumber = model.InternationalPhoneNumber;
             }
 
             user.PasswordHash = PasswordHasher.GetHashPassword(model.Password);
@@ -88,7 +104,7 @@ namespace AspNetCoreSpa.Application.Services
             var userRole = new UserRole
             {
                 User = user,
-                RoleId = UserRoleEnum.User,
+                RoleId = UserRoleEnum.User
             };
 
             user.UserRoles.Add(userRole);
@@ -99,16 +115,16 @@ namespace AspNetCoreSpa.Application.Services
             return Result.OK(user.ToViewModel());
         }
 
-        public async Task<Result> UpdateUserAsync(int id, UpdateUserInputModel model)
+        public async Task<Result> UpdateUserAsync(UpdateUserModel model)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if (user == null)
                 return Result.Fail(EC.UserNotFound, ET.UserNotFound);
 
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.DateOfBirth = model.DateOfBirth;
-            user.Gender = (Gender)model.Gender;
+            user.Gender = (Gender) model.Gender;
 
             if (user.PhoneNumber != null && user.PhoneNumber != model.Phone)
             {
@@ -116,29 +132,21 @@ namespace AspNetCoreSpa.Application.Services
                 user.PhoneNumberConfirmed = false;
             }
 
-            if (model.Address == null)
-            {
-                _userRepository.Put(user);
-                await _unitOfWorks.CommitAsync();
-            
-                return  Result.Ok();
-            }
-            
-            if (model.Address.Id > 0)
+            if (model.Address != null && model.Address.Id > 0)
             {
                 var address = await _addressRepository.GetAddressByIdAsync(model.Address.Id);
-                if(address == null)
-                    return Result.Fail(EC.AddressNotFound, ET.UserNotFound);
+                if (address == null)
+                    return Result.Fail(EC.AddressNotFound, ET.AddressNotFound);
 
                 address.Address1 = model.Address.Address1;
                 address.Address2 = model.Address.Address2;
                 address.City = model.Address.City;
                 address.Postcode = model.Address.Postcode;
                 address.CountryId = model.Address.CountryId;
-                
+
                 _addressRepository.Put(address);
             }
-            else
+            else if (model.Address != null && model.Address.Id == 0)
             {
                 var address = new Address
                 {
@@ -146,8 +154,7 @@ namespace AspNetCoreSpa.Application.Services
                     Address2 = model.Address.Address2,
                     City = model.Address.City,
                     Postcode = model.Address.Postcode,
-                    CountryId = model.Address.CountryId,
-                    
+                    CountryId = model.Address.CountryId
                 };
 
                 var userAddress = new UserAddress
@@ -156,53 +163,46 @@ namespace AspNetCoreSpa.Application.Services
                     User = user,
                     AddressTypeId = AddressTypeEnum.Home
                 };
-                
+
                 user.UserAddresses.Add(userAddress);
             }
-            
+
             _userRepository.Put(user);
             await _unitOfWorks.CommitAsync();
-            
-            return  Result.Ok();
+
+            return Result.Ok();
         }
 
-        public async Task<Result> UpdatePasswordAsync(int id, UpdatePasswordInputModel model)
+        public async Task<Result> UpdatePasswordAsync(int id, UpdatePasswordModel model)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
                 return Result.Fail(EC.UserNotFound, ET.UserNotFound);
-            
+
             var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.OldPassword);
-            if (!verifyPassword)
-            {
-                return Result.Fail(EC.PasswordInvalid, ET.PasswordInvalid);
-            }
-            
+            if (!verifyPassword) return Result.Fail(EC.PasswordInvalid, ET.PasswordInvalid);
+
             user.PasswordHash = PasswordHasher.GetHashPassword(model.NewPassword);
             _userRepository.Put(user);
             await _unitOfWorks.CommitAsync();
-            
+
             return Result.Ok();
         }
 
-        public async Task<Result<TokenViewModel>> LogInAsync(LogInInputModel model)
+        public async Task<Result<TokenViewModel>> LogInAsync(LogInModel model)
         {
             User user;
             if (model.Email.IndexOf("@", StringComparison.Ordinal) > -1)
-            {
                 user = await _userRepository.GetUserByEmailAsync(model.Email);
-            }
             else
-            {
                 user = await _userRepository.GetUserByPhoneAsync(model.Email);
-            }
 
             if (user == null)
                 return Result.Fail<TokenViewModel>(EC.UserNotFound, ET.UserNotFound);
 
-            if(user.LockoutEnd.HasValue && user.LockoutEnd >= DateTimeOffset.UtcNow)
+            if (user.LockoutEnd.HasValue && user.LockoutEnd >= DateTimeOffset.UtcNow)
                 return Result.Fail<TokenViewModel>(EC.AccessFailedCount, ET.AccessFailedCount);
-            
+
             var verifyPassword = PasswordHasher.VerifyHashedPassword(user.PasswordHash, model.Password);
             if (!verifyPassword)
             {
@@ -245,7 +245,8 @@ namespace AspNetCoreSpa.Application.Services
 
             var url = $"{_configuration["UiBaseUrl"]}confirm-email?token={token}";
 
-            var htmlMessage = $"Please confirm your email by <a href='{HtmlEncoder.Default.Encode(url)}'>clicking here</a>.";
+            var htmlMessage =
+                $"Please confirm your email by <a href=\"{HtmlEncoder.Default.Encode(url)}\">clicking here</a>.";
 
             await _emailSender.SendEmailAsync(user.Email, "Confirm email", htmlMessage);
 
@@ -253,23 +254,76 @@ namespace AspNetCoreSpa.Application.Services
             return Result.OK(true);
         }
 
+        public async Task<Result> SendEmailAsync(string email)
+        {
+            var user = await _userQueryRepository.GetUserByEmailAsync(email);
+            if (user == null)
+                return Result.Fail<bool>(EC.EmailNotFound, ET.EmailNotFound);
+
+            var securityCode = SecurityCode.Create(ProviderType.Email, email, CodeActionType.ForgotPasswordByEmail);
+            await _securityCodesRepository.CreateAsync(securityCode);
+
+            var token = _jwtTokenHelper.GenerateTokenWithSecurityCode($"{user.Id}", email, securityCode.Code);
+
+            var url = $"{_configuration["UiBaseUrl"]}resetpassword?token={token}";
+            var htmlMessage =
+                $"To reset your password, just click the link below: <a href=\"{HtmlEncoder.Default.Encode(url)}\">clicking here</a>.";
+
+            try
+            {
+                await _emailSender.SendEmailAsync(email, "Reset your email", htmlMessage);
+            }
+            catch (Exception e)
+            {
+                return Result.Fail<bool>(EC.EmailFailedSend, ET.EmailFailedSend);
+            }
+
+            await _unitOfWorks.CommitAsync();
+            return Result.Ok();
+        }
+
+        public async Task<Result<string>> ValidateTokenAsync(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+                return Result.Fail<string>(EC.TokenInvalid, ET.TokenInvalid);
+
+            var model = _jwtTokenHelper.DecodeToken<EmailTokenModel>(token);
+            var code = await _securityCodeQueryRepository.GetSecurityCodeAsync((int) ProviderType.Email,
+                (int) CodeActionType.ForgotPasswordByEmail, model.Email);
+
+            if (code != model.Code)
+                return Result.Fail<string>(EC.TokenInvalid, ET.TokenInvalid);
+
+            return Result.OK(model.Email);
+        }
+
+        public async Task<Result> ForgotPasswordAsync(PasswordResetModel model)
+        {
+            var user = await _userRepository.GetUserByEmailAsync(model.Email);
+            if (user == null)
+                return Result.Fail(EC.UserNotFound, ET.UserNotFound);
+
+            user.PasswordHash = PasswordHasher.GetHashPassword(model.Password);
+            _userRepository.Put(user);
+            await _unitOfWorks.CommitAsync();
+
+            return Result.Ok();
+        }
+
         public async Task<Result> ConfirmEmailAsync(string token)
         {
             if (string.IsNullOrEmpty(token))
                 return Result.Fail(EC.TokenInvalid, ET.TokenInvalid);
 
-            var model = _jwtTokenHelper.DecodeToken<EmailUpdateToken>(token);
+            var model = _jwtTokenHelper.DecodeToken<EmailTokenModel>(token);
 
-            var codes = await _securityCodesRepository.GetSecurityCodesAsync(model.Email, ProviderType.Email, CodeActionType.ConfirmEmail);
+            var codes = await _securityCodesRepository.GetSecurityCodesAsync(model.Email, ProviderType.Email,
+                CodeActionType.ConfirmEmail);
 
             if (codes != null && codes.Any())
-            {
                 _securityCodesRepository.Delete(codes);
-            }
             else
-            {
                 return Result.Fail(EC.TokenInvalid, ET.TokenInvalid);
-            }
 
             var user = await _userRepository.GetUserByIdAsync(model.Id);
             user.EmailConfirmed = true;
@@ -288,24 +342,22 @@ namespace AspNetCoreSpa.Application.Services
 
             var viewModel = user.ToViewModel();
 
-            // viewModel.Address ??= new AddressViewModel();
-
-            if (viewModel.Image == null) 
+            if (viewModel.Image == null)
                 return Result.OK(viewModel);
 
-            var url = new StringBuilder();
-            url.Append(_httpContextAccessor.HttpContext?.Request?.Scheme);
-            url.Append("://");
-            url.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
-            url.Append("/");
-            url.Append(viewModel.Image.Path.Replace(@"\", "/"));
-            
-            viewModel.Image.Url = url.ToString();
+            // var url = new StringBuilder();
+            // url.Append(_httpContextAccessor.HttpContext?.Request?.Scheme);
+            // url.Append("://");
+            // url.Append(_httpContextAccessor.HttpContext?.Request?.Host.Value);
+            // url.Append("/");
+            // url.Append(viewModel.Image.Path.Replace(@"\", "/"));
+
+            viewModel.Image.Url = $"{_globalSettings.AzureStorageConnection.BlobEndpoint}{user.ImageDto.Path}";
 
             return Result.OK(viewModel);
         }
 
-        public async Task<Result> ChangeEmailAsync(int id, ChangeEmailInputModel model)
+        public async Task<Result> ChangeEmailAsync(int id, ChangeEmailModel model)
         {
             var user = await _userRepository.GetUserByIdAsync(id);
             if (user == null)
@@ -313,10 +365,29 @@ namespace AspNetCoreSpa.Application.Services
 
             user.Email = model.NewEmail;
             user.EmailConfirmed = false;
-            
+
             _userRepository.Put(user);
             await _unitOfWorks.CommitAsync();
-            
+
+            return Result.Ok();
+        }
+
+        public async Task<Result> SendSmsCodeAsync(string phoneNumber, string countryCode)
+        {
+            var isExist = await _userQueryRepository.IsExistPhoneAsync(phoneNumber);
+            if (!isExist)
+                return Result.Fail(EC.PhoneNotFound, ET.PhoneNotFound);
+
+            var code = SecurityCode.Create(ProviderType.Phone, phoneNumber, CodeActionType.ForgotPasswordByPhone);
+
+            await _securityCodesRepository.CreateAsync(code);
+            await _unitOfWorks.CommitAsync();
+
+            var smsSender = new SmsSender(_globalSettings);
+            var result = await smsSender.SendSmsAsync(phoneNumber, $"{code.Code} is your verification code.");
+            if (result == null)
+                return Result.Fail(EC.SmsServiceFailed, ET.SmsServiceFailed);
+
             return Result.Ok();
         }
 
@@ -331,7 +402,7 @@ namespace AspNetCoreSpa.Application.Services
             {
                 user.AccessFailedCount = ++user.AccessFailedCount;
             }
-            
+
             _userRepository.Put(user);
 
             await _unitOfWorks.CommitAsync();

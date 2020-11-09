@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Net.Mime;
+using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
-using System.Net.Mime;
 using Microsoft.AspNetCore.Http;
-using AspNetCoreSpa.Application.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCoreSpa.WebApi.Controllers
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
+﻿namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
 {
     public class LikeDto
     {

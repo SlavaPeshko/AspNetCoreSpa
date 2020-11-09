@@ -5,7 +5,8 @@ namespace AspNetCoreSpa.Application.Validators.Extensions
 {
     public static class RuleBuilderExtensions
     {
-        public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder, int minimumLength = 8)
+        public static IRuleBuilder<T, string> Password<T>(this IRuleBuilder<T, string> ruleBuilder,
+            int minimumLength = 8)
         {
             var options = ruleBuilder
                 .NotEmpty().WithMessage(ET.PasswordRequired)

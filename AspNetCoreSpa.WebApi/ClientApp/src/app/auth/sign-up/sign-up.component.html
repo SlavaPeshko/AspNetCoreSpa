@@ -1,69 +1,165 @@
-<!-- <div class="login-wrapper">
-  <form class="login-form" [formGroup]="signUpFormGroup">
-    <div class="form-group">
-      <label for="inputEmail">Email address</label>
-      <input formControlName="email" [(ngModel)]="loginForm.email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
-
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
-        <div *ngIf="email.errors.required">
-          Name is required.
-        </div>
-        <div *ngIf="email.errors.email">
-          Email is incorrect.
-        </div>
-      </div>
-
-    </div>
-    <div class="form-group">
-      <label for="inputPassword">Password</label>
-      <input formControlName="password" [(ngModel)]="loginForm.password" type="password" class="form-control" id="inputPassword" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
-
-      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback d-block">
-        <div *ngIf="password.errors.required">
-          Password is required.
-        </div>
-        <div *ngIf="password.errors.minlength">
-          Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
-        </div>
-      </div>
-
-    </div>
-    <button type="button" class="btn btn-primary btn-login" (click)="login()">Login</button>
-    <a [routerLink]="['/restore']">Forgot your password?</a>
-  </form>
-</div> -->
 <div class="signUp-wrapper">
-  <form class="signUp-form" [formGroup]="signUpFormGroup">
-    <div class="form-group">
-      <label for="inputEmail">Email address</label>
-      <input formControlName="email" [(ngModel)]="signUpFormGroup.email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
 
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
-        <div *ngIf="email.errors.required">
-          Name is required.
-        </div>
-        <div *ngIf="email.errors.email">
-          Email is incorrect.
+  <div class="signUp-wrapper-box">
+
+    <div class="tab-bar d-flex justify-content-around">
+      <div class="tab-bar-box"
+           (click)="switchNabBlock(true)">
+        <div class="tab-bar-tag">Email</div>
+      </div>
+      <div class="tab-bar-box"
+           (click)="switchNabBlock(false)">
+        <div class="tab-bar-tag">Phone</div>
+      </div>
+      <div class="tab-bar-tag-active"
+           [ngStyle]="showEmailForm?{'left': '68.25px'} : {'left': '238.25px'}"></div>
+    </div>
+
+    <form class="signUp-form"
+          *ngIf="showEmailForm; else phoneBlock"
+          [formGroup]="emailSignUpFormGroup">
+      <div class="form-group">
+        <input formControlName="email"
+               [(ngModel)]="emailSignUpFormGroup.email"
+               type="email"
+               class="form-control"
+               id="inputEmail"
+               aria-describedby="emailHelp"
+               placeholder="Enter email"
+               [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
+
+        <div *ngIf="email.invalid && (email.dirty || email.touched)"
+             class="invalid-feedback d-block">
+          <span *ngIf="email.errors.required">
+            Name is required.
+          </span>
+          <span *ngIf="email.errors.email">
+            Email is incorrect.
+          </span>
         </div>
       </div>
-    </div>
-    <div class="form-group">
-      <label for="inputPassword">Password</label>
-      <input formControlName="password" [(ngModel)]="signUpFormGroup.password" type="password" class="form-control" id="inputPassword" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
 
-      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback d-block">
-        <div *ngIf="password.errors.required">
-          Password is required.
-        </div>
-        <div *ngIf="password.errors.minlength">
-          Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
+      <div class="form-group">
+        <input formControlName="password"
+               [(ngModel)]="emailSignUpFormGroup.password"
+               type="password"
+               class="form-control"
+               id="inputPassword"
+               placeholder="Password"
+               [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+
+        <div *ngIf="password.invalid && (password.dirty || password.touched)"
+             class="invalid-feedback d-block">
+          <span *ngIf="password.errors.required">
+            Password is required.
+          </span>
+          <span *ngIf="password.errors.pattern">
+            Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
+          </span>
         </div>
       </div>
 
-    </div>
+      <div class="signUp-wrapper-btn">
+        <button type="button"
+                class="btn btn-primary btn-md btn-block"
+                [disabled]="emailSignUpFormGroup.invalid && (emailSignUpFormGroup.dirty || emailSignUpFormGroup.touched)"
+                (click)="create()">Sign Up</button>
+      </div>
+    </form>
 
-    <div class="signUp-wrapper-btn">
-      <button type="button" class="btn btn-primary" (click)="create()">Sign Up</button>
-    </div>
-  </form>
+    <ng-template #phoneBlock>
+      <form class="signUp-form"
+            [formGroup]="phoneSignUpFormGroup">
+
+        <div class="form-group">
+          <ngx-intl-tel-input [cssClass]="phone.invalid && phone.touched ? 'form-control is-invalid' : 'form-control'"
+                              [preferredCountries]="preferredCountries"
+                              [enableAutoCountrySelect]="false"
+                              [enablePlaceholder]="true"
+                              [searchCountryFlag]="true"
+                              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                              [selectFirstCountry]="false"
+                              [selectedCountryISO]="CountryISO.UnitedStates"
+                              [maxLength]="15"
+                              [tooltipField]="TooltipLabel.Name"
+                              [phoneValidation]="true"
+                              [separateDialCode]="true"
+                              name="phone"
+                              formControlName="phone"
+                              [(ngModel)]="phoneSignUpFormGroup.phone">
+          </ngx-intl-tel-input>
+          <div *ngIf="phone.invalid && phone.touched"
+               class="invalid-feedback d-block">
+            <span *ngIf="phone.errors.required; else invalidBlock">
+              Phone is required.
+            </span>
+            <ng-template #invalidBlock>
+              <span>
+                Phone is invalid
+              </span>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input formControlName="password"
+                 [(ngModel)]="phoneSignUpFormGroup.password"
+                 type="password"
+                 class="form-control"
+                 id="inputPassword"
+                 placeholder="Password"
+                 [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+
+          <div *ngIf="password.invalid && (password.dirty || password.touched)"
+               class="invalid-feedback d-block">
+            <span *ngIf="password.errors.required">
+              Password is required.
+            </span>
+            <span *ngIf="password.errors.pattern">
+              Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
+            </span>
+          </div>
+
+        </div>
+
+        <div class="form-group verificationCode">
+          <input formControlName="verificationCode"
+                 [(ngModel)]="phoneSignUpFormGroup.verificationCode"
+                 type="text"
+                 class="form-control"
+                 placeholder="Verification code"
+                 [ngClass]="{'is-invalid': verificationCode.invalid && (verificationCode.dirty || verificationCode.touched)}">
+
+          <div *ngIf="verificationCode.invalid && (verificationCode.dirty || verificationCode.touched)"
+               class="invalid-feedback d-block">
+            <span *ngIf="verificationCode.errors.required">
+              Verification code is required.
+            </span>
+            <span *ngIf="verificationCode.errors.minlength || verificationCode.errors.maxlength">
+              Verification Code should be 4 digits.
+            </span>
+          </div>
+
+          <div class="sms-timer"
+               (click)="sendSms()"
+               [ngStyle]="{'cursor': !phone.valid || !phone.value || statusSendingSms == 1 ? 'not-allowed' : 'pointer' }">
+            <span *ngIf="statusSendingSms == 0"
+                  class="sms-timer-send">Send</span>
+            <span *ngIf="statusSendingSms == 1">{{ timeLeft }}s</span>
+            <span *ngIf="statusSendingSms == 2"
+                  class="sms-timer-send">Resend</span>
+          </div>
+
+        </div>
+
+        <div class="signUp-wrapper-btn">
+          <button type="button"
+                  class="btn btn-primary btn-md btn-block"
+                  [disabled]="phoneSignUpFormGroup.invalid && (!phoneSignUpFormGroup.dirty || phoneSignUpFormGroup.touched)"
+                  (click)="create()">Sign Up</button>
+        </div>
+      </form>
+    </ng-template>
+
+  </div>
 </div>

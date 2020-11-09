@@ -10,20 +10,20 @@ import { Post } from '../models/post';
 })
 export class PostService extends BaseService<any> {
   
-  constructor(httpClient: HttpClient) {
+  constructor(HttpClient: HttpClient) {
     super(
-      httpClient,
+      HttpClient,
       config.apiUrl,
       config.endpoint.posts.route);
   }
 
   public getByPageItems(page: number, items: number): Observable<Post[]> {
     
-    return this._httpClient.get<Post[]>(`${this._url}/${this._endpoint}/${page}/${items}`);
+    return this.HttpClient.get<Post[]>(`${this.Url}/${this.Endpoint}/${page}/${items}`);
   }
 
   public getRating(postId: number): Observable<number> {
 
-    return this._httpClient.get<number>(`${this._url}/${config.endpoint.posts.getRating(postId)}`);
+    return this.HttpClient.get<number>(`${this.Url}/${config.endpoint.posts.getRating(postId)}`);
   }
 }

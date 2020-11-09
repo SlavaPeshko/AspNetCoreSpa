@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
 using AspNetCoreSpa.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -31,17 +31,15 @@ namespace AspNetCoreSpa.Data.Context
         public static List<Country> PopulateCounty()
         {
             var countries = new List<Country>();
-            string path = @"C:\Countries.json";
-            var content = System.IO.File.ReadAllText(path);
+            var path = @"C:\Countries.json";
+            var content = File.ReadAllText(path);
 
             foreach (var country in JsonConvert.DeserializeObject<List<JObject>>(content))
-            {
                 countries.Add(new Country
                 {
                     Name = country.Value<string>("name"),
-                    RegionCode = country.Value<string>("alpha3code"),
+                    RegionCode = country.Value<string>("alpha3code")
                 });
-            }
 
             return countries;
         }

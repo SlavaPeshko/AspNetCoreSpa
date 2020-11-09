@@ -3,6 +3,6 @@
     public enum AddressTypeEnum
     {
         Home = 1,
-        Work = 2,
+        Work = 2
     }
 }

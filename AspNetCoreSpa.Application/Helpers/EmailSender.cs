@@ -17,23 +17,26 @@ namespace AspNetCoreSpa.Application.Helpers
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            SmtpClient client = new SmtpClient(_globalSettings.EmailSettings.MailServer, _globalSettings.EmailSettings.MailPort)
+            var client = new SmtpClient(_globalSettings.EmailSettings.MailServer,
+                _globalSettings.EmailSettings.MailPort)
             {
                 UseDefaultCredentials = true,
                 EnableSsl = true,
-                Credentials = new NetworkCredential(_globalSettings.EmailSettings.Sender, _globalSettings.EmailSettings.Password)
+                Credentials = new NetworkCredential(_globalSettings.EmailSettings.Sender,
+                    _globalSettings.EmailSettings.Password)
             };
 
-            MailMessage mailMessage = new MailMessage
+            var mailMessage = new MailMessage
             {
                 From = new MailAddress(_globalSettings.EmailSettings.Sender)
             };
+
             mailMessage.To.Add(email);
             mailMessage.Body = htmlMessage;
+            mailMessage.IsBodyHtml = true;
             mailMessage.Subject = subject;
-            client.Send(mailMessage);
 
-            await Task.CompletedTask;
+            await client.SendMailAsync(mailMessage);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories.Dto
         public DateTime PostCreateAt { get; set; }
         public DateTime PostUpdateAt { get; set; }
         public UserDto User { get; set; }
-        public List<ImageDto> Images { get; set; } 
+        public List<ImageDto> Images { get; set; }
         public List<CommentDto> Comments { get; set; }
         public List<LikeDto> Likes { get; set; }
     }

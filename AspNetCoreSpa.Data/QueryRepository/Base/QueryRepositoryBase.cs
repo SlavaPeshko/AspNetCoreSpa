@@ -1,24 +1,19 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using System.Data;
 
 namespace AspNetCoreSpa.Data.QueryRepository.Base
 {
     public class QueryRepositoryBase
     {
-        private readonly IConfiguration _config;
         private const string ConnectionName = "IdentityConnection";
+        private readonly IConfiguration _config;
 
         public QueryRepositoryBase(IConfiguration config)
         {
             _config = config;
         }
-        public IDbConnection Connection
-        {
-            get
-            {
-                return new SqlConnection(_config.GetConnectionString(ConnectionName));
-            }
-        }
+
+        public IDbConnection Connection => new SqlConnection(_config.GetConnectionString(ConnectionName));
     }
 }

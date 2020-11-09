@@ -1,12 +1,17 @@
-﻿using FluentValidation;
-using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Models.Users;
+using FluentValidation;
+
 namespace AspNetCoreSpa.Application.Validators
 {
-    public sealed class CreateUserModelValidator : AbstractValidator<CreateUserInputModel>
+    public sealed class CreateUserModelValidator : AbstractValidator<CreateUserModel>
     {
         public CreateUserModelValidator()
         {
-            Include(new UserInputModelValidator());
+            RuleFor(e => e.Email)
+                .NotEmpty()
+                .WithMessage("Something wrong");
+
+            // Include(new UserInputModelValidator());
         }
     }
 }

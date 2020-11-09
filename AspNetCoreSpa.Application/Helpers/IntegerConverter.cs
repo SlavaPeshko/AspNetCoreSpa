@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Buffers;
+using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,17 +10,21 @@ namespace AspNetCoreSpa.Application.Helpers
     {
         public override int Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (int.TryParse(reader.GetString(), out int result))
-            {
-                return result;
-            }
-            
-            throw new JsonException();
+            if (reader.TokenType != JsonTokenType.String)
+                return reader.GetInt32();
+
+            var span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+            if (Utf8Parser.TryParse(span, out int number, out var bytesConsumed) && span.Length == bytesConsumed)
+                return number;
+
+            if (int.TryParse(reader.GetString(), out number)) return number;
+
+            return reader.GetInt32();
         }
 
         public override void Write(Utf8JsonWriter writer, int value, JsonSerializerOptions options)
         {
-
+            writer.WriteStringValue($"{value}");
         }
     }
 }

@@ -1,10 +1,9 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreSpa.Data.Repositories
 {
@@ -46,7 +45,7 @@ namespace AspNetCoreSpa.Data.Repositories
                 .SingleOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<User> GetUserByPhoneAsync (string phone)
+        public async Task<User> GetUserByPhoneAsync(string phone)
         {
             return await GetSet().SingleOrDefaultAsync(u => u.PhoneNumber == phone);
         }

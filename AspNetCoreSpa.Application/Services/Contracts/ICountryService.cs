@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models;
+using AspNetCoreSpa.Application.Models.Countries;
 
 namespace AspNetCoreSpa.Application.Services.Contracts
 {

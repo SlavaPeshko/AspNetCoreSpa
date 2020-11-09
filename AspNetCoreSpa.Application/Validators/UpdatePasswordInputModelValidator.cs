@@ -1,11 +1,11 @@
-﻿using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Models.Users;
 using AspNetCoreSpa.Application.Validators.Extensions;
 using FluentValidation;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 
 namespace AspNetCoreSpa.Application.Validators
 {
-    public class UpdatePasswordInputModelValidator: AbstractValidator<UpdatePasswordInputModel>
+    public class UpdatePasswordInputModelValidator : AbstractValidator<UpdatePasswordModel>
     {
         public UpdatePasswordInputModelValidator()
         {

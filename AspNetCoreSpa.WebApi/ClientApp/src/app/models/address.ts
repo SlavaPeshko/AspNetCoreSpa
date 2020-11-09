@@ -1,11 +1,9 @@
-import { Country } from '../models/country';
-
 export class Address {
-    id: number;
-    address1: string;
-    address2: string;
-    city: string;
-    postcode: string;
-    countryId: number;
-    countryname: string;
+  id: number;
+  address1: string;
+  address2: string;
+  city: string;
+  postcode: string;
+  countryId: number;
+  countryname: string;
 }

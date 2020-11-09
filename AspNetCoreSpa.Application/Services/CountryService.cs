@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreSpa.Application.Helpers;
-using AspNetCoreSpa.Application.Models;
+using AspNetCoreSpa.Application.Models.Countries;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
@@ -13,8 +13,8 @@ namespace AspNetCoreSpa.Application.Services
 {
     public class CountryService : ICountryService
     {
-        private readonly ICountryQueryRepository _countryQueryRepository;
         private readonly IMemoryCache _cache;
+        private readonly ICountryQueryRepository _countryQueryRepository;
         private readonly GlobalSettings _globalSettings;
 
         public CountryService(ICountryQueryRepository countryQueryRepository,
@@ -30,14 +30,14 @@ namespace AspNetCoreSpa.Application.Services
         {
             IEnumerable<CountryDto> countries;
 
-            if(!_cache.TryGetValue(CacheKeys.Country, out countries))
+            if (!_cache.TryGetValue(CacheKeys.Country, out countries))
             {
                 countries = await _countryQueryRepository.GetCountriesAsync();
 
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(_globalSettings.Cache.CountriesExpiration);
 
-               _cache.Set(CacheKeys.Country, countries, cacheEntryOptions);
+                _cache.Set(CacheKeys.Country, countries, cacheEntryOptions);
             }
 
             return countries.Select(x => x.ToViewModel());

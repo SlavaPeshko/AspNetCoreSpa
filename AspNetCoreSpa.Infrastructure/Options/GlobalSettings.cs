@@ -12,11 +12,14 @@ namespace AspNetCoreSpa.Infrastructure.Options
         public Cache Cache { get; set; }
         public EmailSettings EmailSettings { get; set; }
         public Configurations Configurations { get; set; }
+        public TwilioAccountDetails TwilioAccountDetails { get; set; }
+        public AzureStorageConnection AzureStorageConnection { get; set; }
     }
 
     public class ConnectionStrings
     {
         public string DefaultConnection { get; set; }
+        public string HangfireConnection { get; set; }
     }
 
     public class Jwt
@@ -63,5 +66,20 @@ namespace AspNetCoreSpa.Infrastructure.Options
     {
         public int AccessFailedCount { get; set; }
         public int ResetTime { get; set; }
+    }
+
+    public class TwilioAccountDetails
+    {
+        public string AccountSid { get; set; }
+        public string AuthToken { get; set; }
+        public string PhoneFrom { get; set; }
+    }
+
+    public class AzureStorageConnection
+    {
+        public string ConnectionString { get; set; }
+        public string BlobEndpoint { get; set; }
+        public string PathToUserProfile { get; set; }
+        public string PathToImagePost { get; set; }
     }
 }

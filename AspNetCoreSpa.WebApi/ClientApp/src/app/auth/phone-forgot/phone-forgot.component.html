@@ -1,0 +1,65 @@
+<div class="forgot-wrapper">
+    <div class="forgot-title">
+        <span>Forgot password?</span>
+    </div>
+    <form [formGroup]="fogotForm">
+        <div class="forgot-form">
+            <div class="form-group">
+                <p class="phone-number-title">Phone number</p>
+                <ngx-intl-tel-input
+                    [cssClass]="phone.invalid && phone.touched ? 'form-control is-invalid' : 'form-control'"
+                    [preferredCountries]="preferredCountries" 
+                    [enableAutoCountrySelect]="false"
+                    [enablePlaceholder]="true" 
+                    [searchCountryFlag]="true"
+                    [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                    [selectFirstCountry]="false" 
+                    [selectedCountryISO]="CountryISO.Belarus" 
+                    [maxLength]="15"
+                    [tooltipField]="TooltipLabel.Name" 
+                    [phoneValidation]="true" 
+                    [separateDialCode]="true" 
+                    name="phone"
+                    formControlName="phone" 
+                    [(ngModel)]="fogotForm.phone">
+                </ngx-intl-tel-input>
+                <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback d-block">
+                    <div *ngIf="phone.errors">
+                        Please provide a valid phone number.
+                    </div>
+                </div>
+                <div *ngIf="sendingSmsType == 1 || sendingSmsType == 2" class="phone-number-verification">
+                    <p class="phone-number-title">
+                        <span>Verification Code</span>
+                    </p>
+                    <div class="phone-number-captcha">
+                        <div class="phone-number-captcha-input">
+                            <input [(ngModel)]="firstSymbol" [ngModelOptions]="{standalone: true}"  type="tel" maxlength="1" class="form-control">
+                        </div>
+                        <div class="phone-number-captcha-input">
+                            <input [(ngModel)]="secondSymbol" [ngModelOptions]="{standalone: true}"  type="tel" maxlength="1" class="form-control">
+                        </div>
+                        <div class="phone-number-captcha-input">
+                            <input [(ngModel)]="thirdSymbol" [ngModelOptions]="{standalone: true}"  type="tel" maxlength="1" class="form-control">
+                        </div>
+                        <div class="phone-number-captcha-input">
+                            <input [(ngModel)]="fourthSymbol" [ngModelOptions]="{standalone: true}" type="tel" maxlength="1" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forgot-wrapper-btn">
+                <button *ngIf="sendingSmsType == 0" [disabled]="phone.invalid" type="button" class="btn btn-primary btn-md btn-block" (click)="send()">Send code</button>
+                <button *ngIf="sendingSmsType == 1 || sendingSmsType == 2" type="button" class="btn btn-primary btn-md btn-block" (click)="verify()">Verify</button>
+                <p *ngIf="sendingSmsType == 2" class="phone-number-captcha-resend">
+                    <span  class="sms-timer-send">Resend</span>
+                </p>
+                <p *ngIf="sendingSmsType == 1" class="phone-number-captcha-time">
+                    <span>{{ timeLeft }}s</span>
+                </p>
+            </div>
+
+        </div>
+    </form>
+</div>

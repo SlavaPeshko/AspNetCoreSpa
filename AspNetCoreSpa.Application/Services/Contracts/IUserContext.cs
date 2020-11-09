@@ -4,8 +4,9 @@ namespace AspNetCoreSpa.Application.Services.Contracts
 {
     public interface IUserContext
     {
+        int UserId { get; }
+
         // bool IsAuthorized();
         bool IsInRole(UserRoleEnum userRoleEnum);
-        int UserId { get; }
     }
 }

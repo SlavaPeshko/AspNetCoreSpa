@@ -1,20 +1,27 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { config } from '../config';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { config } from "../config";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class FileService {
-  
-  constructor(private httpClient: HttpClient) {
-  }
+  constructor(private httpClient: HttpClient) {}
 
   uploadImages(file: FormData, url: string) {
-      return this.httpClient.post(url, file);
+    return this.httpClient.post(url, file);
   }
 
   uploadUserImage(body: any) {
-    return this.httpClient.post(`${config.apiUrl}/${config.endpoint.images.uploadUserImage}`, body);
+    return this.httpClient.post(
+      `${config.apiUrl}/${config.endpoint.user.uploadProfileImage}`,
+      body
+    );
+  }
+
+  getUserPhoto() {
+    return this.httpClient.get(
+      `${config.apiUrl}/${config.endpoint.user.getPhotoUser}`
+    );
   }
 }

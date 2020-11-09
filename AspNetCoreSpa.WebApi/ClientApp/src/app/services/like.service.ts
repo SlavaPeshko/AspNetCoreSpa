@@ -10,24 +10,24 @@ import { Like } from '../models/like';
 })
 export class LikeService extends BaseService<Like> {
   
-  constructor(httpClient: HttpClient) {
+  constructor(HttpClient: HttpClient) {
     super(
-      httpClient,
+      HttpClient,
       config.apiUrl,
       config.endpoint.posts.route);
   }
 
   public createLike(postId: number, isLike: boolean): Observable<number> {
 
-    const url = `${this._url}/${config.endpoint.likes.create}`;
+    const url = `${this.Url}/${config.endpoint.likes.create}`;
 
-    return this._httpClient.post<number>(url, { postId, isLike }, this.httpOptions);
+    return this.HttpClient.post<number>(url, { postId, isLike }, this.httpOptions);
   }
 
   public deleteLike(id: number) {
     
-    const url = `${this._url}/${config.endpoint.likes.delete(id)}`;
+    const url = `${this.Url}/${config.endpoint.likes.delete(id)}`;
     
-    return this._httpClient.delete(url);
+    return this.HttpClient.delete(url);
   }
 }

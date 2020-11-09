@@ -1,4 +1,4 @@
-﻿using AspNetCoreSpa.Application.Models;
+﻿using AspNetCoreSpa.Application.Models.Posts;
 using AspNetCoreSpa.Domain.Entities;
 using AutoMapper;
 

@@ -17,6 +17,7 @@ import { SpinnerHttpInterceptor } from './helpers/http.interceptor';
 
 import { JwtModule } from "@auth0/angular-jwt";
 import { FileService } from './services/file.service';
+import { CheckPasswordsValidatorDirective } from './shared/check-password.directive';
 
 export function tokenGetter() {
   return localStorage.getItem("jwt");
@@ -24,7 +25,8 @@ export function tokenGetter() {
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CheckPasswordsValidatorDirective
   ],
   imports: [
     BrowserModule,

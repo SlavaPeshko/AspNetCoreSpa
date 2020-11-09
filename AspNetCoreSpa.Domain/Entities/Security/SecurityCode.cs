@@ -9,6 +9,7 @@ namespace AspNetCoreSpa.Domain.Entities.Security
         public string Provider { get; set; }
         public string Code { get; set; }
         public CodeActionType CodeActionType { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
 
         public static SecurityCode Create(ProviderType providerType, string provider, CodeActionType codeActionType)
         {
@@ -16,8 +17,9 @@ namespace AspNetCoreSpa.Domain.Entities.Security
             {
                 ProviderType = providerType,
                 CodeActionType = codeActionType,
-                Code = new Random().Next(100000, 999999).ToString(),
+                Code = new Random().Next(1000, 9999).ToString(),
                 Provider = provider,
+                CreateDate = DateTimeOffset.UtcNow
             };
         }
     }

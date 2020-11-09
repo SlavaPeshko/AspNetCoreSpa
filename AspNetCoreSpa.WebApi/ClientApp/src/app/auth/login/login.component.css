@@ -2,15 +2,76 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: calc(94vh);
 }
 
 .login-form {
     min-width: 150px;
     max-width: 500px;
     width: 100%;
+    margin-top: 2rem;
 }
 
 .btn-login {
     margin-right: 15px;
 }
+
+.tab-bar {
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+.tab-bar-tag {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.6;
+    cursor: pointer;
+}
+
+.tab-bar-box {
+    height: 70px;
+    padding-bottom: 10px;
+    flex-direction: row;
+    align-items: flex-end;
+    cursor: pointer;
+    display: flex;
+}
+
+.tab-bar-tag-active {
+    height: 2px;
+    border-radius: 2px;
+    position: absolute;
+    bottom: 0;
+    background-color: #ff4338;
+    -webkit-transition: all .3s cubic-bezier(.4,0,.2,1);
+    transition: all .3s cubic-bezier(.4,0,.2,1);
+    width: 25.5px;
+}
+
+.modal-header {
+    border-bottom: none;
+    display: block;
+}
+
+.modal-dialog {
+    max-width: 400px;
+    margin-top: 3rem;
+}
+
+.login-model-close {
+    cursor: pointer;
+    position: absolute;
+    top: 13px;
+    right: 20px;
+}
+
+.forgot {
+    margin-bottom: 20px;
+}
+
+.login-wrapper-box {
+    width: 340px;
+}
+
+
+

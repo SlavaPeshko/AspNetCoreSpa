@@ -1,6 +1,5 @@
-﻿using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 
 namespace AspNetCoreSpa.Contracts.QueryRepositories
 {
@@ -10,5 +9,7 @@ namespace AspNetCoreSpa.Contracts.QueryRepositories
         Task<bool> IsExistEmailAsync(string email);
         Task<UserDto> GetUserWithRolesByIdAsync(int id);
         Task<bool> IsExistUserAsync(int id);
+        Task<bool> IsExistPhoneAsync(string phoneNumber);
+        Task<UserDto> GetUserByEmailAsync(string email);
     }
 }

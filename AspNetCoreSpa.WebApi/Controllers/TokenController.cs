@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using AspNetCoreSpa.Application.Models;
+using AspNetCoreSpa.Application.Models.Users;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.WebApi.Controllers.Base;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +18,7 @@ namespace AspNetCoreSpa.WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> RefreshToken(TokenInputModel model)
+        public async Task<IActionResult> RefreshToken(TokenModel model)
         {
             var result = await _tokenService.RefreshToken(model);
 

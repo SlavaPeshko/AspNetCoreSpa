@@ -1,25 +1,23 @@
-﻿using AspNetCoreSpa.Application.Models.Comment;
+﻿using System;
+using System.Threading.Tasks;
+using AspNetCoreSpa.Application.Models.Comments;
 using AspNetCoreSpa.Application.Services.Contracts;
 using AspNetCoreSpa.Data.Repositories.Contracts;
+using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using AspNetCoreSpa.Domain.Entities.Base;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
 using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
-using AspNetCoreSpa.Domain.Entities.Base;
-using AspNetCoreSpa.Data.UoW;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IPostRepository _postRepository;
+        private readonly IUnitOfWorks _unitOfWorks;
         private readonly IUserContext _userContext;
         private readonly IUserRepository _userRepository;
-        private readonly IUnitOfWorks _unitOfWorks;
-        private readonly IPostRepository _postRepository;
 
         public CommentService(ICommentRepository commentRepository,
             IUserContext userContext,
@@ -34,7 +32,7 @@ namespace AspNetCoreSpa.Application.Services
             _postRepository = postRepository;
         }
 
-        public async Task<Result> CreateComment(CreateCommentInputModel model, int id)
+        public async Task<Result> CreateComment(CreateCommentModel model, int id)
         {
             var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if (user == null)

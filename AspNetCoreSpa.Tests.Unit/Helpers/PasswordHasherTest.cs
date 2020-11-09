@@ -14,9 +14,9 @@ namespace AspNetCoreSpa.Tests.Unit.Helpers
         [TestCase("")]
         public void GetHashPasswordIfNullOrEmpty(string data)
         {
-            Assert.Throws<ArgumentNullException>((() => PasswordHasher.GetHashPassword(data)));
+            Assert.Throws<ArgumentNullException>(() => PasswordHasher.GetHashPassword(data));
         }
-        
+
         [Test]
         [TestCase("123456aA!")]
         [TestCase("avc!")]
@@ -25,7 +25,7 @@ namespace AspNetCoreSpa.Tests.Unit.Helpers
         {
             Assert.IsInstanceOf<string>(PasswordHasher.GetHashPassword(data));
         }
-        
+
         [Test]
         [TestCase("123456aA!")]
         [TestCase("avc!")]
@@ -33,19 +33,19 @@ namespace AspNetCoreSpa.Tests.Unit.Helpers
         public void GetHashPassword_IsNotNullOrEmpty(string data)
         {
             var result = PasswordHasher.GetHashPassword(data);
-            
+
             Assert.NotNull(result);
             Assert.IsNotEmpty(result);
         }
-        
+
         [Test]
         [TestCase("123456aA!")]
         [TestCase("avc!")]
         [TestCase("%429gnt56")]
         public void GetHashPassword_Count(string data)
         {
-            var actual  = PasswordHasher.GetHashPassword(data).Length;
-            
+            var actual = PasswordHasher.GetHashPassword(data).Length;
+
             Assert.AreEqual(actual, 68);
         }
 
@@ -58,7 +58,7 @@ namespace AspNetCoreSpa.Tests.Unit.Helpers
         {
             Assert.Throws<ArgumentNullException>(() => PasswordHasher.VerifyHashedPassword(intput1, intput2));
         }
-        
+
         [Test]
         [TestCase("123456aA!")]
         [TestCase("avc!")]
@@ -66,7 +66,7 @@ namespace AspNetCoreSpa.Tests.Unit.Helpers
         public void VerifyHashedPassword_IsTrue(string data)
         {
             var hash = PasswordHasher.GetHashPassword(data);
-            
+
             Assert.IsTrue(PasswordHasher.VerifyHashedPassword(hash, data));
         }
     }

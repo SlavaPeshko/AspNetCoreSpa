@@ -1,130 +1,99 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using AspNetCoreSpa.Application.Models;
-using Microsoft.AspNetCore.Http;
+using AspNetCoreSpa.Application.Models.Users;
+using AspNetCoreSpa.Application.Services.AzureBlobStorage;
 using AspNetCoreSpa.Application.Services.Contracts;
+using AspNetCoreSpa.Contracts.QueryRepositories;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Data.UoW;
 using AspNetCoreSpa.Domain.Entities;
 using AspNetCoreSpa.Domain.Entities.Base;
 using AspNetCoreSpa.Infrastructure.Options;
-using NetTopologySuite.Geometries;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using EC = AspNetCoreSpa.Domain.Entities.ErrorCode;
 using ET = AspNetCoreSpa.CrossCutting.Resources.ErrorTranslation;
-using NetTopologySuite.Geometries;
 
 namespace AspNetCoreSpa.Application.Services
 {
     public class FileService : IFileService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IImageRepository _imageRepository;
-        private readonly IUserImageRepository _userImageRepository;
-        private readonly UserContext _userContext;
+        private const long FileLength = 1_048_576L;
         private readonly IWebHostEnvironment _environment;
+        private readonly IPostImageRepository _postImageRepository;
+        private readonly IPostImageStorageService _postImageStorageService;
         private readonly GlobalSettings _settings;
         private readonly IUnitOfWorks _unitOfWorks;
+        private readonly IUserContext _userContext;
+        private readonly IUserPhotoQueryRepository _userPhotoQueryRepository;
+        private readonly IUserPhotoRepository _userPhotoRepository;
+        private readonly IUserPhotoStorageService _userPhotoStorageService;
+
+        private readonly IUserRepository _userRepository;
 
         public FileService(IUserRepository userRepository,
-            IImageRepository imageRepository,
-            IUserImageRepository userImageRepository,
-            UserContext userContext,
+            IUserPhotoRepository userPhotoRepository,
+            IUserContext userContext,
             IWebHostEnvironment environment,
-            GlobalSettings settings, IUnitOfWorks unitOfWorks)
+            GlobalSettings settings,
+            IUserPhotoStorageService userImageStorageService,
+            IPostImageRepository postImageRepository,
+            IPostImageStorageService postImageStorageService,
+            IUnitOfWorks unitOfWorks,
+            IUserPhotoQueryRepository userPhotoQueryRepository)
         {
             _userRepository = userRepository;
-            _imageRepository = imageRepository;
-            _userImageRepository = userImageRepository;
+            _userPhotoRepository = userPhotoRepository;
             _userContext = userContext;
             _environment = environment ?? throw new ArgumentNullException(nameof(environment));
             _settings = settings;
+            _userPhotoStorageService = userImageStorageService;
+            _postImageRepository = postImageRepository;
+            _postImageStorageService = postImageStorageService;
             _unitOfWorks = unitOfWorks;
+            _userPhotoQueryRepository = userPhotoQueryRepository;
         }
 
-        public async Task<Result<List<string>>> UploadImagesAsync(int id, int postId, List<IFormFile> files)
+        public async Task<Result<List<string>>> UploadImagesAsync(int postId, List<IFormFile> files)
         {
             if (files == null)
                 return Result.Fail<List<string>>(EC.ImageInvalid, ET.ImageInvalid);
 
-            if (files.Any(file => file.Length > 2_101_156L))
-            {
+            if (files.Any(file => file.Length > FileLength))
                 return Result.Fail<List<string>>(EC.LengthImageInvalid, ET.LengthImageInvalid);
-            }
 
-            var paths = new List<string>();
+            var images = new List<PostImage>();
             foreach (var file in files)
-            {
-                using (var stream = file.OpenReadStream())
+                images.Add(new PostImage
                 {
-                    using (var image = new Bitmap(stream))
-                    {
-                        int width, height;
-                        const int size = 200;
-                        const int quality = 4;
-                        if (image.Width > image.Height)
-                        {
-                            width = size;
-                            height = Convert.ToInt32(image.Height * size / (double) image.Width);
-                        }
-                        else
-                        {
-                            width = Convert.ToInt32(image.Width * size / (double) image.Height);
-                            height = size;
-                        }
+                    OriginalName = file.FileName,
+                    PostId = postId,
+                    Path = await _postImageStorageService.UploadFileToBlobAsync(file)
+                });
 
-                        var resized = new Bitmap(width, height);
-                        using (var graphics = Graphics.FromImage(resized))
-                        {
-                            graphics.CompositingQuality = CompositingQuality.HighSpeed;
-                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            graphics.CompositingMode = CompositingMode.SourceCopy;
-                            graphics.DrawImage(image, 0, 0, width, height);
-
-                            var folderPaths = Path.Combine(_environment.WebRootPath, _settings.Paths.ImagesPostPath,
-                                id.ToString());
-
-                            if (!Directory.Exists(folderPaths))
-                                Directory.CreateDirectory(folderPaths);
-
-                            var allPath = Path.Combine(folderPaths, file.FileName);
-
-                            using (var output = File.Open(allPath, FileMode.Create))
-                            {
-                                var qualityParamId = Encoder.Quality;
-                                var encoderParameters = new EncoderParameters(1);
-                                encoderParameters.Param[0] = new EncoderParameter(qualityParamId, quality);
-                                var codec = ImageCodecInfo.GetImageDecoders()
-                                    .FirstOrDefault(x => x.FormatID == ImageFormat.Png.Guid);
-                                resized.Save(output, codec, encoderParameters);
-                            }
-
-                            var resultPath = Path.Combine(_settings.Paths.ImagesPostPath, id.ToString(), file.FileName);
-
-                            paths.Add(resultPath);
-
-                            postId = 0;
-
-                            await _imageRepository.PostAsync(new PostImage
-                            {
-                                Name = file.FileName,
-                                Path = resultPath,
-                                PostId = postId,
-                            });
-                        }
-                    }
-                }
-            }
+            await _postImageRepository.PostAsync(images);
 
             await _unitOfWorks.CommitAsync();
 
-            return Result.OK(paths);
+            return Result.OK(images.Select(x => x.Path).ToList());
+        }
+
+        public async Task<Result<UserPhotoViewModel>> GetUserImageAsync()
+        {
+            var photo = await _userPhotoQueryRepository.GetUserOriginalPhotoAsync(_userContext.UserId);
+            if (photo == null)
+                return new Result<UserPhotoViewModel>();
+
+            return Result.OK(new UserPhotoViewModel
+            {
+                Url = $"{_settings.AzureStorageConnection.BlobEndpoint}{photo.Path}",
+                Position = JsonSerializer.Deserialize<PositionModel>(photo.Position)
+            });
         }
 
         public async Task<Result<string>> UploadUserImageAsync(UserImageInputModel model)
@@ -132,59 +101,64 @@ namespace AspNetCoreSpa.Application.Services
             if (model?.File == null)
                 return Result.Fail<string>(EC.ImageInvalid, ET.ImageInvalid);
 
-            if (model.File.Length > 2_101_156L)
+            if (model.File.Length > FileLength)
                 return Result.Fail<string>(EC.LengthImageInvalid, ET.LengthImageInvalid);
 
             var user = await _userRepository.GetUserByIdAsync(_userContext.UserId);
             if (user == null)
                 return Result.Fail<string>(EC.UserNotFound, ET.UserNotFound);
 
-            var originalImagePath = Path.Combine(_environment.WebRootPath, _settings.Paths.PhotoProfilePath,
-                $"{_userContext.UserId}", model.File.Name);
-
-            if (!Directory.Exists(originalImagePath))
-                Directory.CreateDirectory(originalImagePath);
-
-            await using (var fileStream = new FileStream(originalImagePath, FileMode.Create))
+            await using (var stream = new MemoryStream(DecodeUrlBase64(model.CroppedImage)))
             {
-                await model.File.CopyToAsync(fileStream);
-            }
-
-            var userImagePath = Path.Combine(_settings.Paths.PhotoProfilePath, $"{_userContext.UserId}", $"{Guid.NewGuid()}");
-            await File.WriteAllBytesAsync(userImagePath, Convert.FromBase64String(model.Cropped));
-            
-            var position = new NetTopologySuite.Geometries.Point(new Coordinate())
-            {
-                X = model.X1,
-                M = model.X2,
-                Y = model.Y1,
-                Z = model.Y2
-            };
-
-            var userImage = await _userImageRepository.GetUserImageByUserIdAsync(_userContext.UserId);
-            if (userImage == null)
-            {
-                await _userImageRepository.PostAsync(new UserImage
+                await _userPhotoRepository.PostAsync(new UserPhoto
                 {
                     UserId = _userContext.UserId,
-                    OriginalName = model.File.Name,
-                    OriginalImagePath = originalImagePath,
-                    ProfileImagePath = userImagePath,
-                    Position = new NetTopologySuite.Geometries.Point(new Coordinate()),
+                    OriginalName = model.File.FileName,
+                    Path = await _userPhotoStorageService.UploadFileToBlobAsync(stream, model.File.ContentType)
+                });
+            }
+
+            var position = JsonSerializer.Serialize(new PositionModel
+            {
+                X1 = model.X1,
+                X2 = model.X2,
+                Y1 = model.Y1,
+                Y2 = model.Y2
+            });
+
+            var path = await _userPhotoStorageService.UploadFileToBlobAsync(model.File);
+
+            var photo = await _userPhotoRepository.GetUserPhotoById(_userContext.UserId);
+            if (photo == null)
+            {
+                await _userPhotoRepository.PostAsync(new UserPhoto
+                {
+                    UserId = _userContext.UserId,
+                    OriginalName = model.File.FileName,
+                    Path = path,
+                    Position = position
                 });
             }
             else
             {
-                userImage.OriginalImagePath = originalImagePath;
-                userImage.ProfileImagePath = userImagePath;
-                userImage.Position = position;
-                
-                _userImageRepository.Put(userImage);
+                await _userPhotoStorageService.DeleteBlobDataAsync(photo.Path);
+
+                photo.OriginalName = model.File.FileName;
+                photo.Path = path;
+                photo.Position = position;
+
+                _userPhotoRepository.Put(photo);
             }
-            
+
             await _unitOfWorks.CommitAsync();
 
-            return Result.OK(userImagePath);
+            return Result.OK(path);
+        }
+
+        private static byte[] DecodeUrlBase64(string s)
+        {
+            var imageParts = s.Split(',').ToList();
+            return Convert.FromBase64String(imageParts[1]);
         }
     }
 }

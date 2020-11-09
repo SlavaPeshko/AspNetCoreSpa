@@ -12,9 +12,9 @@ export class AuthService extends BaseService<any> {
   private readonly JWT_TOKEN = 'jwt';
   private readonly REFRESH_TOKEN = 're_jwt';
 
-  constructor(httpClient: HttpClient,  
+  constructor(HttpClient: HttpClient,  
     private router: Router) {
-    super(httpClient,
+    super(HttpClient,
       config.apiUrl,
       config.endpoint.user.login);
   }
@@ -32,7 +32,7 @@ export class AuthService extends BaseService<any> {
   refreshToke() {
     const body = { accessToken: this.getJwtToken(), refreshToken: this.getRefreshToken() };
 
-    return this._httpClient.post(`${config.apiUrl}/${config.endpoint.tokens.refreshToken}`, JSON.stringify(body), this.httpOptions)
+    return this.HttpClient.post(`${config.apiUrl}/${config.endpoint.tokens.refreshToken}`, JSON.stringify(body), this.httpOptions)
     .subscribe(response => {
       this.storeTokens(response);
 

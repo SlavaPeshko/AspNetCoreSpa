@@ -1,23 +1,146 @@
 <div class="forgot-wrapper">
-  <div class="forgot-info">
-    Please enter the or <b>email</b> that you used to sign in.
-  </div>
-  <div class="forgot-form">
-    <form [formGroup]="fogotForm">
-      <input formControlName="email" [(ngModel)]="fogotForm.email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
-      
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
-        <div *ngIf="email.errors.required">
-          Name is required.
-        </div>
-        <div *ngIf="email.errors.email">
-          Email is incorrect.
+  <div *ngIf="showResetPasswordForm; else emailBlock"
+       class="forgot-box-password">
+    <div class="forgot-title">
+      <span>Reset password</span>
+    </div>
+    <div class="forgot-note">
+      <span>
+        You have requested to reset the password for: {{ emailFromToken }}
+      </span>
+    </div>
+    <form [formGroup]="forgotForm">
+      <div class="form-group">
+        <label for="inputPassword">New Password</label>
+        <input class="form-control"
+               formControlName="password"
+               type="password"
+               id="inputPassword"
+               placeholder="Password"
+               [(ngModel)]="forgotForm.password"
+               [ngClass]="{
+            'is-invalid':
+              password.invalid && (password.dirty || password.touched)
+          }" />
+
+        <div class="invalid-feedback d-block"
+             *ngIf="password.invalid && (password.dirty || password.touched)">
+          <span *ngIf="password.errors.required">
+            Password is required.
+          </span>
+          <span *ngIf="password.errors.pattern">
+            Password must contain at least two of the following: numbers,
+            lowercase letters, uppercase letters.
+          </span>
         </div>
       </div>
 
+      <div class="form-group">
+        <input formControlName="confirmPassword"
+               type="password"
+               class="form-control"
+               placeholder="Confirm new password"
+               [(ngModel)]="forgotForm.confirmPassword"
+               [ngClass]="{
+            'is-invalid':
+              (confirmPassword.invalid) &&
+              (confirmPassword.dirty || confirmPassword.touched)
+          }" />
+        <div class="invalid-feedback d-block"
+             *ngIf="
+            (confirmPassword.invalid) &&
+            (confirmPassword.dirty || confirmPassword.touched)
+          ">
+          <span *ngIf="confirmPassword.errors?.required; else notSameBlock">
+            Password is required.
+          </span>
+          <ng-template #notSameBlock>
+            <span>
+              The passwords you entered do not match.
+            </span>
+          </ng-template>
+        </div>
+      </div>
       <div class="forgot-wrapper-btn">
-        <button type="button" class="btn btn-primary" (click)="next()">Next</button>
+        <button [disabled]="forgotForm.invalid && (forgotForm.dirty || forgotForm.touched)"
+                type="button"
+                class="btn btn-primary btn-md btn-block"
+                (click)="forgotPassword()">
+          Submit
+        </button>
       </div>
     </form>
   </div>
+
+  <ng-template #emailBlock>
+    <div *ngIf="!isSendEmail; else titleBlock"
+         class="forgot-title">
+      <span>Forgot password?</span>
+    </div>
+    <ng-template #titleBlock>
+      <div class="forgot-title">
+        <span>Please check your email</span>
+      </div>
+
+      <div class="forgot-note">
+        <span>
+          We just sent a password reset email to your email ({{
+            emailForm.email
+          }}).<br />
+          Click the link in the email to reset your password.
+        </span>
+      </div>
+
+      <div class="text-bar">
+        <div class="text-li-title">
+          <span>Didn't receive the email?</span>
+        </div>
+        <li class="text-li">
+          <span>Please remember to check your spam folder</span>
+        </li>
+        <li class="text-li text-li-blue">
+          <span (click)="send()">Resend email</span>
+        </li>
+      </div>
+    </ng-template>
+
+    <div *ngIf="!isSendEmail"
+         class="forgot-form">
+      <form [formGroup]="emailForm">
+        <div class="forgot-note">
+          <span>Enter the email address you used to sign up to that site below and
+            we will send you a password reset link.</span>
+        </div>
+
+        <div class="forgot-input">
+          <input formControlName="email"
+                 [(ngModel)]="emailForm.email"
+                 type="email"
+                 class="form-control"
+                 id="exampleInputEmail1"
+                 aria-describedby="emailHelp"
+                 placeholder="Enter email"
+                 [ngClass]="{
+              'is-invalid': email.invalid && (email.dirty || email.touched)
+            }" />
+
+          <div *ngIf="email.invalid && (email.dirty || email.touched)"
+               class="invalid-feedback d-block">
+            <div *ngIf="email.errors">
+              Please enter your email.
+            </div>
+          </div>
+        </div>
+
+        <div class="forgot-wrapper-btn">
+          <button [disabled]="email.invalid"
+                  type="button"
+                  class="btn btn-primary btn-md btn-block"
+                  (click)="send()">
+            Next
+          </button>
+        </div>
+      </form>
+    </div>
+  </ng-template>
 </div>

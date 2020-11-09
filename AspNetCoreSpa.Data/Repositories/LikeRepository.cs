@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AspNetCoreSpa.Data.Context;
 using AspNetCoreSpa.Data.Repositories.Contracts;
 using AspNetCoreSpa.Domain.Entities;

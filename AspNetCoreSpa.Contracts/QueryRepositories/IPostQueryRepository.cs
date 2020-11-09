@@ -1,7 +1,6 @@
-﻿using System;
-using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AspNetCoreSpa.Contracts.QueryRepositories.Dto;
 
 namespace AspNetCoreSpa.Contracts.QueryRepositories
 {

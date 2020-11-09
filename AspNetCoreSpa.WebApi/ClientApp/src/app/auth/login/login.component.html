@@ -1,34 +1,157 @@
 <div class="login-wrapper">
-  <form class="login-form" [formGroup]="loginForm">
-    <div class="form-group">
-      <label for="inputEmail">Email address</label>
-      <input formControlName="email" [(ngModel)]="loginForm.email" type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
+  <div class="login-wrapper-box">
+    <div class="tab-bar d-flex justify-content-around">
+      <div class="tab-bar-box"
+           (click)="switchNabBlock(true)">
+        <div class="tab-bar-tag">Email</div>
+      </div>
+      <div class="tab-bar-box"
+           (click)="switchNabBlock(false)">
+        <div class="tab-bar-tag">Phone</div>
+      </div>
+      <div class="tab-bar-tag-active"
+           [ngStyle]="showEmailForm?{'left': '68.25px'} : {'left': '238.25px'}"></div>
+    </div>
+    <form class="login-form"
+          *ngIf="showEmailForm; else phoneFormBlock"
+          [formGroup]="emailLoginForm">
+      <div class="form-group">
+        <input formControlName="email"
+               type="email"
+               class="form-control"
+               id="inputEmail"
+               aria-describedby="emailHelp"
+               placeholder="Enter email"
+               [(ngModel)]="emailLoginForm.email"
+               [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}">
 
-      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="invalid-feedback d-block">
-        <div *ngIf="email.errors.required">
-          Email is required.
-        </div>
-        <div *ngIf="email.errors.email">
-          Email is incorrect.
+        <div class="invalid-feedback d-block"
+             *ngIf="email.invalid && (email.dirty || email.touched)">
+          <div *ngIf="email.errors.required">
+            Email is required.
+          </div>
+          <div *ngIf="email.errors.email">
+            Email is incorrect.
+          </div>
         </div>
       </div>
 
-    </div>
-    <div class="form-group">
-      <label for="inputPassword">Password</label>
-      <input formControlName="password" [(ngModel)]="loginForm.password" type="password" class="form-control" id="inputPassword" placeholder="Password" [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+      <div class="form-group">
+        <input formControlName="password"
+               [(ngModel)]="emailLoginForm.password"
+               type="password"
+               class="form-control"
+               id="inputPassword"
+               placeholder="Password"
+               [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
 
-      <div *ngIf="password.invalid && (password.dirty || password.touched)" class="invalid-feedback d-block">
-        <div *ngIf="password.errors.required">
-          Password is required.
+        <div class="invalid-feedback d-block"
+             *ngIf="password.invalid && (password.dirty || password.touched)">
+          <div *ngIf="password.errors.required">
+            Password is required.
+          </div>
+          <div *ngIf="password.errors.pattern">
+            Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
+          </div>
         </div>
-        <div *ngIf="password.errors.minlength">
-          Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
-        </div>
+
       </div>
 
-    </div>
-    <button type="button" class="btn btn-primary btn-login" (click)="login()">Login</button>
-    <a [routerLink]="['/restore']">Forgot your password?</a>
-  </form>
+      <div class="forgot d-flex justify-content-between">
+        <div class="form-check">
+          <input class="form-check-input"
+                 type="checkbox"
+                 value=""
+                 id="defaultCheck1">
+          <label class="form-check-label"
+                 for="defaultCheck1">
+            Keep me logged in
+          </label>
+        </div>
+        <div>
+          <a [routerLink]="['/resetpassword']">Forgot your password?</a>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-login btn-md btn-block"
+              type="button"
+              [disabled]="emailLoginForm.invalid && (emailLoginForm.dirty || emailLoginForm.touched)"
+              (click)="login()">Login</button>
+    </form>
+
+    <ng-template #phoneFormBlock>
+      <form class="login-form"
+            [formGroup]="phoneLoginForm">
+
+        <div class="form-group">
+          <ngx-intl-tel-input [cssClass]="phone.invalid && phone.touched ? 'form-control is-invalid' : 'form-control'"
+                              [preferredCountries]="preferredCountries"
+                              [enableAutoCountrySelect]="false"
+                              [enablePlaceholder]="true"
+                              [searchCountryFlag]="true"
+                              [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                              [selectFirstCountry]="false"
+                              [selectedCountryISO]="CountryISO.UnitedStates"
+                              [maxLength]="15"
+                              [tooltipField]="TooltipLabel.Name"
+                              [phoneValidation]="true"
+                              [separateDialCode]="true"
+                              name="phone"
+                              formControlName="phone"
+                              [(ngModel)]="phoneLoginForm.phone">
+          </ngx-intl-tel-input>
+          <div class="invalid-feedback d-block"
+               *ngIf="phone.invalid && phone.touched">
+            <div *ngIf="phone.errors.required; else invalidBlock">
+              Phone is required.
+            </div>
+            <ng-template #invalidBlock>
+              <div>
+                Phone is invalid
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <input formControlName="password"
+                 [(ngModel)]="phoneLoginForm.password"
+                 type="password"
+                 class="form-control"
+                 id="inputPassword"
+                 placeholder="Password"
+                 [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}">
+
+          <div class="invalid-feedback d-block"
+               *ngIf="password.invalid && (password.dirty || password.touched)">
+            <div *ngIf="password.errors.required">
+              Password is required.
+            </div>
+            <div *ngIf="password.errors.pattern">
+              Password must contain at least two of the following: numbers, lowercase letters, uppercase letters.
+            </div>
+          </div>
+        </div>
+
+        <div class="forgot d-flex justify-content-between">
+          <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   value=""
+                   id="defaultCheck1">
+            <label class="form-check-label"
+                   for="defaultCheck1">
+              Keep me logged in
+            </label>
+          </div>
+          <div>
+            <a [routerLink]="['/phoneresetpassword']">Forgot your password?</a>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-login btn-md btn-block"
+                type="button"
+                [disabled]="phoneLoginForm.invalid && (!phoneLoginForm.dirty || phoneLoginForm.touched)"
+                (click)="login()">Login</button>
+      </form>
+    </ng-template>
+  </div>
 </div>
